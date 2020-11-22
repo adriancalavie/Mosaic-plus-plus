@@ -1,10 +1,10 @@
 #include "PictureTools.h"
 #include <iostream>
 
-Mat PictureTools::crop(Mat image, std::pair <uint8_t, uint8_t> topL, std::pair <uint8_t, uint8_t> botR)
+Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
 {
-	uint8_t height = botR.first - topL.first;
-	uint8_t width = botR.second - topL.second;
+	uint64_t height = botR.first - topL.first;
+	uint64_t width = botR.second - topL.second;
 	Mat result(height, width, CV_8UC3);
 	std::cout << result.rows << " " << result.cols;
 	for (int index_rows = 0; index_rows < height; index_rows++)
@@ -17,7 +17,7 @@ Mat PictureTools::crop(Mat image, std::pair <uint8_t, uint8_t> topL, std::pair <
 	return result;
 }
 
- Mat PictureTools::resize(const Mat& image, int width, int height)
+Mat PictureTools::resize(const Mat& image, const uint16_t& width, const uint16_t& height)
 {
 
 	Mat newimage(width, height, CV_8UC3);
@@ -39,28 +39,69 @@ Mat PictureTools::crop(Mat image, std::pair <uint8_t, uint8_t> topL, std::pair <
 	return newimage;
 }
 
-Scalar PictureTools::averageColor(const Mat& image) 
+Scalar PictureTools::averageColor(const Mat& image)
 {
 	assert(!image.empty());
 	double blue, green, red;
 	blue = green = red = 0;
 	int size = (image.rows) * (image.cols);
-	for (int rows= 0; rows < image.rows; ++rows)
+	for (int rows = 0; rows < image.rows; ++rows)
 	{
 		for (int cols = 0; cols < image.cols; ++cols)
 		{
-			blue+= (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
+			blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
 			green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
 			red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
 
 		}
 	}
-	red = red/ size;
+	red = red / size;
 	green = green / size;
-	blue= blue/ size;
-	red = red* 100;
+	blue = blue / size;
+	red = red * 100;
 	green = green * 100;
-	blue= blue* 100;
+	blue = blue * 100;
 
 	return Scalar(blue, green, red);
+}
+
+Mat PictureTools::makeMosaic(const Mat& image, const uint8_t& partitionSize)
+{
+	bool v1 = image.cols % partitionSize == 0;
+	bool v2 = image.rows % partitionSize == 0;
+	bool v3 = v1 || v2;
+	assert(v3);
+	//if any pixels would remain after partitioning process, call abort;
+
+
+	Mat result(image.rows, image.cols, CV_8UC3);
+
+	for (auto x = 0; x < image.cols; x += partitionSize)
+		for (auto y = 0; y < image.rows; y += partitionSize)
+		{
+			Mat partition = crop(image, { y,x }, { y + partitionSize, x + partitionSize });
+
+			Scalar partitionAverage = averageColor(partition);
+
+			// compare partitionAverage with mapped images's average;
+			// partition = closestMappedImage;
+
+			for (auto i = x; i < x + partitionSize; ++i)
+			{
+				for (auto j = y; j < y + partitionSize; ++j)
+				{
+					if (i < result.cols && j < result.rows) {
+						result.at<Vec3b>({ i,j })[0] = partition.at<Vec3b>({ i - x, j - y })[0];
+						result.at<Vec3b>({ i,j })[1] = partition.at<Vec3b>({ i - x, j - y })[1];
+						result.at<Vec3b>({ i,j })[2] = partition.at<Vec3b>({ i - x, j - y })[2];
+					}
+					else
+					{
+						//nimic
+					}
+				}
+			}
+		}
+
+	return result;
 }

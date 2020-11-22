@@ -8,9 +8,15 @@ using namespace cv;
 
 class PictureTools
 {
+private:
+	using Point = std::pair <uint64_t, uint64_t>;
+
+private:
+	static const uint8_t defaultSize = 100;
 public:
-	Mat crop(Mat image, std::pair <uint8_t, uint8_t> topL, std::pair <uint8_t, uint8_t> botR);
-	static Mat resize(const Mat& image, int width = 0, int height = 0);
+	static Mat crop(const Mat& image, Point topL, Point botR);
+	static Mat resize(const Mat& image, const uint16_t& width = 0, const uint16_t& height = 0);
 	static Scalar averageColor(const Mat& image);
+	static Mat makeMosaic(const Mat& image, const uint8_t& partitionSize = defaultSize);
 };
 

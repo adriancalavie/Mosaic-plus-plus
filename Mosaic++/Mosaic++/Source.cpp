@@ -5,9 +5,9 @@
 int main()
 {
 	//std::cout << "Test1";
-<<<<<<< Updated upstream
-	BasePictures test(1000, ".jpg");
-=======
+
+	//BasePictures test(1000, ".jpg");
+
 	/*BasePictures test(10, ".jpg");
 >>>>>>> Stashed changes
 	test.CreatingPicturesForMosaics();
@@ -27,6 +27,13 @@ int main()
 	imshow("Display Window3", image3);
 	waitKey(0);
 	*/
+
+
+	/*Mat input = imread("D:\\test.jpg");
+	Mat output = PictureTools::makeMosaic(input);
+
+	imshow("Returned", output);
+	waitKey(0);*/
 
 	return 0;
 }
