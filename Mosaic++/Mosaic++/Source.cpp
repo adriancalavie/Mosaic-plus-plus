@@ -1,12 +1,17 @@
 #include <iostream>
 #include "BasePictures.h"
 #include "PictureTools.h"
+
 int main()
 {
 	//std::cout << "Test1";
+<<<<<<< Updated upstream
 	BasePictures test(1000, ".jpg");
+=======
+	/*BasePictures test(10, ".jpg");
+>>>>>>> Stashed changes
 	test.CreatingPicturesForMosaics();
-	waitKey(0);
+	waitKey(0);*/
 
 
 	/*TESTING RESIZE AND AVERGECOLOR FUNCTIONS
@@ -22,5 +27,6 @@ int main()
 	imshow("Display Window3", image3);
 	waitKey(0);
 	*/
+
 	return 0;
 }
