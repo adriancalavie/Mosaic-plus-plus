@@ -21,9 +21,15 @@
     <ClCompile Include="BasePictures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PictureTools.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasePictures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PictureTools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
