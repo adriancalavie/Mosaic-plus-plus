@@ -4,7 +4,7 @@
 int main()
 {
 	//std::cout << "Test1";
-	BasePictures test(10, ".jpg");
+	BasePictures test(1000, ".jpg");
 	test.CreatingPicturesForMosaics();
 	waitKey(0);
 

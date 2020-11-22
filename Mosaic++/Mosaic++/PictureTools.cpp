@@ -17,7 +17,7 @@ Mat PictureTools::crop(Mat image, std::pair <uint8_t, uint8_t> topL, std::pair <
 	return result;
 }
 
-Mat PictureTools::resize(const Mat& image, int width, int height)const
+ Mat PictureTools::resize(const Mat& image, int width, int height)
 {
 
 	Mat newimage(width, height, CV_8UC3);
@@ -39,7 +39,7 @@ Mat PictureTools::resize(const Mat& image, int width, int height)const
 	return newimage;
 }
 
-Scalar PictureTools::averageColor(const Mat& image) const
+Scalar PictureTools::averageColor(const Mat& image) 
 {
 	assert(!image.empty());
 	double blue, green, red;

@@ -10,7 +10,7 @@ class PictureTools
 {
 public:
 	Mat crop(Mat image, std::pair <uint8_t, uint8_t> topL, std::pair <uint8_t, uint8_t> botR);
-	Mat resize(const Mat& image, int width = 0, int height = 0)const;
-	Scalar averageColor(const Mat& image)const;
+	static Mat resize(const Mat& image, int width = 0, int height = 0);
+	static Scalar averageColor(const Mat& image);
 };
 
