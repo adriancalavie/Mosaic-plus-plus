@@ -19,7 +19,7 @@ private:
 
 public:
 	BasePictures(const uint16_t&, const std::string&);
-
+	const std::vector<cv::Scalar>& GetMediumColor() const;
 	const void CreatingPicturesForMosaics(const std::string& ="..//Base pictures\\", const std::string& = "..//Pictures for mosaics\\" );
 };
 

@@ -1,4 +1,5 @@
 #include "PictureTools.h"
+#include "BasePictures.h"
 #include <iostream>
 
 Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
@@ -6,7 +7,7 @@ Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
 	uint64_t height = botR.first - topL.first;
 	uint64_t width = botR.second - topL.second;
 	Mat result(height, width, CV_8UC3);
-	std::cout << result.rows << " " << result.cols;
+	//std::cout << result.rows << " " << result.cols;
 	for (int index_rows = 0; index_rows < height; index_rows++)
 		for (int index_cols = 0; index_cols < width; index_cols++)
 		{
@@ -19,15 +20,15 @@ Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
 
 Mat PictureTools::resize(const Mat& image, const uint16_t& width, const uint16_t& height)
 {
-
+	assert(!image.empty());
 	Mat newimage(width, height, CV_8UC3);
 
 	int x_ratio = (int)((image.cols << 16) / width) + 1;
 	int y_ratio = (int)((image.rows << 16) / height) + 1;
 
 	int nearX, nearY;
-	for (int rows = 0; rows < height; rows++) {
-		for (int cols = 0; cols < width; cols++) {
+	for (int rows = 0; rows < height; ++rows) {
+		for (int cols = 0; cols < width; ++cols) {
 			nearX = ((cols * x_ratio) >> 16);
 			nearY = ((rows * y_ratio) >> 16);
 
@@ -65,7 +66,7 @@ Scalar PictureTools::averageColor(const Mat& image)
 	return Scalar(blue, green, red);
 }
 
-Mat PictureTools::makeMosaic(const Mat& image, const uint8_t& partitionSize)
+Mat PictureTools::makeMosaic(const std::vector<Scalar>& dataPictures, Mat& image, const uint8_t& partitionSize)
 {
 	bool v1 = image.cols % partitionSize == 0;
 	bool v2 = image.rows % partitionSize == 0;
@@ -83,7 +84,24 @@ Mat PictureTools::makeMosaic(const Mat& image, const uint8_t& partitionSize)
 
 			Scalar partitionAverage = averageColor(partition);
 
-			// compare partitionAverage with mapped images's average;
+			// compare partitionAverage with mapped images's average;*first implementation using STL vector
+			Scalar medColor = PictureTools::averageColor(partition);
+			int sumMedColor = medColor[0] + medColor[1] + medColor[2];
+			int bestMatch = std::abs((sumMedColor)-
+				(dataPictures[0][0] + dataPictures[0][1] + dataPictures[0][2]));
+			unsigned int bestIndex = 0;
+			for (unsigned int index = 1; index < dataPictures.size(); ++index)
+			{
+				int curr = std::abs((sumMedColor)
+					-(dataPictures[index][0] + dataPictures[index][1] + dataPictures[index][2]));
+				if (bestMatch > curr)
+				{
+					bestIndex = index;
+					bestMatch = curr;
+				}
+			}
+			//std::cout << bestMatch << std::endl;
+
 			// partition = closestMappedImage;
 
 			for (auto i = x; i < x + partitionSize; ++i)
@@ -105,3 +123,4 @@ Mat PictureTools::makeMosaic(const Mat& image, const uint8_t& partitionSize)
 
 	return result;
 }
+

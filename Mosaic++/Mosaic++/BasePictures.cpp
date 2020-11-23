@@ -11,6 +11,11 @@ BasePictures::BasePictures(const uint16_t& numberPictures, const std::string& pi
 	this->m_pictureExtension = pictureExtension;
 }
 
+const std::vector<cv::Scalar>& BasePictures::GetMediumColor() const
+{
+	return this->m_mediumColor;
+}
+
 const void BasePictures::CreatingPicturesForMosaics(const std::string& fileSource, const std::string& fileDestination) 
 {
 	uint16_t count = 0;

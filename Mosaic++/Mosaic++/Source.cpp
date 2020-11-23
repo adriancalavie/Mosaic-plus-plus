@@ -8,10 +8,12 @@ int main()
 
 	//BasePictures test(1000, ".jpg");
 
-	/*BasePictures test(10, ".jpg");
->>>>>>> Stashed changes
+	/*
+	BasePictures test(10, ".jpg");
+//>>>>>>> Stashed changes
 	test.CreatingPicturesForMosaics();
-	waitKey(0);*/
+	waitKey(0);
+	*/
 
 
 	/*TESTING RESIZE AND AVERGECOLOR FUNCTIONS
@@ -28,12 +30,14 @@ int main()
 	waitKey(0);
 	*/
 
-
-	/*Mat input = imread("D:\\test.jpg");
-	Mat output = PictureTools::makeMosaic(input);
+	/*
+	Mat input = imread("C:\\Users\\Dinu\\Desktop\\poze_de_baza\\16.jpg", IMREAD_COLOR);
+	input = PictureTools::resize(input, 600, 600);
+	Mat output = PictureTools::makeMosaic(test.GetMediumColor(),input);
 
 	imshow("Returned", output);
-	waitKey(0);*/
+	waitKey(0);
+	*/
 
 	return 0;
 }
