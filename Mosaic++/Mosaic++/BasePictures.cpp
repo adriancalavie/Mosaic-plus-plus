@@ -1,7 +1,4 @@
 #include "BasePictures.h"
-//#include <opencv2/core.hpp>
-//#include <opencv2/imgcodecs.hpp>
-//#include <opencv2/highgui.hpp>
 #include "PictureTools.h"
 
 BasePictures::BasePictures(const uint16_t& numberPictures, const std::string& pictureExtension)
@@ -28,8 +25,11 @@ const void BasePictures::CreatingPicturesForMosaics(const std::string& fileSourc
 		img=PictureTools::resize(img, 50, 50);
 
 		m_mediumColor[count]=(PictureTools::averageColor(img));
-		cv::imwrite(fileDestination+std::to_string(count)+this->m_pictureExtension, img);
+		//this->m_mediumColorv2.insert(std::make_pair(PictureTools::averageColor(img), std::to_string(count) + this->m_pictureExtension));
+		// need a hash function for unorder_map
 
+
+		cv::imwrite(fileDestination+std::to_string(count)+this->m_pictureExtension, img);
 		assert(!img.empty());
 			
 		++count;

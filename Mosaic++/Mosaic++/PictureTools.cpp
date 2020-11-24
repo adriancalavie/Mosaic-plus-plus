@@ -4,8 +4,8 @@
 
 Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
 {
-	uint64_t height = botR.first - topL.first;
-	uint64_t width = botR.second - topL.second;
+	uint16_t height = botR.first - topL.first;
+	uint16_t width = botR.second - topL.second;
 	Mat result(height, width, CV_8UC3);
 	//std::cout << result.rows << " " << result.cols;
 	for (int index_rows = 0; index_rows < height; index_rows++)
@@ -139,7 +139,7 @@ Mat PictureTools::makeMosaic(const std::vector<Scalar>& dataPictures, Mat& image
 					bestMatch = curr;
 				}
 			}
-			//std::cout << bestMatch << std::endl;
+			std::cout << bestMatch << std::endl;
 
 			// partition = closestMappedImage;
 

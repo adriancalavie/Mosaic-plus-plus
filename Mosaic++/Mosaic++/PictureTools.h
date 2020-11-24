@@ -9,10 +9,10 @@ using namespace cv;
 class PictureTools
 {
 private:
-	using Point = std::pair <uint64_t, uint64_t>;
+	using Point = std::pair <uint16_t, uint16_t>;
 
 private:
-	static const uint8_t defaultSize = 100;
+	static const uint8_t defaultSize = 10;
 public:
 	static Mat crop(const Mat& image, Point topL, Point botR);
 	static Mat rotateLeft(const Mat& image);
