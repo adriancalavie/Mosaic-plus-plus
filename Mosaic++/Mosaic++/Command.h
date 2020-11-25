@@ -2,7 +2,11 @@
 #include <string>
 #include <optional>
 #include <iostream>
+#include <vector>
+#include <regex>
+#include <fstream>
 
+#include "PictureTools.h"
 class Command
 {
 	using argument = const std::string&;
@@ -13,21 +17,21 @@ public:
 
 public:
 	enum class HelpType { none, condensed, expanded };
-	enum class CommandType { mosaic, folder };
+	enum class CommandType { unknown, mosaic, folder };
 
 public:
-	Command(argument in);
+	Command(std::vector<std::string> arguments);
+
+private:
+
 	bool help();
-
-private:
-
-	void makeMosaic(argument path, const std::optional<uint8_t>& partitionSize);
-	void selectFolder(argument path);
+	void makeMosaic(argument path, const std::optional<uint8_t>& partitionSize) const;
+	void selectFolder(argument path) const;
 
 
 private:
 
-	HelpType m_help;
-	CommandType m_type;
+	HelpType m_help = HelpType::none;
+	CommandType m_type = CommandType::unknown;;
 };
 
