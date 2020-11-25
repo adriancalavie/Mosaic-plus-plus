@@ -121,6 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,12 +147,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BasePictures.cpp" />
+    <ClCompile Include="Command.cpp" />
+    <ClCompile Include="CommandLineInterface.cpp" />
     <ClCompile Include="PictureTools.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasePictures.h" />
+    <ClInclude Include="Command.h" />
+    <ClInclude Include="CommandLineInterface.h" />
     <ClInclude Include="PictureTools.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Documentation\[docs]make_mosaic.txt" />
+    <Text Include="..\Documentation\[docs]select_images_folder.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
