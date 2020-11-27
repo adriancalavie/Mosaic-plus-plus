@@ -25,7 +25,7 @@ const void BasePictures::CreatingPicturesForMosaics(const std::string& fileSourc
 		img=PictureTools::resize(img, 50, 50);
 
 		m_mediumColor[count]=(PictureTools::averageColor(img));
-		//this->m_mediumColorv2.insert(std::make_pair(PictureTools::averageColor(img), std::to_string(count) + this->m_pictureExtension));
+		this->m_mediumColorv2.insert(std::make_pair(PictureTools::averageColor(img), std::to_string(count) + this->m_pictureExtension));
 		// need a hash function for unorder_map
 
 
