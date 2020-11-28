@@ -32,15 +32,7 @@ class BasePictures
 private:
 	struct HashKey
 	{
-		size_t operator()(const cv::Scalar& toHash) const
-		{
-			size_t res = 17;
-			res = res * 31 + std::hash<double>()(toHash.val[0]);
-			res = res * 31 + std::hash<double>()(toHash.val[1]);
-			res = res * 31 + std::hash<double>()(toHash.val[2]);
-			return res;
-		}
-
+		size_t operator()(const cv::Scalar& toHash) const;
 	};
 
 private:

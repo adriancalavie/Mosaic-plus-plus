@@ -39,3 +39,12 @@ const void BasePictures::CreatingPicturesForMosaics(const std::string& fileSourc
 	
 
 }
+
+size_t BasePictures::HashKey::operator()(const cv::Scalar& toHash) const
+{
+		size_t res = 17;
+		res = res * 31 + std::hash<double>()(toHash.val[0]);
+		res = res * 31 + std::hash<double>()(toHash.val[1]);
+		res = res * 31 + std::hash<double>()(toHash.val[2]);
+		return res;
+}
