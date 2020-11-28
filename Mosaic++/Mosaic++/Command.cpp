@@ -88,6 +88,14 @@ bool Command::help()
 
 void Command::makeMosaic(argument path, const std::optional<uint8_t>& partitionSize) const
 {
+	cv::Mat input = imread(path);
+	cv::Mat output;
+	if (partitionSize.has_value())
+		/*output = PictureTools::makeMosaic()*/;
+	else
+		/*output = PictureTools::makeMosaic()*/;
+
+	cv::imshow("Resulted Image", output);
 
 }
 

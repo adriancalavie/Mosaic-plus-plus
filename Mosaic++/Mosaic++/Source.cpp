@@ -13,7 +13,11 @@ int main()
 	//BasePictures test(1000, ".jpg");
 
 	BasePictures test(100, ".jpg");
+<<<<<<< Updated upstream
 //>>>>>>> Stashed changes
+=======
+	//>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 	test.CreatingPicturesForMosaics();
 	waitKey(0);
 
@@ -39,7 +43,11 @@ int main()
 	imshow("Returned", output);
 	waitKey(0);
 	*/
+<<<<<<< Updated upstream
 	
+=======
+
+>>>>>>> Stashed changes
 
 
 	return 0;
