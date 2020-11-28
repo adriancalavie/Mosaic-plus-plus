@@ -101,4 +101,11 @@ void Command::makeMosaic(argument path, const std::optional<uint8_t>& partitionS
 
 void Command::selectFolder(argument path) const
 {
+	BasePictures pool(100, ".jpg");//temporary arguments, will change
+
+	pool.CreatingPicturesForMosaics(path);
+
+	//pool.GetMediumColor();
+
+	//member pool = pool;
 }
