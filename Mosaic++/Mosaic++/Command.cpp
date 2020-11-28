@@ -93,5 +93,4 @@ void Command::makeMosaic(argument path, const std::optional<uint8_t>& partitionS
 
 void Command::selectFolder(argument path) const
 {
-
 }
