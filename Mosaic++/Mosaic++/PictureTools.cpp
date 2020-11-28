@@ -1,13 +1,13 @@
 #include "PictureTools.h"
 #include "BasePictures.h"
 #include <iostream>
+#include <unordered_map>
 
 Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
 {
 	uint16_t height = botR.first - topL.first;
 	uint16_t width = botR.second - topL.second;
 	Mat result(height, width, CV_8UC3);
-	//std::cout << result.rows << " " << result.cols;
 	for (int index_rows = 0; index_rows < height; index_rows++)
 		for (int index_cols = 0; index_cols < width; index_cols++)
 		{
@@ -105,7 +105,9 @@ Scalar PictureTools::averageColor(const Mat& image)
 	return Scalar(blue, green, red);
 }
 
-Mat PictureTools::makeMosaic(const std::vector<Scalar>& dataPictures, Mat& image, const uint8_t& partitionSize)
+
+
+Mat PictureTools::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, Mat& image, const uint8_t& partitionSize)
 {
 	bool v1 = image.cols % partitionSize == 0;
 	bool v2 = image.rows % partitionSize == 0;
@@ -126,23 +128,14 @@ Mat PictureTools::makeMosaic(const std::vector<Scalar>& dataPictures, Mat& image
 			// compare partitionAverage with mapped images's average;*first implementation using STL vector
 			Scalar medColor = PictureTools::averageColor(partition);
 			int sumMedColor = medColor[0] + medColor[1] + medColor[2];
-			int bestMatch = std::abs((sumMedColor)-
-				(dataPictures[0][0] + dataPictures[0][1] + dataPictures[0][2]));
+			int bestMatch = std::abs((sumMedColor));
 			unsigned int bestIndex = 0;
-			for (unsigned int index = 1; index < dataPictures.size(); ++index)
-			{
-				int curr = std::abs((sumMedColor)
-					-(dataPictures[index][0] + dataPictures[index][1] + dataPictures[index][2]));
-				if (bestMatch > curr)
-				{
-					bestIndex = index;
-					bestMatch = curr;
-				}
-			}
+			//best mach image 
+			
+
 			std::cout << bestMatch << std::endl;
 
-			// partition = closestMappedImage;
-
+			
 			for (auto i = x; i < x + partitionSize; ++i)
 			{
 				for (auto j = y; j < y + partitionSize; ++j)

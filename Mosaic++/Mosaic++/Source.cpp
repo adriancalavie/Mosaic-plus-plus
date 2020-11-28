@@ -13,11 +13,7 @@ int main()
 	//BasePictures test(1000, ".jpg");
 
 	BasePictures test(100, ".jpg");
-<<<<<<< Updated upstream
 //>>>>>>> Stashed changes
-=======
-	//>>>>>>> Stashed changes
->>>>>>> Stashed changes
 	test.CreatingPicturesForMosaics();
 	waitKey(0);
 
@@ -35,19 +31,15 @@ int main()
 	waitKey(0);
 	*/
 
-	/*
+	
 	Mat input = imread("..//test.jpg", IMREAD_COLOR);
 	input = PictureTools::resize(input, 600, 600);
 	Mat output = PictureTools::makeMosaic(test.GetMediumColor(),input);
 
 	imshow("Returned", output);
 	waitKey(0);
-	*/
-<<<<<<< Updated upstream
 	
-=======
-
->>>>>>> Stashed changes
+	
 
 
 	return 0;

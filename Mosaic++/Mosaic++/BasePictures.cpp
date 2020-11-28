@@ -4,14 +4,15 @@
 BasePictures::BasePictures(const uint16_t& numberPictures, const std::string& pictureExtension)
 {
 	this->m_numberPictures = numberPictures;
-	this->m_mediumColor.resize(numberPictures);
 	this->m_pictureExtension = pictureExtension;
 }
 
-const std::vector<cv::Scalar>& BasePictures::GetMediumColor() const
+const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const
 {
-	return this->m_mediumColor;
+	return m_mediumColor;
 }
+
+
 
 const void BasePictures::CreatingPicturesForMosaics(const std::string& fileSource, const std::string& fileDestination) 
 {
@@ -23,11 +24,7 @@ const void BasePictures::CreatingPicturesForMosaics(const std::string& fileSourc
 	{
 		cv::Mat img = cv::imread(image_path, cv::IMREAD_COLOR);
 		img=PictureTools::resize(img, 50, 50);
-
-		m_mediumColor[count]=(PictureTools::averageColor(img));
-		this->m_mediumColorv2.insert(std::make_pair(PictureTools::averageColor(img), std::to_string(count) + this->m_pictureExtension));
-		// need a hash function for unorder_map
-
+		this->m_mediumColor.insert(std::make_pair(PictureTools::averageColor(img), std::to_string(count) + this->m_pictureExtension));
 
 		cv::imwrite(fileDestination+std::to_string(count)+this->m_pictureExtension, img);
 		assert(!img.empty());
