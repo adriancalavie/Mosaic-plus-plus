@@ -1,4 +1,5 @@
 #include "Command.h"
+#include "BasePictures.h"
 
 const std::string Command::mosaicDocs = "[docs]make_mosaic.txt";
 const std::string Command::selectDocs = "[docs]select_images_folder.txt";
