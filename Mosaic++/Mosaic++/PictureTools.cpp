@@ -28,45 +28,6 @@ Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
 	return result;
 }
 
-Mat PictureTools::rotateLeft(const Mat& image)
-{
-	Mat result(image.rows, image.cols, CV_8UC3);
-	for (int index_rows = 0; index_rows < image.rows; index_rows++)
-		for (int index_cols = 0; index_cols < image.cols; index_cols++)
-		{
-			result.at<Vec3b>(image.cols - index_cols - 1, index_rows)[0] = image.at<Vec3b>(index_rows, index_cols)[0];
-			result.at<Vec3b>(image.cols - index_cols - 1, index_rows)[1] = image.at<Vec3b>(index_rows, index_cols)[1];
-			result.at<Vec3b>(image.cols - index_cols - 1, index_rows)[2] = image.at<Vec3b>(index_rows, index_cols)[2];
-		}
-	return result;
-}
-
-Mat PictureTools::rotateRight(const Mat& image)
-{
-	Mat result(image.rows, image.cols, CV_8UC3);
-	for (int index_rows = 0; index_rows < image.rows; index_rows++)
-		for (int index_cols = 0; index_cols < image.cols; index_cols++)
-		{
-			result.at<Vec3b>(index_cols, image.rows - index_rows - 1)[0] = image.at<Vec3b>(index_rows, index_cols)[0];
-			result.at<Vec3b>(index_cols, image.rows - index_rows - 1)[1] = image.at<Vec3b>(index_rows, index_cols)[1];
-			result.at<Vec3b>(index_cols, image.rows - index_rows - 1)[2] = image.at<Vec3b>(index_rows, index_cols)[2];
-		}
-	return result;
-}
-
-Mat PictureTools::rotate180(const Mat& image)
-{
-	Mat result(image.rows, image.cols, CV_8UC3);
-	for (int index_rows = 0; index_rows < image.rows; index_rows++)
-		for (int index_cols = 0; index_cols < image.cols; index_cols++)
-		{
-			result.at<Vec3b>(image.rows - index_rows - 1, image.cols - index_cols - 1)[0] = image.at<Vec3b>(index_rows, index_cols)[0];
-			result.at<Vec3b>(image.rows - index_rows - 1, image.cols - index_cols - 1)[1] = image.at<Vec3b>(index_rows, index_cols)[1];
-			result.at<Vec3b>(image.rows - index_rows - 1, image.cols - index_cols - 1)[2] = image.at<Vec3b>(index_rows, index_cols)[2];
-		}
-	return result;
-}
-
 Mat PictureTools::resize(const Mat& image, const uint16_t& width, const uint16_t& height)
 {
 	assert(!image.empty());
