@@ -1,7 +1,7 @@
 #include <iostream>
 #include "BasePictures.h"
 #include "PictureTools.h"
-
+#include "StopWatch.h"
 #include <vector>
 
 
@@ -13,7 +13,7 @@ int main()
 	//BasePictures test(1000, ".jpg");
 
 	BasePictures test(1000, ".jpg");
-//>>>>>>> Stashed changes
+
 	test.CreatingPicturesForMosaics();
 	waitKey(0);
 
@@ -30,13 +30,11 @@ int main()
 	imshow("Display Window3", image3);
 	waitKey(0);
 	*/
-	
-	Mat input = imread("..//test.jpg", IMREAD_COLOR);
-	input = PictureTools::resize(input, 800, 800);
-	imshow("Original", input);
-	waitKey(0);
 
-	Mat output = PictureTools::makeMosaic(test.GetMediumColor(),input);
+	Mat input = imread("..//test.jpg", IMREAD_COLOR);
+	Mat input2 = imread("..//test.jpg", IMREAD_COLOR);
+
+	//Mat output = PictureTools::makeMosaic(test.GetMediumColor(),input);
 
 	/*output=PictureTools::rotateLeft(output);
 	output = PictureTools::rotateRight(output);
@@ -46,8 +44,8 @@ int main()
 	std::pair<int, int> start(0,0);
 
 	PictureTools::replaceCell(output, testPhoto, start);*/
-	imshow("Returned", output);
-	waitKey(0);
+	//imshow("Returned", output);
+	//waitKey(0);
 	
 	
 

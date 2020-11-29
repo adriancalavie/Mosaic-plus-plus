@@ -1,8 +1,8 @@
 #include "PictureTools.h"
-#include "BasePictures.h"
 #include <iostream>
 #include <unordered_map>
 
+using namespace cv;
 
 int euclideanDistance(const Scalar& firstColor, const Scalar& secondColor)
 {
@@ -65,6 +65,13 @@ Mat PictureTools::rotate180(const Mat& image)
 			result.at<Vec3b>(image.rows - index_rows - 1, image.cols - index_cols - 1)[2] = image.at<Vec3b>(index_rows, index_cols)[2];
 		}
 	return result;
+}
+
+Mat PictureTools::resizeBI(const Mat& image, const uint16_t& width, const uint16_t& height)
+{
+	Mat s;
+	//to implement
+	return s;
 }
 
 Mat PictureTools::resize(const Mat& image, const uint16_t& width, const uint16_t& height)

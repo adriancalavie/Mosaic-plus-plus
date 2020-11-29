@@ -3,11 +3,9 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <cstdlib>
+#include "BasePictures.h"
 
 using namespace cv;
-
-
-
 
 class PictureTools
 {
@@ -24,6 +22,8 @@ public:
 	static Mat rotateLeft(const Mat& image);
 	static Mat rotateRight(const Mat& image);
 	static Mat rotate180(const Mat& image);
+
+	static Mat resizeBI(const Mat& image, const uint16_t& width = 0, const uint16_t& height = 0);
 	static Mat resize(const Mat& image, const uint16_t& width = 0, const uint16_t& height = 0);
 
 	static Scalar averageColor(const Mat& image);
