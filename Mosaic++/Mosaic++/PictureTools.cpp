@@ -3,6 +3,37 @@
 #include <unordered_map>
 
 
+int PictureTools::valueCheck(int number)
+{
+	if (number < 0)
+		return 0;
+	if (number > 255)
+		return 255;
+	return number;
+}
+
+std::tuple<uint8_t, uint8_t, uint8_t> PictureTools::hueShiftPixel(int R, int G, int B, int angle)
+{
+	int resR, resG, resB;
+	const double pi = atan(1) * 4;
+	double x = angle * pi / 180;
+	double xCos = cos(x);
+	double xSin = sin(x);
+	double calculationMatrix[3][3] = { 1,0,0,0,1,0,0,0,1 };
+	calculationMatrix[0][0] = xCos + (1.0 - xCos) / 3.0;
+	calculationMatrix[0][1] = 1. / 3. * (1.0 - xCos) - sqrt(1. / 3.) * xSin;
+	calculationMatrix[0][2] = 1. / 3. * (1.0 - xCos) + sqrt(1. / 3.) * xSin;
+	calculationMatrix[1][0] = 1. / 3. * (1.0 - xCos) + sqrt(1. / 3.) * xSin;
+	calculationMatrix[1][1] = xCos + 1. / 3. * (1.0 - xCos);
+	calculationMatrix[1][2] = 1. / 3. * (1.0 - xCos) - sqrt(1. / 3.) * xSin;
+	calculationMatrix[2][0] = 1. / 3. * (1.0 - xCos) - sqrt(1. / 3.) * xSin;
+	calculationMatrix[2][1] = 1. / 3. * (1.0 - xCos) + sqrt(1. / 3.) * xSin;
+	calculationMatrix[2][2] = xCos + 1. / 3. * (1.0 - xCos);
+	resR = R * calculationMatrix[0][0] + G * calculationMatrix[0][1] + B * calculationMatrix[0][2];
+	resG = R * calculationMatrix[1][0] + G * calculationMatrix[1][1] + B * calculationMatrix[1][2];
+	resB = R * calculationMatrix[2][0] + G * calculationMatrix[2][1] + B * calculationMatrix[2][2];
+	return std::make_tuple(valueCheck(resR), valueCheck(resG), valueCheck(resB));
+}
 
 Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
 {
@@ -93,6 +124,21 @@ Scalar PictureTools::averageColor(const Mat& image, std::pair<int, int>startLoca
 	blue = blue * 100;
 
 	return Scalar(blue, green, red);
+}
+
+Mat PictureTools::hueShiftImage(const Mat& image, int angle)
+{
+	std::tuple <uint8_t, uint8_t, uint8_t> newColor;
+	Mat result(image.rows, image.cols, CV_8UC3);
+	for (int rows = 0; rows < image.rows; ++rows)
+		for (int cols = 0; cols < image.cols; ++cols)
+			{
+			newColor = hueShiftPixel(image.at<cv::Vec3b>(rows, cols)[2], image.at<cv::Vec3b>(rows, cols)[1], image.at<cv::Vec3b>(rows, cols)[0], angle);
+			result.at<cv::Vec3b>(rows, cols)[0] = std::get<2>(newColor);
+			result.at<cv::Vec3b>(rows, cols)[1] = std::get<1>(newColor);
+			result.at<cv::Vec3b>(rows, cols)[2] = std::get<0>(newColor);
+			}
+	return result;
 }
 
 
