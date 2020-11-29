@@ -106,7 +106,6 @@ Scalar PictureTools::averageColor(const Mat& image)
 }
 
 
-
 Mat PictureTools::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, Mat& image, const uint8_t& partitionSize)
 {
 	bool v1 = image.cols % partitionSize == 0;
@@ -127,19 +126,12 @@ Mat PictureTools::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& 
 
 			// compare partitionAverage with mapped images's average;*first implementation using STL vector
 			Scalar medColor = PictureTools::averageColor(partition);
-			int sumMedColor = medColor[0] + medColor[1] + medColor[2];
-			int bestMatch = std::abs((sumMedColor));
-			unsigned int bestIndex = 0;
-			//best mach image 
-
-
-			std::cout << bestMatch << std::endl;
 
 			Mat testPhoto;
-			testPhoto = BasePictures::readPhoto(std::to_string(bestMatch) + ".jpg");
-			std::pair<int, int> start(x, y);
+			//testPhoto = BasePictures::readPhoto(pictureName);
+			/*std::pair<int, int> start(x, y);
 			std::cout << x << " " << y << std::endl;
-			PictureTools::replaceCell(image, testPhoto, start);
+			PictureTools::replaceCell(image, testPhoto, start);*/
 
 
 
@@ -148,9 +140,9 @@ Mat PictureTools::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& 
 				for (auto j = y; j < y + partitionSize; ++j)
 				{
 					if (i < result.cols && j < result.rows) {
-						result.at<Vec3b>({ i,j })[0] = partition.at<Vec3b>({ i - x, j - y })[0];
-						result.at<Vec3b>({ i,j })[1] = partition.at<Vec3b>({ i - x, j - y })[1];
-						result.at<Vec3b>({ i,j })[2] = partition.at<Vec3b>({ i - x, j - y })[2];
+						result.at<Vec3b>({ i,j })[0] = testPhoto.at<Vec3b>({ i - x, j - y })[0];
+						result.at<Vec3b>({ i,j })[1] = testPhoto.at<Vec3b>({ i - x, j - y })[1];
+						result.at<Vec3b>({ i,j })[2] = testPhoto.at<Vec3b>({ i - x, j - y })[2];
 					}
 					else
 					{
@@ -158,7 +150,7 @@ Mat PictureTools::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& 
 					}
 				}
 			}
-			PictureTools::replaceCell(result, testPhoto, std::make_pair(x, y));
+			//PictureTools::replaceCell(result, testPhoto, std::make_pair(x, y));
 		}
 
 	return result;
@@ -176,3 +168,11 @@ void PictureTools::replaceCell(Mat& originalPicture, const Mat& mosaicPhoto, con
 		}
 }
 
+int euclidianDistance(const Scalar& firstColor, const Scalar& secondColor)
+{
+	int blueD, greenD, redD;
+	blueD = firstColor[0] - secondColor[0];
+	greenD = firstColor[1] - secondColor[1];
+	redD = firstColor[2] - secondColor[2];
+	return (blueD * blueD + greenD * greenD + redD * redD);
+}

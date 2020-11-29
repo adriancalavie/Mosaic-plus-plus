@@ -16,6 +16,7 @@ private:
 
 private:
 	static const uint8_t defaultSize = 10;
+
 public:
 	static Mat crop(const Mat& image, Point topL, Point botR);
 	static Mat rotateLeft(const Mat& image);
@@ -25,6 +26,8 @@ public:
 	static Scalar averageColor(const Mat& image);
 	static Mat makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, Mat& image, const uint8_t& partitionSize = defaultSize);
 	static void replaceCell(Mat& originalPicture, const Mat& mosaicPhoto,const std::pair<int, int>& topL);
+
+	friend int euclidianDistance(const Scalar& firstColor, const Scalar& secondColor);
 
 };
 

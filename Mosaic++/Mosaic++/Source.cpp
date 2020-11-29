@@ -30,10 +30,12 @@ int main()
 	imshow("Display Window3", image3);
 	waitKey(0);
 	*/
-
 	
 	Mat input = imread("..//test.jpg", IMREAD_COLOR);
-	input = PictureTools::resize(input, 600, 600);
+	input = PictureTools::resize(input, 800, 800);
+	imshow("Original", input);
+	waitKey(0);
+
 	Mat output = PictureTools::makeMosaic(test.GetMediumColor(),input);
 
 	/*output=PictureTools::rotateLeft(output);
@@ -44,8 +46,6 @@ int main()
 	std::pair<int, int> start(0,0);
 
 	PictureTools::replaceCell(output, testPhoto, start);*/
-
-
 	imshow("Returned", output);
 	waitKey(0);
 	
