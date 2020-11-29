@@ -3,35 +3,27 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <cstdlib>
-#include "BasePictures.h"
-
+#include <cmath>
+#include <tuple>
 using namespace cv;
+
+
+
 
 class PictureTools
 {
 private:
 	using Point = std::pair <uint16_t, uint16_t>;
-
 private:
 	static const uint8_t defaultSize = 10;
-
+private:
+	static int valueCheck(int number);
+	static std::tuple <uint8_t, uint8_t, uint8_t> hueShiftPixel(int B, int G, int R, int angle);
 public:
-	friend int euclideanDistance(const Scalar& firstColor, const Scalar& secondColor);
-
 	static Mat crop(const Mat& image, Point topL, Point botR);
-	static Mat rotateLeft(const Mat& image);
-	static Mat rotateRight(const Mat& image);
-	static Mat rotate180(const Mat& image);
-
-	static Mat resizeBI(const Mat& image, const uint16_t& width = 0, const uint16_t& height = 0);
 	static Mat resize(const Mat& image, const uint16_t& width = 0, const uint16_t& height = 0);
-
 	static Scalar averageColor(const Mat& image);
 	static Scalar averageColor(const Mat& image,std::pair<int,int>startLocation, std::pair<int, int> size);
-
-	static Mat makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, Mat& image, const uint8_t& partitionSize = defaultSize);
-	static void replaceCell(Mat& originalPicture, const Mat& mosaicPhoto,const std::pair<int, int>& topL);
-
-
+	static Mat hueShiftImage(const Mat& image, int angle);
 };
 

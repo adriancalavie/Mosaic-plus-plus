@@ -2,15 +2,37 @@
 #include <iostream>
 #include <unordered_map>
 
-using namespace cv;
 
-int euclideanDistance(const Scalar& firstColor, const Scalar& secondColor)
+int PictureTools::valueCheck(int number)
 {
-	int blueD, greenD, redD;
-	blueD = firstColor[0] - secondColor[0];
-	greenD = firstColor[1] - secondColor[1];
-	redD = firstColor[2] - secondColor[2];
-	return (blueD * blueD + greenD * greenD + redD * redD);
+	if (number < 0)
+		return 0;
+	if (number > 255)
+		return 255;
+	return number;
+}
+
+std::tuple<uint8_t, uint8_t, uint8_t> PictureTools::hueShiftPixel(int R, int G, int B, int angle)
+{
+	int resR, resG, resB;
+	const double pi = atan(1) * 4;
+	double x = angle * pi / 180;
+	double xCos = cos(x);
+	double xSin = sin(x);
+	double calculationMatrix[3][3] = { 1,0,0,0,1,0,0,0,1 };
+	calculationMatrix[0][0] = xCos + (1.0 - xCos) / 3.0;
+	calculationMatrix[0][1] = 1. / 3. * (1.0 - xCos) - sqrt(1. / 3.) * xSin;
+	calculationMatrix[0][2] = 1. / 3. * (1.0 - xCos) + sqrt(1. / 3.) * xSin;
+	calculationMatrix[1][0] = 1. / 3. * (1.0 - xCos) + sqrt(1. / 3.) * xSin;
+	calculationMatrix[1][1] = xCos + 1. / 3. * (1.0 - xCos);
+	calculationMatrix[1][2] = 1. / 3. * (1.0 - xCos) - sqrt(1. / 3.) * xSin;
+	calculationMatrix[2][0] = 1. / 3. * (1.0 - xCos) - sqrt(1. / 3.) * xSin;
+	calculationMatrix[2][1] = 1. / 3. * (1.0 - xCos) + sqrt(1. / 3.) * xSin;
+	calculationMatrix[2][2] = xCos + 1. / 3. * (1.0 - xCos);
+	resR = R * calculationMatrix[0][0] + G * calculationMatrix[0][1] + B * calculationMatrix[0][2];
+	resG = R * calculationMatrix[1][0] + G * calculationMatrix[1][1] + B * calculationMatrix[1][2];
+	resB = R * calculationMatrix[2][0] + G * calculationMatrix[2][1] + B * calculationMatrix[2][2];
+	return std::make_tuple(valueCheck(resR), valueCheck(resG), valueCheck(resB));
 }
 
 Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
@@ -26,52 +48,6 @@ Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
 			result.at<Vec3b>(index_rows, index_cols)[2] = image.at<Vec3b>(topL.first + index_rows, topL.second + index_cols)[2];
 		}
 	return result;
-}
-
-Mat PictureTools::rotateLeft(const Mat& image)
-{
-	Mat result(image.rows, image.cols, CV_8UC3);
-	for (int index_rows = 0; index_rows < image.rows; index_rows++)
-		for (int index_cols = 0; index_cols < image.cols; index_cols++)
-		{
-			result.at<Vec3b>(image.cols - index_cols - 1, index_rows)[0] = image.at<Vec3b>(index_rows, index_cols)[0];
-			result.at<Vec3b>(image.cols - index_cols - 1, index_rows)[1] = image.at<Vec3b>(index_rows, index_cols)[1];
-			result.at<Vec3b>(image.cols - index_cols - 1, index_rows)[2] = image.at<Vec3b>(index_rows, index_cols)[2];
-		}
-	return result;
-}
-
-Mat PictureTools::rotateRight(const Mat& image)
-{
-	Mat result(image.rows, image.cols, CV_8UC3);
-	for (int index_rows = 0; index_rows < image.rows; index_rows++)
-		for (int index_cols = 0; index_cols < image.cols; index_cols++)
-		{
-			result.at<Vec3b>(index_cols, image.rows - index_rows - 1)[0] = image.at<Vec3b>(index_rows, index_cols)[0];
-			result.at<Vec3b>(index_cols, image.rows - index_rows - 1)[1] = image.at<Vec3b>(index_rows, index_cols)[1];
-			result.at<Vec3b>(index_cols, image.rows - index_rows - 1)[2] = image.at<Vec3b>(index_rows, index_cols)[2];
-		}
-	return result;
-}
-
-Mat PictureTools::rotate180(const Mat& image)
-{
-	Mat result(image.rows, image.cols, CV_8UC3);
-	for (int index_rows = 0; index_rows < image.rows; index_rows++)
-		for (int index_cols = 0; index_cols < image.cols; index_cols++)
-		{
-			result.at<Vec3b>(image.rows - index_rows - 1, image.cols - index_cols - 1)[0] = image.at<Vec3b>(index_rows, index_cols)[0];
-			result.at<Vec3b>(image.rows - index_rows - 1, image.cols - index_cols - 1)[1] = image.at<Vec3b>(index_rows, index_cols)[1];
-			result.at<Vec3b>(image.rows - index_rows - 1, image.cols - index_cols - 1)[2] = image.at<Vec3b>(index_rows, index_cols)[2];
-		}
-	return result;
-}
-
-Mat PictureTools::resizeBI(const Mat& image, const uint16_t& width, const uint16_t& height)
-{
-	Mat s;
-	//to implement
-	return s;
 }
 
 Mat PictureTools::resize(const Mat& image, const uint16_t& width, const uint16_t& height)
@@ -150,70 +126,20 @@ Scalar PictureTools::averageColor(const Mat& image, std::pair<int, int>startLoca
 	return Scalar(blue, green, red);
 }
 
-
-Mat PictureTools::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, Mat& image, const uint8_t& partitionSize)
+Mat PictureTools::hueShiftImage(const Mat& image, int angle)
 {
-	bool v1 = image.cols % partitionSize == 0;
-	bool v2 = image.rows % partitionSize == 0;
-	bool v3 = v1 || v2;
-	assert(v3);
-
-	//if any pixels would remain after partitioning process, call abort;
-
-
+	std::tuple <uint8_t, uint8_t, uint8_t> newColor;
 	Mat result(image.rows, image.cols, CV_8UC3);
-
-	for (auto x = 0; x < image.cols; x += partitionSize)
-		for (auto y = 0; y < image.rows; y += partitionSize)
-		{
-			// compare partitionAverage with mapped images's average;*first implementation using STL vector
-			Scalar medColor = PictureTools::averageColor(image, { y,x }, { partitionSize,partitionSize });
-			
-			std::string pictureName;
-			int closestDistance = INT_MAX;
-			for (auto itr : dataPictures)
+	for (int rows = 0; rows < image.rows; ++rows)
+		for (int cols = 0; cols < image.cols; ++cols)
 			{
-				int currDistance = euclideanDistance(medColor, itr.first);
-
-				if (currDistance < closestDistance)
-				{
-					closestDistance = currDistance;
-					pictureName = itr.second;
-				}
+			newColor = hueShiftPixel(image.at<cv::Vec3b>(rows, cols)[2], image.at<cv::Vec3b>(rows, cols)[1], image.at<cv::Vec3b>(rows, cols)[0], angle);
+			result.at<cv::Vec3b>(rows, cols)[0] = std::get<2>(newColor);
+			result.at<cv::Vec3b>(rows, cols)[1] = std::get<1>(newColor);
+			result.at<cv::Vec3b>(rows, cols)[2] = std::get<0>(newColor);
 			}
-
-			Mat testPhoto;
-			testPhoto = BasePictures::readPhoto(pictureName);
-
-			for (auto i = x; i < x + partitionSize; ++i)
-			{
-				for (auto j = y; j < y + partitionSize; ++j)
-				{
-					if (i < result.cols && j < result.rows) {
-						result.at<Vec3b>({ i,j })[0] = testPhoto.at<Vec3b>({ i - x, j - y })[0];
-						result.at<Vec3b>({ i,j })[1] = testPhoto.at<Vec3b>({ i - x, j - y })[1];
-						result.at<Vec3b>({ i,j })[2] = testPhoto.at<Vec3b>({ i - x, j - y })[2];
-					}
-					else
-					{
-						//nimic
-					}
-				}
-			}
-			//PictureTools::replaceCell(result, testPhoto, std::make_pair(x, y));
-		}
-
 	return result;
 }
 
-void PictureTools::replaceCell(Mat& originalPicture, const Mat& mosaicPhoto, const std::pair<int, int>& topL)
-{
 
-	for (int index_rows = 0; index_rows < mosaicPhoto.rows; index_rows++)
-		for (int index_cols = 0; index_cols < mosaicPhoto.cols; index_cols++)
-		{
-			originalPicture.at<Vec3b>(index_rows + topL.first, index_cols + topL.second)[0] = mosaicPhoto.at<Vec3b>(index_rows, index_cols)[0];
-			originalPicture.at<Vec3b>(index_rows + topL.first, index_cols + topL.second)[1] = mosaicPhoto.at<Vec3b>(index_rows, index_cols)[1];
-			originalPicture.at<Vec3b>(index_rows + topL.first, index_cols + topL.second)[2] = mosaicPhoto.at<Vec3b>(index_rows, index_cols)[2];
-		}
-}
+
