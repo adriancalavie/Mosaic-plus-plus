@@ -44,5 +44,8 @@ public:
 	BasePictures(const uint16_t&, const std::string&);
 	const std::unordered_map<cv::Scalar, std::string>& GetMediumColor() const;
 	const void CreatingPicturesForMosaics(const std::string& ="..//Base pictures\\", const std::string& = "..//Pictures for mosaics\\" );
+
+
+	static cv::Mat readPhoto(const std::string &  ="\n" , const std::string & = "..//Pictures for mosaics\\");
 };
 

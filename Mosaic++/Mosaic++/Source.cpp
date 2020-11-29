@@ -12,7 +12,7 @@ int main()
 
 	//BasePictures test(1000, ".jpg");
 
-	BasePictures test(100, ".jpg");
+	BasePictures test(1000, ".jpg");
 //>>>>>>> Stashed changes
 	test.CreatingPicturesForMosaics();
 	waitKey(0);
@@ -35,6 +35,16 @@ int main()
 	Mat input = imread("..//test.jpg", IMREAD_COLOR);
 	input = PictureTools::resize(input, 600, 600);
 	Mat output = PictureTools::makeMosaic(test.GetMediumColor(),input);
+
+	/*output=PictureTools::rotateLeft(output);
+	output = PictureTools::rotateRight(output);
+	output = PictureTools::rotate180(output);*/
+	/*Mat testPhoto;
+	testPhoto= BasePictures::readPhoto("0.jpg");
+	std::pair<int, int> start(0,0);
+
+	PictureTools::replaceCell(output, testPhoto, start);*/
+
 
 	imshow("Returned", output);
 	waitKey(0);

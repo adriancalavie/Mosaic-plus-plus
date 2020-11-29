@@ -23,7 +23,7 @@ const void BasePictures::CreatingPicturesForMosaics(const std::string& fileSourc
 	while (count < this->m_numberPictures)
 	{
 		cv::Mat img = cv::imread(image_path, cv::IMREAD_COLOR);
-		img=PictureTools::resize(img, 50, 50);
+		img=PictureTools::resize(img, 10, 10);
 		this->m_mediumColor.insert(std::make_pair(PictureTools::averageColor(img), std::to_string(count) + this->m_pictureExtension));
 
 		cv::imwrite(fileDestination+std::to_string(count)+this->m_pictureExtension, img);
@@ -35,6 +35,13 @@ const void BasePictures::CreatingPicturesForMosaics(const std::string& fileSourc
 	}
 	
 
+}
+
+cv::Mat BasePictures::readPhoto(const std::string& pictureName, const std::string& fileName)
+{
+	cv::Mat img = cv::imread(fileName+ pictureName, cv::IMREAD_COLOR);
+	assert(!img.empty());
+	return img;
 }
 
 size_t BasePictures::HashKey::operator()(const cv::Scalar& toHash) const
