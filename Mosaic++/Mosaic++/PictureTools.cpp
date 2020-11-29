@@ -3,6 +3,16 @@
 #include <iostream>
 #include <unordered_map>
 
+
+int euclideanDistance(const Scalar& firstColor, const Scalar& secondColor)
+{
+	int blueD, greenD, redD;
+	blueD = firstColor[0] - secondColor[0];
+	greenD = firstColor[1] - secondColor[1];
+	redD = firstColor[2] - secondColor[2];
+	return (blueD * blueD + greenD * greenD + redD * redD);
+}
+
 Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
 {
 	uint16_t height = botR.first - topL.first;
@@ -105,6 +115,34 @@ Scalar PictureTools::averageColor(const Mat& image)
 	return Scalar(blue, green, red);
 }
 
+Scalar PictureTools::averageColor(const Mat& image, std::pair<int, int>startLocation, std::pair<int, int> size)
+{
+	assert(!image.empty());
+	double blue, green, red;
+	blue = green = red = 0;
+	int sizeOfPartition = (size.first) * (size.second);
+	int rowSize = size.first + startLocation.first;
+	int colSize = size.second + startLocation.second;
+	for (int rows = startLocation.first; rows < rowSize; ++rows)
+	{
+		for (int cols = startLocation.second; cols < colSize; ++cols)
+		{
+			blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
+			green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
+			red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
+
+		}
+	}
+	red = red / sizeOfPartition;
+	green = green / sizeOfPartition;
+	blue = blue / sizeOfPartition;
+	red = red * 100;
+	green = green * 100;
+	blue = blue * 100;
+
+	return Scalar(blue, green, red);
+}
+
 
 Mat PictureTools::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, Mat& image, const uint8_t& partitionSize)
 {
@@ -112,6 +150,7 @@ Mat PictureTools::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& 
 	bool v2 = image.rows % partitionSize == 0;
 	bool v3 = v1 || v2;
 	assert(v3);
+
 	//if any pixels would remain after partitioning process, call abort;
 
 
@@ -120,20 +159,24 @@ Mat PictureTools::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& 
 	for (auto x = 0; x < image.cols; x += partitionSize)
 		for (auto y = 0; y < image.rows; y += partitionSize)
 		{
-			Mat partition = crop(image, { y,x }, { y + partitionSize, x + partitionSize });
-
-			Scalar partitionAverage = averageColor(partition);
-
 			// compare partitionAverage with mapped images's average;*first implementation using STL vector
-			Scalar medColor = PictureTools::averageColor(partition);
+			Scalar medColor = PictureTools::averageColor(image, { y,x }, { partitionSize,partitionSize });
+			
+			std::string pictureName;
+			int closestDistance = INT_MAX;
+			for (auto itr : dataPictures)
+			{
+				int currDistance = euclideanDistance(medColor, itr.first);
+
+				if (currDistance < closestDistance)
+				{
+					closestDistance = currDistance;
+					pictureName = itr.second;
+				}
+			}
 
 			Mat testPhoto;
-			//testPhoto = BasePictures::readPhoto(pictureName);
-			/*std::pair<int, int> start(x, y);
-			std::cout << x << " " << y << std::endl;
-			PictureTools::replaceCell(image, testPhoto, start);*/
-
-
+			testPhoto = BasePictures::readPhoto(pictureName);
 
 			for (auto i = x; i < x + partitionSize; ++i)
 			{
@@ -166,13 +209,4 @@ void PictureTools::replaceCell(Mat& originalPicture, const Mat& mosaicPhoto, con
 			originalPicture.at<Vec3b>(index_rows + topL.first, index_cols + topL.second)[1] = mosaicPhoto.at<Vec3b>(index_rows, index_cols)[1];
 			originalPicture.at<Vec3b>(index_rows + topL.first, index_cols + topL.second)[2] = mosaicPhoto.at<Vec3b>(index_rows, index_cols)[2];
 		}
-}
-
-int euclidianDistance(const Scalar& firstColor, const Scalar& secondColor)
-{
-	int blueD, greenD, redD;
-	blueD = firstColor[0] - secondColor[0];
-	greenD = firstColor[1] - secondColor[1];
-	redD = firstColor[2] - secondColor[2];
-	return (blueD * blueD + greenD * greenD + redD * redD);
 }
