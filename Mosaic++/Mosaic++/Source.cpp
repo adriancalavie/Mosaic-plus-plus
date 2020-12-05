@@ -2,7 +2,6 @@
 #include "BasePictures.h"
 #include "PictureTools.h"
 #include "StopWatch.h"
-#include <vector>
 #include "Mosaic.h"
 
 

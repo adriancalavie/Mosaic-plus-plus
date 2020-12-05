@@ -47,6 +47,16 @@ const void BasePictures::setNumberPicture(const std::uint16_t& number)
 	this->m_numberPictures = number;
 }
 
+const uint16_t BasePictures::getNumberPicture() const
+{
+	return this->m_numberPictures;
+}
+
+const std::string BasePictures::getPictureExtension() const
+{
+	return this->m_pictureExtension;
+}
+
 cv::Mat BasePictures::readPhoto(const std::string& pictureName, const std::string& fileName)
 {
 	cv::Mat img = cv::imread(fileName+ pictureName, cv::IMREAD_COLOR);

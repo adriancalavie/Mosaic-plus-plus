@@ -47,6 +47,9 @@ public:
 	const void setPictureExtension(const std::string&);
 	const void setNumberPicture(const std::uint16_t&);
 
+	const uint16_t getNumberPicture() const;
+	const std::string getPictureExtension() const;
+
 	static cv::Mat readPhoto(const std::string &  ="\n" , const std::string & = "..//Pictures for mosaics\\");
 };
 
