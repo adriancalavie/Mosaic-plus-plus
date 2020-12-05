@@ -2,7 +2,6 @@
 #include "CppUnitTest.h"
 #include "../Mosaic++/BasePictures.h"
 #include "../Mosaic++/BasePictures.cpp"
-#include "../Mosaic++/StopWatch.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>

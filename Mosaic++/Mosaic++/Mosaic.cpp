@@ -67,7 +67,7 @@ Mat Mosaic::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPi
 
 void Mosaic::replaceCell(Mat& originalPicture, const Mat& mosaicPhoto, const std::pair<int, int>& topL)
 {
-
+	assert(originalPicture.empty());
 	for (int index_rows = 0; index_rows < mosaicPhoto.rows; index_rows++)
 		for (int index_cols = 0; index_cols < mosaicPhoto.cols; index_cols++)
 		{
