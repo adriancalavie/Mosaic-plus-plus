@@ -37,6 +37,16 @@ const void BasePictures::CreatingPicturesForMosaics(const std::string& fileSourc
 
 }
 
+const void BasePictures::setPictureExtension(const std::string& extension)
+{
+	this->m_pictureExtension = extension;
+}
+
+const void BasePictures::setNumberPicture(const std::uint16_t& number)
+{
+	this->m_numberPictures = number;
+}
+
 cv::Mat BasePictures::readPhoto(const std::string& pictureName, const std::string& fileName)
 {
 	cv::Mat img = cv::imread(fileName+ pictureName, cv::IMREAD_COLOR);

@@ -1,8 +1,7 @@
 #pragma once
-#include <vector>
+
 #include <string>
 #include <iostream>
-#include <vector>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -41,10 +40,12 @@ private:
 	std::unordered_map<cv::Scalar, std::string> m_mediumColor;
 
 public:
-	BasePictures(const uint16_t&, const std::string&);
+	BasePictures(const uint16_t& = 0, const std::string& = ".jpg");
 	const std::unordered_map<cv::Scalar, std::string>& GetMediumColor() const;
 	const void CreatingPicturesForMosaics(const std::string& ="..//Base pictures\\", const std::string& = "..//Pictures for mosaics\\" );
 
+	const void setPictureExtension(const std::string&);
+	const void setNumberPicture(const std::uint16_t&);
 
 	static cv::Mat readPhoto(const std::string &  ="\n" , const std::string & = "..//Pictures for mosaics\\");
 };

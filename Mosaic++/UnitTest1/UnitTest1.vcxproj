@@ -78,8 +78,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>E:\OpenCV\opencv\build\x64\vc15\lib;C:\OpenCV\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>E:\OpenCV\opencv\build\include;C:\OpenCV\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\OpenCV\opencv\build\x64\vc15\lib;C:\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\OpenCV\opencv\build\include;C:\opencv\build\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>

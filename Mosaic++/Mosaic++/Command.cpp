@@ -110,3 +110,8 @@ void Command::selectFolder(argument path) const
 
 	//member pool = pool;
 }
+
+void Command::selectPicturesExtension(argument path) const
+{
+	//usint setPictureExtension from BasePictures
+}

@@ -39,7 +39,5 @@ namespace PictureToolsTest
 
 			//Assert::AreEqual(swOriginal, swMine);
 		}
-
-		
 	};
 }

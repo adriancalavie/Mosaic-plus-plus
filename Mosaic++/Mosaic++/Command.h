@@ -27,7 +27,7 @@ private:
 	bool help();
 	void makeMosaic(argument path, const std::optional<uint8_t>& partitionSize) const;
 	void selectFolder(argument path) const;
-
+	void selectPicturesExtension(argument path) const;
 
 private:
 
