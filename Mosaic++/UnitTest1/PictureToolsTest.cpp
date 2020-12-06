@@ -6,6 +6,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
+#include <tuple>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -68,6 +69,25 @@ namespace PictureToolsTest
 						break;
 					}
 
+			Assert::IsTrue(isEqual);
+		}
+		TEST_METHOD(HueShiftImage)
+		{
+			Mat testImage = imread("..//test.jpg", IMREAD_COLOR);
+			Mat hueShiftedImage = PictureTools::hueShiftImage(testImage, 45);
+			std::tuple <uint8_t, uint8_t, uint8_t> testColor;
+
+			bool isEqual = true;
+			for (int index_x = 0; index_x < testImage.rows; ++index_x)
+				for (int index_y = 0; index_y < testImage.cols; ++index_y)
+				{
+					testColor = PictureTools::hueShiftPixel(testImage.at<cv::Vec3b>(index_x, index_y)[2], testImage.at<cv::Vec3b>(index_x, index_y)[1], testImage.at<cv::Vec3b>(index_x, index_y)[0], 45);
+					if (testColor != std::tuple <uint8_t, uint8_t, uint8_t>(hueShiftedImage.at<cv::Vec3b>(index_x, index_y)[2], hueShiftedImage.at<cv::Vec3b>(index_x, index_y)[1], hueShiftedImage.at<cv::Vec3b>(index_x, index_y)[0]))
+					{
+						isEqual = false;
+						break;
+					}
+				}
 			Assert::IsTrue(isEqual);
 		}
 	};

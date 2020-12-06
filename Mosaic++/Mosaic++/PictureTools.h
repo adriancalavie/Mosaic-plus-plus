@@ -18,8 +18,8 @@ private:
 	static const uint8_t defaultSize = 10;
 private:
 	static int valueCheck(int number);
-	static std::tuple <uint8_t, uint8_t, uint8_t> hueShiftPixel(int B, int G, int R, int angle);
 public:
+	static std::tuple <uint8_t, uint8_t, uint8_t> hueShiftPixel(int B, int G, int R, int angle);
 	static Mat crop(const Mat& image, Point topL, Point botR);
 	static Mat resize(const Mat& image, const uint16_t& width = 0, const uint16_t& height = 0);
 	static Scalar averageColor(const Mat& image);
