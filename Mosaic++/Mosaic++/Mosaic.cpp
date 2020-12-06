@@ -2,6 +2,8 @@
 #include "BasePictures.h"
 #include "PictureTools.h"
 
+
+
 int euclideanDistance(const Scalar& firstColor, const Scalar& secondColor)
 {
 	int blueD, greenD, redD;
@@ -10,7 +12,50 @@ int euclideanDistance(const Scalar& firstColor, const Scalar& secondColor)
 	redD = firstColor[2] - secondColor[2];
 	return (blueD * blueD + greenD * greenD + redD * redD);
 }
-Mat Mosaic::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, Mat& image, const uint8_t& partitionSize)
+
+void Mosaic::alphaBlending(const std::unordered_map<cv::Scalar, std::string>& dataPictures)
+{
+	//trying to blend photo mosaic better
+	Mat foreground = imread("");
+	Mat background = imread("");
+	Mat alpha = imread("");
+
+	// Convert Mat to float data type
+	foreground.convertTo(foreground, CV_32FC3);
+	background.convertTo(background, CV_32FC3);
+
+	// Normalize the alpha mask to keep intensity between 0 and 1
+	alpha.convertTo(alpha, CV_32FC3, 1.0 / 255); // 
+
+	// Storage for output image
+	Mat ouImage = Mat::zeros(foreground.size(), foreground.type());
+
+	multiply(alpha, foreground, foreground);
+
+	multiply(Scalar::all(1.0) - alpha, background, background);
+
+	add(foreground, background, ouImage);
+
+	imshow("alpha blended image", ouImage / 255);
+	waitKey(0);
+
+
+}
+
+Mat Mosaic::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, Mat& image, const uint8_t& partitionSize, const uint8_t& shape)
+{
+	assert(!image.empty());
+
+	switch (shape)
+	{
+	case 1:
+		return makeSquare(dataPictures, image, partitionSize);
+	default:
+		break;
+	}
+}
+
+Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPictures, Mat& image, const uint8_t& partitionSize)
 {
 	bool v1 = image.cols % partitionSize == 0;
 	bool v2 = image.rows % partitionSize == 0;
