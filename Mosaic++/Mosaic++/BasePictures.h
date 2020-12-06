@@ -20,11 +20,12 @@ struct std::hash<cv::Scalar>
 		res = res * 31 + std::hash<double>()(k.val[2]);
 		return res;
 	}
-
 };
 
 class BasePictures
 {
+
+	using map = std::unordered_map<cv::Scalar, std::string>;
 
 private:
 	struct HashKey
@@ -32,23 +33,26 @@ private:
 		size_t operator()(const cv::Scalar& toHash) const;
 	};
 
-
-
 private:
 	std::uint16_t m_numberPictures;
-	std::string m_pictureExtension;
-	std::unordered_map<cv::Scalar, std::string> m_mediumColor;
+	map m_mediumColor;
+
+	std::string m_source;
+	std::string m_processedPictures;
+	std::string m_extension;
+
 
 public:
 	BasePictures(const uint16_t& = 0);
-	const std::unordered_map<cv::Scalar, std::string>& GetMediumColor() const;
-	const void CreatingPicturesForMosaics();
 
-	const void setPictureExtension(const std::string&);
-	const void setNumberPicture(const std::uint16_t&);
+	const map& GetMediumColor() const;
+	const void CreatePictures();
 
-	const uint16_t getNumberPicture() const;
-	const std::string getPictureExtension() const;
+	
+	void setPicturesNumber(const std::uint16_t&);
+
+	const uint16_t& getPictureCount() const;
+	
 
 	static cv::Mat readPhoto(const std::string &  ="\n" , const std::string & = "..//Pictures for mosaics\\");
 
@@ -58,9 +62,7 @@ public:
 	const std::string& getFileDestination() const;
 	void setFileDestination(const std::string&);
 
-private:
-
-	static std::string fileSource;
-	static std::string fileDestination;
+	const std::string& getExtension() const;
+	void setExtension(const std::string&);
 };
 

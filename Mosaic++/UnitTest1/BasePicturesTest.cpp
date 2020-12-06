@@ -17,8 +17,8 @@ namespace BasePicturesTest
 		TEST_METHOD(Constructor)
 		{
 			BasePictures pictures(1000, ".jpg");
-			Assert::IsTrue(pictures.getNumberPicture() == 1000);
-			Assert::IsTrue(pictures.getPictureExtension() == ".jpg");
+			Assert::IsTrue(pictures.getPictureCount() == 1000);
+			Assert::IsTrue(pictures.getExtension() == ".jpg");
 		}
 
 		TEST_METHOD(ReadPhoto)
@@ -30,7 +30,7 @@ namespace BasePicturesTest
 		TEST_METHOD(AddPicturesInUnordered_Map)
 		{
 			BasePictures test(10);
-			test.CreatingPicturesForMosaics();
+			test.CreatePictures();
 			Assert::IsTrue(test.GetMediumColor().size() > 0);
 		}
 	};

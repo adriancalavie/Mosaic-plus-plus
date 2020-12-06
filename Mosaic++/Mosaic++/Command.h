@@ -21,18 +21,17 @@ public:
 	enum class CommandType { unknown, mosaic, folder };
 
 public:
-	Command(std::vector<std::string> arguments);
+	Command(std::vector<std::string> arguments, BasePictures& pool);
 
 private:
 
 	bool help();
-	void makeMosaic(argument path, const std::optional<uint8_t>& partitionSize, const std::string& picturesPath = "..//Pictures for mosaics\\") const;
-	void selectFolder(argument path) const;
-	void selectPicturesExtension(argument path) const;
+	void makeMosaic(argument, const std::optional<uint8_t>&, BasePictures&) const;
+	void selectFolder(BasePictures& pool, argument path) const;
+	void selectPicturesExtension(BasePictures&, const std::string&) const;
 
 private:
 
 	HelpType m_help = HelpType::none;
-	CommandType m_type = CommandType::unknown;;
+	CommandType m_type = CommandType::unknown;
 };
-

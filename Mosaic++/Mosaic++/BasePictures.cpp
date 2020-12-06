@@ -4,10 +4,10 @@
 BasePictures::BasePictures(const uint16_t& numberPictures)
 {
 	this->m_numberPictures = numberPictures;
-	this->m_pictureExtension = ".jpg";
-
-	fileSource = "..//Base Pictures\\";
-	fileDestination = "..//Pictures for mosaics\\";
+	
+	m_extension = ".jpg";
+	m_source = "..//Base Pictures\\";
+	m_processedPictures = "..//Pictures for mosaics\\";
 }
 
 const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const
@@ -15,48 +15,27 @@ const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor(
 	return m_mediumColor;
 }
 
-const void BasePictures::CreatingPicturesForMosaics() 
+const void BasePictures::CreatePictures() 
 {
 	uint16_t count = 0;
-	std::string image_path = fileSource;
-	image_path += std::to_string(count) + m_pictureExtension;
+	std::string image_path = m_source;
+	image_path += std::to_string(count) + m_extension;
 
 	while (count < this->m_numberPictures)
 	{
 		cv::Mat img = cv::imread(image_path, cv::IMREAD_COLOR);
 		img=PictureTools::resize(img, 10, 10);
-		this->m_mediumColor.insert(std::make_pair(PictureTools::averageColor(img), std::to_string(count) + this->m_pictureExtension));
+		this->m_mediumColor.insert(std::make_pair(PictureTools::averageColor(img), std::to_string(count) + m_extension));
 
-		cv::imwrite(fileDestination+std::to_string(count)+this->m_pictureExtension, img);
+		cv::imwrite(m_processedPictures+std::to_string(count)+m_extension, img);
 		assert(!img.empty());
 			
 		++count;
-		image_path = fileSource + std::to_string(count) + m_pictureExtension;
+		image_path = m_source + std::to_string(count) + m_extension;
 
 	}
-	
-
 }
 
-const void BasePictures::setPictureExtension(const std::string& extension)
-{
-	this->m_pictureExtension = extension;
-}
-
-const void BasePictures::setNumberPicture(const std::uint16_t& number)
-{
-	this->m_numberPictures = number;
-}
-
-const uint16_t BasePictures::getNumberPicture() const
-{
-	return this->m_numberPictures;
-}
-
-const std::string BasePictures::getPictureExtension() const
-{
-	return this->m_pictureExtension;
-}
 
 cv::Mat BasePictures::readPhoto(const std::string& pictureName, const std::string& fileName)
 {
@@ -65,24 +44,44 @@ cv::Mat BasePictures::readPhoto(const std::string& pictureName, const std::strin
 	return img;
 }
 
+void BasePictures::setExtension(const std::string& extensionName)
+{
+	m_extension = extensionName;
+}
+
+void BasePictures::setPicturesNumber(const std::uint16_t& number)
+{
+	this->m_numberPictures = number;
+}
+
+const uint16_t& BasePictures::getPictureCount() const
+{
+	return this->m_numberPictures;
+}
+
+const std::string& BasePictures::getExtension() const
+{
+	return m_extension;
+}
+
 const std::string& BasePictures::getFileSource() const
 {
-	return fileSource;
+	return m_source;
 }
 
 void BasePictures::setFileSource(const std::string& source)
 {
-	fileSource = source;
+	m_source = source;
 }
 
 const std::string& BasePictures::getFileDestination() const
 {
-	return fileDestination;
+	return m_processedPictures;
 }
 
 void BasePictures::setFileDestination(const std::string& source)
 {
-	fileDestination = source;
+	m_processedPictures = source;
 }
 
 size_t BasePictures::HashKey::operator()(const cv::Scalar& toHash) const

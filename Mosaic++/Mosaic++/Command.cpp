@@ -4,7 +4,7 @@
 const std::string Command::mosaicDocs = "[docs]make_mosaic.txt";
 const std::string Command::selectDocs = "[docs]select_images_folder.txt";
 
-Command::Command(std::vector<std::string> args)
+Command::Command(std::vector<std::string> args, BasePictures& pool)
 {
 
 	if (args[0] == "mkmosaic")
@@ -17,7 +17,7 @@ Command::Command(std::vector<std::string> args)
 			throw "too few arguments";
 			break;
 		case 2:
-			makeMosaic(args[1], std::nullopt);
+			makeMosaic(args[1], std::nullopt, pool);
 			m_help = HelpType::none;
 
 			break;
@@ -30,7 +30,7 @@ Command::Command(std::vector<std::string> args)
 			}
 			else if (std::regex_match(args[2], std::regex("[0-9]*")))
 			{
-				makeMosaic(args[1], std::stoi(args[2]));
+				makeMosaic(args[1], std::stoi(args[2]), pool);
 				m_help = HelpType::none;
 			}
 			else throw "unknown argument";
@@ -48,7 +48,7 @@ Command::Command(std::vector<std::string> args)
 		if (args.size() > 2) throw "too many arguments";
 		else
 		{
-			selectFolder(args[1]);
+			selectFolder(pool, args[1]);
 		}
 	}
 	else throw "unknown command";
@@ -87,13 +87,12 @@ bool Command::help()
 	}
 }
 
-void Command::makeMosaic(argument path, const std::optional<uint8_t>& partitionSize) const
+void Command::makeMosaic(argument path, const std::optional<uint8_t>& partitionSize, BasePictures& pool) const
 {
 	cv::Mat input = imread(path);
 	cv::Mat output;
 
-	BasePictures pool(1000, ".jpg");
-	pool.CreatingPicturesForMosaics(picturesPath);
+	pool.CreatePictures();
 
 	if (partitionSize.has_value())
 	{
@@ -108,12 +107,12 @@ void Command::makeMosaic(argument path, const std::optional<uint8_t>& partitionS
 }
 
 
-void Command::selectFolder(argument path) const
+void Command::selectFolder(BasePictures& pool, argument path) const
 {
-
+	pool.setFileSource(path);
 }
 
-void Command::selectPicturesExtension(argument path) const
+void Command::selectPicturesExtension(BasePictures& pool, const std::string& extension) const
 {
-	//usint setPictureExtension from BasePictures
+	pool.setExtension(extension);
 }

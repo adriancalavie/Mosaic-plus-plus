@@ -8,8 +8,8 @@
 int main()
 {
 	//Make mosaic 
-	BasePictures test(1000, ".jpg");
-	test.CreatingPicturesForMosaics();
+	BasePictures test(1000);
+	test.CreatePictures();
 
 	Mat input = imread("..//test.jpg", IMREAD_COLOR);
 
