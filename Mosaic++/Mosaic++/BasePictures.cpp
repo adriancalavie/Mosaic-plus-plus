@@ -1,10 +1,13 @@
 #include "BasePictures.h"
 #include "PictureTools.h"
 
-BasePictures::BasePictures(const uint16_t& numberPictures, const std::string& pictureExtension)
+BasePictures::BasePictures(const uint16_t& numberPictures)
 {
 	this->m_numberPictures = numberPictures;
-	this->m_pictureExtension = pictureExtension;
+	this->m_pictureExtension = ".jpg";
+
+	fileSource = "..//Base Pictures\\";
+	fileDestination = "..//Pictures for mosaics\\";
 }
 
 const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const
@@ -12,7 +15,7 @@ const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor(
 	return m_mediumColor;
 }
 
-const void BasePictures::CreatingPicturesForMosaics(const std::string& fileSource, const std::string& fileDestination) 
+const void BasePictures::CreatingPicturesForMosaics() 
 {
 	uint16_t count = 0;
 	std::string image_path = fileSource;
@@ -60,6 +63,26 @@ cv::Mat BasePictures::readPhoto(const std::string& pictureName, const std::strin
 	cv::Mat img = cv::imread(fileName+ pictureName, cv::IMREAD_COLOR);
 	assert(!img.empty());
 	return img;
+}
+
+const std::string& BasePictures::getFileSource() const
+{
+	return fileSource;
+}
+
+void BasePictures::setFileSource(const std::string& source)
+{
+	fileSource = source;
+}
+
+const std::string& BasePictures::getFileDestination() const
+{
+	return fileDestination;
+}
+
+void BasePictures::setFileDestination(const std::string& source)
+{
+	fileDestination = source;
 }
 
 size_t BasePictures::HashKey::operator()(const cv::Scalar& toHash) const

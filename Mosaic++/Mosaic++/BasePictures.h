@@ -23,7 +23,6 @@ struct std::hash<cv::Scalar>
 
 };
 
-
 class BasePictures
 {
 
@@ -34,15 +33,16 @@ private:
 	};
 
 
+
 private:
 	std::uint16_t m_numberPictures;
 	std::string m_pictureExtension;
 	std::unordered_map<cv::Scalar, std::string> m_mediumColor;
 
 public:
-	BasePictures(const uint16_t& = 0, const std::string& = ".jpg");
+	BasePictures(const uint16_t& = 0);
 	const std::unordered_map<cv::Scalar, std::string>& GetMediumColor() const;
-	const void CreatingPicturesForMosaics(const std::string& ="..//Base pictures\\", const std::string& = "..//Pictures for mosaics\\" );
+	const void CreatingPicturesForMosaics();
 
 	const void setPictureExtension(const std::string&);
 	const void setNumberPicture(const std::uint16_t&);
@@ -51,5 +51,16 @@ public:
 	const std::string getPictureExtension() const;
 
 	static cv::Mat readPhoto(const std::string &  ="\n" , const std::string & = "..//Pictures for mosaics\\");
+
+	const std::string& getFileSource() const;
+	void setFileSource(const std::string&);
+
+	const std::string& getFileDestination() const;
+	void setFileDestination(const std::string&);
+
+private:
+
+	static std::string fileSource;
+	static std::string fileDestination;
 };
 

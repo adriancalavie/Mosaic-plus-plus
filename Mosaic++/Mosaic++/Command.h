@@ -7,6 +7,7 @@
 #include <fstream>
 
 #include "PictureTools.h"
+#include "Mosaic.h"
 class Command
 {
 	using argument = const std::string&;
@@ -25,7 +26,7 @@ public:
 private:
 
 	bool help();
-	void makeMosaic(argument path, const std::optional<uint8_t>& partitionSize) const;
+	void makeMosaic(argument path, const std::optional<uint8_t>& partitionSize, const std::string& picturesPath = "..//Pictures for mosaics\\") const;
 	void selectFolder(argument path) const;
 	void selectPicturesExtension(argument path) const;
 

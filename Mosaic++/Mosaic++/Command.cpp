@@ -91,24 +91,26 @@ void Command::makeMosaic(argument path, const std::optional<uint8_t>& partitionS
 {
 	cv::Mat input = imread(path);
 	cv::Mat output;
+
+	BasePictures pool(1000, ".jpg");
+	pool.CreatingPicturesForMosaics(picturesPath);
+
 	if (partitionSize.has_value())
-		/*output = PictureTools::makeMosaic()*/;
+	{
+		output = Mosaic::makeMosaic(pool.GetMediumColor(), input, partitionSize.value());
+	}
 	else
-		/*output = PictureTools::makeMosaic()*/;
+	{
+		output = Mosaic::makeMosaic(pool.GetMediumColor(), input);
+	}
 
 	cv::imshow("Resulted Image", output);
-
 }
+
 
 void Command::selectFolder(argument path) const
 {
-	BasePictures pool(100, ".jpg");//temporary arguments, will change
 
-	pool.CreatingPicturesForMosaics(path);
-
-	//pool.GetMediumColor();
-
-	//member pool = pool;
 }
 
 void Command::selectPicturesExtension(argument path) const
