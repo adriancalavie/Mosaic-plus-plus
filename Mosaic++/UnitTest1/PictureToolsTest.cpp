@@ -44,16 +44,31 @@ namespace PictureToolsTest
 		{
 			Mat testImage = imread("..//test.jpg", IMREAD_COLOR);
 
-			Assert::IsTrue(!testImage.empty());
-
 			testImage = PictureTools::resize(testImage, 600, 600);
 
 			bool testingSize = testImage.rows == 600 && testImage.cols == 600;
 
 			Assert::IsTrue(testingSize);
-
 			Assert::IsTrue(!testImage.empty());
 		}
 
+		TEST_METHOD(Crop)
+		{
+			Mat testImage = imread("..//test.jpg", IMREAD_COLOR);
+
+			Mat cropedImage = PictureTools::crop(testImage, { 0,0 }, { 20,20 });
+
+			bool isEqual = true;
+
+			for (int index_x = 0; index_x < 20; ++index_x)
+				for (int index_y = 0; index_y < 20; ++index_y)
+					if (testImage.at<Vec3b>(index_x, index_y) != cropedImage.at<Vec3b>(index_x, index_y))
+					{
+						isEqual = false;
+						break;
+					}
+
+			Assert::IsTrue(isEqual);
+		}
 	};
 }
