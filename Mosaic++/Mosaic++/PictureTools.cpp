@@ -53,7 +53,7 @@ Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
 Mat PictureTools::resize(const Mat& image, const uint16_t& width, const uint16_t& height)
 {
 	assert(!image.empty());
-	Mat newimage(width, height, CV_8UC3);
+	Mat newimage(height, width, CV_8UC3);
 
 	int x_ratio = (int)((image.cols << 16) / width) + 1;
 	int y_ratio = (int)((image.rows << 16) / height) + 1;
@@ -64,11 +64,14 @@ Mat PictureTools::resize(const Mat& image, const uint16_t& width, const uint16_t
 			nearX = ((cols * x_ratio) >> 16);
 			nearY = ((rows * y_ratio) >> 16);
 
-			newimage.at<cv::Vec3b>(rows, cols)[0] = image.at<cv::Vec3b>(nearY, nearX)[0];
-			newimage.at<cv::Vec3b>(rows, cols)[1] = image.at<cv::Vec3b>(nearY, nearX)[1];
-			newimage.at<cv::Vec3b>(rows, cols)[2] = image.at<cv::Vec3b>(nearY, nearX)[2];
+			newimage.at<cv::Vec3b>(rows, cols) = Vec3b(image.at<cv::Vec3b>(nearY, nearX));
+
+			//std::cout << (int)newimage.at<cv::Vec3b>(rows,cols)[0] <<" "
+				//<<(int) newimage.at<cv::Vec3b>(rows,cols)[1] <<" "<<
+			//(int) newimage.at<cv::Vec3b>(rows,cols)[2] << std::endl;
 		}
 	}
+
 	return newimage;
 }
 

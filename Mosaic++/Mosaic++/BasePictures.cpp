@@ -12,8 +12,6 @@ const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor(
 	return m_mediumColor;
 }
 
-
-
 const void BasePictures::CreatingPicturesForMosaics(const std::string& fileSource, const std::string& fileDestination) 
 {
 	uint16_t count = 0;

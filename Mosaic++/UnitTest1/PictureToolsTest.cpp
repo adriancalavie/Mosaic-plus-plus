@@ -39,5 +39,21 @@ namespace PictureToolsTest
 
 			//Assert::AreEqual(swOriginal, swMine);
 		}
+
+		TEST_METHOD(Resize)
+		{
+			Mat testImage = imread("..//test.jpg", IMREAD_COLOR);
+
+			Assert::IsTrue(!testImage.empty());
+
+			testImage = PictureTools::resize(testImage, 600, 600);
+
+			bool testingSize = testImage.rows == 600 && testImage.cols == 600;
+
+			Assert::IsTrue(testingSize);
+
+			Assert::IsTrue(!testImage.empty());
+		}
+
 	};
 }

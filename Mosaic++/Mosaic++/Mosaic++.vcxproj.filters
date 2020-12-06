@@ -50,6 +50,9 @@
     <ClInclude Include="Mosaic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StopWatch.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Documentation\[docs]make_mosaic.txt">

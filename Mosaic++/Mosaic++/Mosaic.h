@@ -3,9 +3,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <cstdlib>
+#include "BasePictures.h"
 using namespace cv;
-
-
 
 class Mosaic
 {
