@@ -10,8 +10,11 @@ int main()
 	//Make mosaic 
 	BasePictures test(1000, ".jpg");
 	test.CreatingPicturesForMosaics();
+
 	Mat input = imread("..//test.jpg", IMREAD_COLOR);
-	input = PictureTools::resize(input, 600, 600);
+
+	input = PictureTools::resize(input, 1200, 650);
+
 	Mat input2 = Mosaic::makeMosaic(test.GetMediumColor(), input);
 	imshow("Original", input);
 	imshow("Returned", input2);
