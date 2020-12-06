@@ -18,7 +18,8 @@ namespace PictureToolsTest
 
 		TEST_METHOD(TestSpeed)
 		{			
-			
+			//PictureTools::resize vs cv::resize execution time
+
 			cv::Mat input = imread("..//test.jpg", IMREAD_COLOR);
 			cv::Mat input2 = imread("..//test.jpg", IMREAD_COLOR);
 			
@@ -39,6 +40,27 @@ namespace PictureToolsTest
 			swMine.tock();
 
 			//Assert::AreEqual(swOriginal, swMine);
+
+
+			//PictureTools::crop vs cv::Rect crop execution time
+
+			cv::Mat input = imread("..//test.jpg", IMREAD_COLOR);
+			cv::Mat input2 = imread("..//test.jpg", IMREAD_COLOR);
+
+			stopwatch swPTCrop;
+			stopwatch swCVCrop;
+			
+			swPTCrop.tick();
+			cv::Mat result = PictureTools::crop(input, { 0,0 }, { 20,20 });
+			swPTCrop.tock();
+
+			swCVCrop.tick();
+			cv::Rect myROI(0, 0, 20, 20);
+			cv::Mat result2 = input2(myROI);
+			swCVCrop.tock();
+
+			//Assert::AreEqual(swPTCrop, swCVCrop);
+
 		}
 
 		TEST_METHOD(Resize)
