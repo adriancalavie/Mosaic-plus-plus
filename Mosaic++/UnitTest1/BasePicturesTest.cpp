@@ -16,9 +16,9 @@ namespace BasePicturesTest
 
 		TEST_METHOD(Constructor)
 		{
-			BasePictures pictures(1000, ".jpg");
+			BasePictures pictures(1000);
 			Assert::IsTrue(pictures.getPictureCount() == 1000);
-			Assert::IsTrue(pictures.getExtension() == ".jpg");
+			//Assert::IsTrue(pictures.getExtension() == ".jpg");
 		}
 
 		TEST_METHOD(ReadPhoto)

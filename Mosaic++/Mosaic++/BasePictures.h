@@ -2,6 +2,9 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <regex>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -43,19 +46,19 @@ private:
 
 
 public:
-	BasePictures(const uint16_t& = 0);
+	BasePictures(const uint16_t & = 0);
 
 	const map& GetMediumColor() const;
 	const void CreatePictures();
 
-	
+
 	void setPicturesNumber(const std::uint16_t&);
 
 	const uint16_t& getPictureCount() const;
-	
 
-	static cv::Mat readPhoto(const std::string &  ="\n" , const std::string & = "..//Pictures for mosaics\\");
+	static cv::Mat readPhoto(const std::string & = "\n", const std::string & = "..//Pictures for mosaics\\");
 
+public:
 	const std::string& getFileSource() const;
 	void setFileSource(const std::string&);
 
@@ -64,5 +67,8 @@ public:
 
 	const std::string& getExtension() const;
 	void setExtension(const std::string&);
+
+	void addPicturesMosaic(const bool&);
+
 };
 
