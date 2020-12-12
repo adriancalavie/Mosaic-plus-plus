@@ -15,7 +15,7 @@ private:
 	static void alphaBlending(const std::unordered_map < cv::Scalar, std::string>& dataPictures);
 
 public:
-	friend int32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
+	friend uint32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
 	static cv::Mat makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const uint8_t& partitionSize = defaultSize, const uint8_t& shape = defaultShape);
 	static cv::Mat makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const uint8_t& partitionSize = defaultSize);
 	static void replaceCell(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL);

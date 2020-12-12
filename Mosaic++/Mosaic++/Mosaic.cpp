@@ -4,7 +4,7 @@
 
 
 
-int32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor)
+uint32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor)
 {
 	int8_t blueD, greenD, redD;
 	blueD = firstColor[0] - secondColor[0];
@@ -93,9 +93,9 @@ cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& da
 				for (auto j = y; j < y + partitionSize; ++j)
 				{
 					if (i < result.cols && j < result.rows) {
-						result.at<cv::Vec3b>({ i,j })[0] = testPhoto.at<cv::Vec3b>({ i - x, j - y })[0];
-						result.at<cv::Vec3b>({ i,j })[1] = testPhoto.at<cv::Vec3b>({ i - x, j - y })[1];
-						result.at<cv::Vec3b>({ i,j })[2] = testPhoto.at<cv::Vec3b>({ i - x, j - y })[2];
+						result.at<cv::Vec3b>({ i,j })[0] = std::move(testPhoto.at<cv::Vec3b>({ i - x, j - y })[0]);
+						result.at<cv::Vec3b>({ i,j })[1] = std::move(testPhoto.at<cv::Vec3b>({ i - x, j - y })[1]);
+						result.at<cv::Vec3b>({ i,j })[2] = std::move(testPhoto.at<cv::Vec3b>({ i - x, j - y })[2]);
 					}
 					else
 					{

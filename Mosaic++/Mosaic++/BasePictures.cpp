@@ -42,7 +42,7 @@ const void BasePictures::CreatePictures()
 
 cv::Mat BasePictures::readPhoto(const std::string& pictureName, const std::string& fileName)
 {
-	cv::Mat img = cv::imread(fileName + pictureName, cv::IMREAD_COLOR);
+	cv::Mat img = std::move(cv::imread(fileName + pictureName, cv::IMREAD_COLOR));
 	assert(!img.empty());
 	return img;
 }
