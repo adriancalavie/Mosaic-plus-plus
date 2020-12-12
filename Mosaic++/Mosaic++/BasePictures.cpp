@@ -33,7 +33,6 @@ const void BasePictures::CreatePictures()
 			<< std::to_string(count) + m_extension << std::endl;
 		cv::imwrite(m_processedPictures + std::to_string(count) + m_extension, img);
 		assert(!img.empty());
-
 		++count;
 		image_path = m_source + std::to_string(count) + m_extension;
 	}
@@ -121,8 +120,6 @@ void BasePictures::addPicturesMosaic(const bool& modify)
 		aux[2] = std::move(std::stod(item));
 		std::getline(ss, item, ' ');
 		m_mediumColor.insert(std::make_pair(std::move(aux), std::move(item)));
-
 	}
 	in.close();
-
 }

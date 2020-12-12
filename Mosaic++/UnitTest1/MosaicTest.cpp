@@ -18,7 +18,7 @@ namespace MosaicTest
 		{
 			cv::Scalar color1(0, 0, 1);
 			cv::Scalar color2(255, 255, 255);
-			uint8_t blueD, greenD, redD;
+			int8_t blueD, greenD, redD;
 			blueD = color1[0] - color2[0];
 			greenD = color1[1] - color2[1];
 			redD = color1[2] - color2[2];

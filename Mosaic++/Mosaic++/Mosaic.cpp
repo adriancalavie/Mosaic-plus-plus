@@ -4,9 +4,9 @@
 
 
 
-int euclideanDistance(const Scalar& firstColor, const Scalar& secondColor)
+int32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor)
 {
-	int blueD, greenD, redD;
+	int8_t blueD, greenD, redD;
 	blueD = firstColor[0] - secondColor[0];
 	greenD = firstColor[1] - secondColor[1];
 	redD = firstColor[2] - secondColor[2];
@@ -16,9 +16,9 @@ int euclideanDistance(const Scalar& firstColor, const Scalar& secondColor)
 void Mosaic::alphaBlending(const std::unordered_map<cv::Scalar, std::string>& dataPictures)
 {
 	//trying to blend photo mosaic better
-	Mat foreground = imread("");
-	Mat background = imread("");
-	Mat alpha = imread("");
+	cv::Mat foreground = cv::imread("");
+	cv::Mat background = cv::imread("");
+	cv::Mat alpha = cv::imread("");
 
 	// Convert Mat to float data type
 	foreground.convertTo(foreground, CV_32FC3);
@@ -28,21 +28,21 @@ void Mosaic::alphaBlending(const std::unordered_map<cv::Scalar, std::string>& da
 	alpha.convertTo(alpha, CV_32FC3, 1.0 / 255); // 
 
 	// Storage for output image
-	Mat ouImage = Mat::zeros(foreground.size(), foreground.type());
+	cv::Mat ouImage = cv::Mat::zeros(foreground.size(), foreground.type());
 
 	multiply(alpha, foreground, foreground);
 
-	multiply(Scalar::all(1.0) - alpha, background, background);
+	multiply(cv::Scalar::all(1.0) - alpha, background, background);
 
 	add(foreground, background, ouImage);
 
 	imshow("alpha blended image", ouImage / 255);
-	waitKey(0);
+	cv::waitKey(0);
 
 
 }
 
-Mat Mosaic::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, Mat& image, const uint8_t& partitionSize, const uint8_t& shape)
+cv::Mat Mosaic::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const uint8_t& partitionSize, const uint8_t& shape)
 {
 	assert(!image.empty());
 
@@ -55,7 +55,7 @@ Mat Mosaic::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPi
 	}
 }
 
-Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPictures, Mat& image, const uint8_t& partitionSize)
+cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const uint8_t& partitionSize)
 {
 	bool v1 = image.cols % partitionSize == 0;
 	bool v2 = image.rows % partitionSize == 0;
@@ -65,13 +65,13 @@ Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPi
 	//if any pixels would remain after partitioning process, call abort;
 
 
-	Mat result(image.rows, image.cols, CV_8UC3);
+	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
 	for (auto x = 0; x < image.cols; x += partitionSize)
 		for (auto y = 0; y < image.rows; y += partitionSize)
 		{
 			// compare partitionAverage with mapped images's average;*first implementation using STL vector
-			Scalar medColor = PictureTools::averageColor(image, { y,x }, { partitionSize,partitionSize });
+			cv::Scalar medColor = PictureTools::averageColor(image, { y,x }, { partitionSize,partitionSize });
 
 			std::string pictureName;
 			int closestDistance = INT_MAX;
@@ -86,17 +86,16 @@ Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPi
 				}
 			}
 
-			Mat testPhoto;
-			testPhoto = BasePictures::readPhoto(pictureName);
+			cv::Mat testPhoto = std::move(BasePictures::readPhoto(pictureName));
 
 			for (auto i = x; i < x + partitionSize; ++i)
 			{
 				for (auto j = y; j < y + partitionSize; ++j)
 				{
 					if (i < result.cols && j < result.rows) {
-						result.at<Vec3b>({ i,j })[0] = testPhoto.at<Vec3b>({ i - x, j - y })[0];
-						result.at<Vec3b>({ i,j })[1] = testPhoto.at<Vec3b>({ i - x, j - y })[1];
-						result.at<Vec3b>({ i,j })[2] = testPhoto.at<Vec3b>({ i - x, j - y })[2];
+						result.at<cv::Vec3b>({ i,j })[0] = testPhoto.at<cv::Vec3b>({ i - x, j - y })[0];
+						result.at<cv::Vec3b>({ i,j })[1] = testPhoto.at<cv::Vec3b>({ i - x, j - y })[1];
+						result.at<cv::Vec3b>({ i,j })[2] = testPhoto.at<cv::Vec3b>({ i - x, j - y })[2];
 					}
 					else
 					{
@@ -104,20 +103,19 @@ Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPi
 					}
 				}
 			}
-			//PictureTools::replaceCell(result, testPhoto, std::make_pair(x, y));
 		}
 
 	return result;
 }
 
-void Mosaic::replaceCell(Mat& originalPicture, const Mat& mosaicPhoto, const std::pair<int, int>& topL)
+void Mosaic::replaceCell(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL)
 {
 	assert(originalPicture.empty());
 	for (int index_rows = 0; index_rows < mosaicPhoto.rows; index_rows++)
 		for (int index_cols = 0; index_cols < mosaicPhoto.cols; index_cols++)
 		{
-			originalPicture.at<Vec3b>(index_rows + topL.first, index_cols + topL.second)[0] = mosaicPhoto.at<Vec3b>(index_rows, index_cols)[0];
-			originalPicture.at<Vec3b>(index_rows + topL.first, index_cols + topL.second)[1] = mosaicPhoto.at<Vec3b>(index_rows, index_cols)[1];
-			originalPicture.at<Vec3b>(index_rows + topL.first, index_cols + topL.second)[2] = mosaicPhoto.at<Vec3b>(index_rows, index_cols)[2];
+			originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[0] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[0]);
+			originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[1] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[1]);
+			originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[2] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[2]);
 		}
 }

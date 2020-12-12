@@ -3,7 +3,7 @@
 #include <unordered_map>
 
 
-int PictureTools::valueCheck(int number)
+uint8_t PictureTools::valueCheck(int number)
 {
 	if (number < 0)
 		return 0;
@@ -12,9 +12,9 @@ int PictureTools::valueCheck(int number)
 	return number;
 }
 
-std::tuple<uint8_t, uint8_t, uint8_t> PictureTools::hueShiftPixel(int R, int G, int B, int angle)
+std::tuple<uint8_t, uint8_t, uint8_t> PictureTools::hueShiftPixel(const uint8_t& R, const uint8_t& G, const uint8_t& B, const uint16_t& angle)
 {
-	int resR, resG, resB;
+	uint8_t resR, resG, resB;
 	const double pi = atan(1) * 4;
 	double x = angle * pi / 180;
 	double xCos = cos(x);
@@ -35,25 +35,25 @@ std::tuple<uint8_t, uint8_t, uint8_t> PictureTools::hueShiftPixel(int R, int G, 
 	return std::make_tuple(valueCheck(resR), valueCheck(resG), valueCheck(resB));
 }
 
-Mat PictureTools::crop(const Mat& image, Point topL, Point botR)
+cv::Mat PictureTools::crop(const cv::Mat& image, const Point& topL, const Point& botR)
 {
 	uint16_t height = botR.first - topL.first;
 	uint16_t width = botR.second - topL.second;
-	Mat result(height, width, CV_8UC3);
+	cv::Mat result(height, width, CV_8UC3);
 	for (int index_rows = 0; index_rows < height; index_rows++)
 		for (int index_cols = 0; index_cols < width; index_cols++)
 		{
-			result.at<Vec3b>(index_rows, index_cols)[0] = image.at<Vec3b>(topL.first + index_rows, topL.second + index_cols)[0];
-			result.at<Vec3b>(index_rows, index_cols)[1] = image.at<Vec3b>(topL.first + index_rows, topL.second + index_cols)[1];
-			result.at<Vec3b>(index_rows, index_cols)[2] = image.at<Vec3b>(topL.first + index_rows, topL.second + index_cols)[2];
+			result.at<cv::Vec3b>(index_rows, index_cols)[0] = image.at<cv::Vec3b>(topL.first + index_rows, topL.second + index_cols)[0];
+			result.at<cv::Vec3b>(index_rows, index_cols)[1] = image.at<cv::Vec3b>(topL.first + index_rows, topL.second + index_cols)[1];
+			result.at<cv::Vec3b>(index_rows, index_cols)[2] = image.at<cv::Vec3b>(topL.first + index_rows, topL.second + index_cols)[2];
 		}
 	return result;
 }
 
-Mat PictureTools::resize(const Mat& image, const uint16_t& width, const uint16_t& height)
+cv::Mat PictureTools::resize(const cv::Mat& image, const uint16_t& width, const uint16_t& height)
 {
 	assert(!image.empty());
-	Mat newimage(height, width, CV_8UC3);
+	cv::Mat newimage(height, width, CV_8UC3);
 
 	int x_ratio = (int)((image.cols << 16) / width) + 1;
 	int y_ratio = (int)((image.rows << 16) / height) + 1;
@@ -64,7 +64,7 @@ Mat PictureTools::resize(const Mat& image, const uint16_t& width, const uint16_t
 			nearX = ((cols * x_ratio) >> 16);
 			nearY = ((rows * y_ratio) >> 16);
 
-			newimage.at<cv::Vec3b>(rows, cols) = Vec3b(image.at<cv::Vec3b>(nearY, nearX));
+			newimage.at<cv::Vec3b>(rows, cols) = cv::Vec3b(image.at<cv::Vec3b>(nearY, nearX));
 
 			//std::cout << (int)newimage.at<cv::Vec3b>(rows,cols)[0] <<" "
 				//<<(int) newimage.at<cv::Vec3b>(rows,cols)[1] <<" "<<
@@ -75,7 +75,7 @@ Mat PictureTools::resize(const Mat& image, const uint16_t& width, const uint16_t
 	return newimage;
 }
 
-Scalar PictureTools::averageColor(const Mat& image)
+cv::Scalar PictureTools::averageColor(const cv::Mat& image)
 {
 	assert(!image.empty());
 	double blue, green, red;
@@ -98,10 +98,10 @@ Scalar PictureTools::averageColor(const Mat& image)
 	green = green * 100;
 	blue = blue * 100;
 
-	return Scalar(blue, green, red);
+	return cv::Scalar(blue, green, red);
 }
 
-Scalar PictureTools::averageColor(const Mat& image, std::pair<int, int>startLocation, std::pair<int, int> size)
+cv::Scalar PictureTools::averageColor(const cv::Mat& image, const Point& startLocation, const Point& size)
 {
 	assert(!image.empty());
 	double blue, green, red;
@@ -126,21 +126,21 @@ Scalar PictureTools::averageColor(const Mat& image, std::pair<int, int>startLoca
 	green = green * 100;
 	blue = blue * 100;
 
-	return Scalar(blue, green, red);
+	return cv::Scalar(blue, green, red);
 }
 
-Mat PictureTools::hueShiftImage(const Mat& image, int angle)
+cv::Mat PictureTools::hueShiftImage(const cv::Mat& image, const uint16_t& angle)
 {
 	std::tuple <uint8_t, uint8_t, uint8_t> newColor;
-	Mat result(image.rows, image.cols, CV_8UC3);
+	cv::Mat result(image.rows, image.cols, CV_8UC3);
 	for (int rows = 0; rows < image.rows; ++rows)
 		for (int cols = 0; cols < image.cols; ++cols)
-			{
+		{
 			newColor = hueShiftPixel(image.at<cv::Vec3b>(rows, cols)[2], image.at<cv::Vec3b>(rows, cols)[1], image.at<cv::Vec3b>(rows, cols)[0], angle);
 			result.at<cv::Vec3b>(rows, cols)[0] = std::get<2>(newColor);
 			result.at<cv::Vec3b>(rows, cols)[1] = std::get<1>(newColor);
 			result.at<cv::Vec3b>(rows, cols)[2] = std::get<0>(newColor);
-			}
+		}
 	return result;
 }
 

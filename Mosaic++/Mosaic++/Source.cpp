@@ -8,17 +8,18 @@
 int main()
 {
 	//Make mosaic 
-	BasePictures test(5996);
+	BasePictures test(1000);
 	test.addPicturesMosaic(false);
 
-	Mat input = imread("..//test.jpg", IMREAD_COLOR);
+	cv::Mat input = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 
 	input = PictureTools::resize(input, 1200, 650);
 
-	Mat input2 = Mosaic::makeMosaic(test.GetMediumColor(), input);
-	imshow("Original", input);
-	imshow("Returned", input2);
-	waitKey(0);
+	cv::Mat input2 = Mosaic::makeMosaic(test.GetMediumColor(), input);
+	cv::imwrite("..//Resulting pictures\\1000.jpg", input2);
+	cv::imshow("Original", input);
+	cv::imshow("Returned", input2);
+	cv::waitKey(0);
 
 	return 0;
 }

@@ -89,7 +89,7 @@ bool Command::help()
 
 void Command::makeMosaic(argument path, const std::optional<uint8_t>& partitionSize, BasePictures& pool) const
 {
-	cv::Mat input = imread(path);
+	cv::Mat input = cv::imread(path);
 	cv::Mat output;
 
 	pool.CreatePictures();

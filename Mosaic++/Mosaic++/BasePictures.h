@@ -4,7 +4,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <regex>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -55,7 +54,6 @@ public:
 	void setPicturesNumber(const std::uint16_t&);
 
 	const uint16_t& getPictureCount() const;
-
 	static cv::Mat readPhoto(const std::string & = "\n", const std::string & = "..//Pictures for mosaics\\");
 
 public:
