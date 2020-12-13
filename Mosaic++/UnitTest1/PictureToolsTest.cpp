@@ -20,20 +20,23 @@ namespace PictureToolsTest
 		{			
 			//PictureTools::resize vs cv::resize execution time
 
-			cv::Mat input = imread("..//test.jpg", IMREAD_COLOR);
-			cv::Mat input2 = imread("..//test.jpg", IMREAD_COLOR);
+			cv::Mat input = cv::imread("..//test.jpg", IMREAD_COLOR);
+			cv::Mat input2 = cv::imread("..//test.jpg", IMREAD_COLOR);
 			
 			stopwatch swOriginal;
 			stopwatch swMine;
+
+			/*
 			swOriginal.tick();
 
 			//input = PictureTools::resize(input, 800, 800);
-			cv::resize(input, input, { 800,800 });
+			//cv::resize(input, input, { 800,800 });
 
 			swOriginal.tock();
+			*/
 
 			swMine.tick();
-
+			
 			input2 = PictureTools::resize(input2, 800, 800);
 			//cv::resize(input2, input2, { 800,800 });
 
@@ -44,21 +47,24 @@ namespace PictureToolsTest
 
 			//PictureTools::crop vs cv::Rect crop execution time
 
-			cv::Mat input = imread("..//test.jpg", IMREAD_COLOR);
-			cv::Mat input2 = imread("..//test.jpg", IMREAD_COLOR);
+			/*
+			cv::Mat input = cv::imread("..//test.jpg", IMREAD_COLOR);
+			cv::Mat input2 = cv::imread("..//test.jpg", IMREAD_COLOR);
 
 			stopwatch swPTCrop;
 			stopwatch swCVCrop;
 			
 			swPTCrop.tick();
-			cv::Mat result = PictureTools::crop(input, { 0,0 }, { 20,20 });
+			cv::Mat result = PictureTools::cropSquare(input, { 0,0 }, { 20,20 });
 			swPTCrop.tock();
 
 			swCVCrop.tick();
 			cv::Rect myROI(0, 0, 20, 20);
 			cv::Mat result2 = input2(myROI);
 			swCVCrop.tock();
+			*/
 
+			std::cout << swMine.report_ms;
 			//Assert::AreEqual(swPTCrop, swCVCrop);
 
 		}

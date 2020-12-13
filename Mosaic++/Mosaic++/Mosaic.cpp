@@ -26,23 +26,38 @@ void Mosaic::alphaBlending(cv::Mat& image, const cv::Scalar& color)
 	}
 }
 
-cv::Mat Mosaic::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const uint8_t& partitionSize, const uint8_t& shape)
+cv::Mat Mosaic::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const uint8_t& partitionSize, const uint8_t& shape, bool blending)
 {
 	assert(!image.empty());
 
 	switch (shape)
 	{
 	case 1:
-		return makeSquare(dataPictures, image, partitionSize);
+		return makeSquare(dataPictures, image, blending, partitionSize);
+	case 2:
+		return makeTriangle(dataPictures, image, blending, partitionSize);
 	default:
 		break;
 	}
 }
 
-cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const uint8_t& partitionSize)
+int cmmdc(int firstNumber,int secondNumber)
 {
-	bool v1 = image.cols % partitionSize == 0;
-	bool v2 = image.rows % partitionSize == 0;
+	int res;
+	while (firstNumber % secondNumber)
+	{
+		res = firstNumber % secondNumber;
+		firstNumber = secondNumber;
+		secondNumber = res;
+	}
+
+	return secondNumber;
+}
+
+cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize)
+{
+	int v1 = image.cols % partitionSize;
+	int v2 = image.rows % partitionSize;
 	bool v3 = v1 || v2;
 	assert(v3);
 
@@ -50,6 +65,7 @@ cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& da
 
 
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
+	//int counter = 1;
 
 	for (auto x = 0; x < image.cols; x += partitionSize)
 		for (auto y = 0; y < image.rows; y += partitionSize)
@@ -72,6 +88,13 @@ cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& da
 
 			cv::Mat testPhoto = std::move(BasePictures::readPhoto(pictureName));
 
+			
+			if (blending)
+			{				
+				alphaBlending(testPhoto, PictureTools::averageColor(testPhoto));
+			}
+			
+
 			for (auto i = x; i < x + partitionSize; ++i)
 			{
 				for (auto j = y; j < y + partitionSize; ++j)
@@ -89,7 +112,14 @@ cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& da
 			}
 		}
 
+   //TO DO: MAKE IT WORK FOR ALL DIMENSIONS
+
 	return result;
+}
+
+cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize)
+{
+	return cv::Mat();
 }
 
 void Mosaic::replaceCellRectangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL)
