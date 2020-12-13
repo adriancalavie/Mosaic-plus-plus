@@ -20,8 +20,8 @@ namespace PictureToolsTest
 		{			
 			//PictureTools::resize vs cv::resize execution time
 
-			cv::Mat input = cv::imread("..//test.jpg", IMREAD_COLOR);
-			cv::Mat input2 = cv::imread("..//test.jpg", IMREAD_COLOR);
+			cv::Mat input = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+			cv::Mat input2 = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 			
 			stopwatch swOriginal;
 			stopwatch swMine;
@@ -69,29 +69,41 @@ namespace PictureToolsTest
 
 		}
 
-		TEST_METHOD(Resize)
+		TEST_METHOD(ResizeNeighbour)
 		{
-			Mat testImage = imread("..//test.jpg", IMREAD_COLOR);
+			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 
-			testImage = PictureTools::resize(testImage, 600, 600);
+			testImage = PictureTools::resize(testImage, 600, 600,PictureTools::Algorithm::nearestNeighbour);
 
 			bool testingSize = testImage.rows == 600 && testImage.cols == 600;
 
-			Assert::IsTrue(testingSize);
+			//Assert::IsTrue(testingSize);
+			Assert::IsTrue(!testImage.empty());
+		}
+
+		TEST_METHOD(ResizeBilinearInterpolation)
+		{
+			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+
+			testImage = PictureTools::resize(testImage, 1200, 780,PictureTools::Algorithm::bilinearInterpolation);
+
+			bool testingSize = testImage.rows == 1200 && testImage.cols == 780;
+
+			//Assert::IsTrue(testingSize);
 			Assert::IsTrue(!testImage.empty());
 		}
 
 		TEST_METHOD(Crop)
 		{
-			Mat testImage = imread("..//test.jpg", IMREAD_COLOR);
+			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 
-			Mat cropedImage = PictureTools::crop(testImage, { 0,0 }, { 20,20 });
+			cv::Mat cropedImage = PictureTools::cropSquare(testImage, { 0,0 }, { 20,20 });
 
 			bool isEqual = true;
 
 			for (int index_x = 0; index_x < 20; ++index_x)
 				for (int index_y = 0; index_y < 20; ++index_y)
-					if (testImage.at<Vec3b>(index_x, index_y) != cropedImage.at<Vec3b>(index_x, index_y))
+					if (testImage.at<cv::Vec3b>(index_x, index_y) != cropedImage.at<cv::Vec3b>(index_x, index_y))
 					{
 						isEqual = false;
 						break;
@@ -101,8 +113,8 @@ namespace PictureToolsTest
 		}
 		TEST_METHOD(HueShiftImage)
 		{
-			Mat testImage = imread("..//test.jpg", IMREAD_COLOR);
-			Mat hueShiftedImage = PictureTools::hueShiftImage(testImage, 45);
+			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+			cv::Mat hueShiftedImage = PictureTools::hueShiftImage(testImage, 45);
 			std::tuple <uint8_t, uint8_t, uint8_t> testColor;
 
 			bool isEqual = true;

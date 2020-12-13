@@ -27,14 +27,21 @@ namespace MosaicTest
 
 		}
 
-		TEST_METHOD(ReplaceTest)
+		TEST_METHOD(BlendingTest)
 		{
-			//TOO DO 
+			cv::Scalar color2(255, 255, 255);
+			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+			cv::Mat copyTestImage = testImage;
+			Mosaic::alphaBlending(testImage, color2);
+
+			Assert::IsTrue(testImage.empty());
+
 		}
 
 		TEST_METHOD(MakeTest)
 		{
-			//TOO DO
+			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+			//TO DO
 		}
 	};
 }
