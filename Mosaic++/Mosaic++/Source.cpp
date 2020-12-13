@@ -24,7 +24,6 @@ int main()
 	cv::imshow("Original", input);
 	/*cv::imshow("Returned", input2);*/
 	cv::waitKey(0);
-	*/
 
 	return 0;
 }
