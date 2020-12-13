@@ -4,12 +4,13 @@
 #include "StopWatch.h"
 #include "Mosaic.h"
 
-
 int main()
 {
 	//Make mosaic 
+	/*
 	BasePictures test(1001);
 	test.addPicturesMosaic(false);
+	*/
 
 
 	cv::Mat input = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
@@ -23,6 +24,7 @@ int main()
 	cv::imshow("Original", input);
 	/*cv::imshow("Returned", input2);*/
 	cv::waitKey(0);
+	*/
 
 	return 0;
 }
