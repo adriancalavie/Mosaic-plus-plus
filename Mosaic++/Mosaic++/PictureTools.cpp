@@ -49,7 +49,24 @@ cv::Mat PictureTools::cropSquare(const cv::Mat& image, const Point& topL, const 
 	return result;
 }
 
-cv::Mat PictureTools::resize(const cv::Mat& image, const uint16_t& width, const uint16_t& height)
+cv::Mat PictureTools::resize(const cv::Mat& image, const uint16_t& width, const uint16_t& height, const Algorithm& type)
+{
+	switch (type)
+	{
+	case Algorithm::nearestNeighbour:
+		return nearestNeighbour(image, width, height);
+
+	case Algorithm::bilinearInterpolation:
+		return bilinearInterpolation(image, width, height);
+
+	default:
+		return cv::Mat();
+	}
+}
+
+
+
+cv::Mat PictureTools::nearestNeighbour(const cv::Mat& image, const uint16_t& width, const uint16_t& height)
 {
 	assert(!image.empty());
 	cv::Mat newimage(height, width, CV_8UC3);
@@ -64,14 +81,82 @@ cv::Mat PictureTools::resize(const cv::Mat& image, const uint16_t& width, const 
 			nearY = ((rows * y_ratio) >> 16);
 
 			newimage.at<cv::Vec3b>(rows, cols) = cv::Vec3b(image.at<cv::Vec3b>(nearY, nearX));
-
-			//std::cout << (int)newimage.at<cv::Vec3b>(rows,cols)[0] <<" "
-				//<<(int) newimage.at<cv::Vec3b>(rows,cols)[1] <<" "<<
-			//(int) newimage.at<cv::Vec3b>(rows,cols)[2] << std::endl;
 		}
 	}
 
 	return newimage;
+}
+
+double PictureTools::interpolation(double firstNeighbour, double secondNeighbour, double proportion)
+{
+	return std::move((secondNeighbour - firstNeighbour) * proportion + firstNeighbour);
+}
+
+cv::Vec3b PictureTools::interpolation(const cv::Vec3b& firstNeighbour, const cv::Vec3b& secondNeighbour, double proportion)
+{
+	return std::move(cv::Vec3b(
+		static_cast<uchar>(interpolation(firstNeighbour[0], secondNeighbour[0], proportion)),
+		static_cast<uchar>(interpolation(firstNeighbour[1], secondNeighbour[1], proportion)),
+		static_cast<uchar>(interpolation(firstNeighbour[2], secondNeighbour[2], proportion))
+	));
+}
+
+cv::Mat PictureTools::bilinearInterpolation(const cv::Mat& image, const uint16_t& width, const uint16_t& height)
+{
+
+	cv::Mat newImage(height, width, CV_8UC3);
+
+	double heightRatio = height / static_cast<double>(image.rows);
+	double widthRatio = width / static_cast<double>(image.cols);
+
+	for (int hIndex = 0; hIndex < height; ++hIndex)
+	{
+		for (int wIndex = 0; wIndex < width; ++wIndex)
+		{
+			std::array <cv::Point, 2> neighbours;
+			double h_t, w_t;
+			cv::Vec3b valueW1, valueW2, valueH;
+
+			h_t = hIndex / heightRatio;
+			w_t = wIndex / widthRatio;
+
+			neighbours[0].x = static_cast<int>(h_t);
+			neighbours[0].y = static_cast<int>(w_t);
+			neighbours[1].x = neighbours[0].x + 1;
+			neighbours[1].y = neighbours[0].y + 1;
+
+			if (neighbours[1].x < image.rows && neighbours[1].y < image.cols)
+			{
+				valueW1 = interpolation(
+					image.at<cv::Vec3b>(neighbours[0].x, neighbours[0].y),
+					image.at<cv::Vec3b>(neighbours[0].x, neighbours[1].y),
+					h_t - neighbours[0].x
+				);
+
+				valueW2 = interpolation(
+					image.at<cv::Vec3b>(neighbours[0].x, neighbours[0].y),
+					image.at<cv::Vec3b>(neighbours[0].x, neighbours[1].y),
+					h_t - neighbours[0].x
+				);
+
+				valueH = interpolation(
+					valueW1,
+					valueW2,
+					w_t - neighbours[0].y
+				);
+
+				newImage.at<cv::Vec3b>(hIndex, wIndex) = std::move(valueH);
+			}
+			else
+			{
+
+				newImage.at<cv::Vec3b>(hIndex, wIndex) = image.at<cv::Vec3b>(neighbours[0].x, neighbours[0].y);
+			}
+
+		}
+	}
+
+	return newImage;
 }
 
 cv::Scalar PictureTools::averageColor(const cv::Mat& image)
