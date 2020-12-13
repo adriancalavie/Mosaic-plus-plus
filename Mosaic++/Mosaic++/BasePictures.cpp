@@ -62,6 +62,11 @@ void BasePictures::setNumberPictures(const uint16_t& number)
 	m_numberPictures = number;
 }
 
+void BasePictures::setFolder(const std::string& filename)
+{
+	this->m_source = filename;
+}
+
 void BasePictures::setPicturesNumber(const std::uint16_t& number)
 {
 	this->m_numberPictures = number;

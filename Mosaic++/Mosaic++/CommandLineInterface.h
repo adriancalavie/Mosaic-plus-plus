@@ -22,7 +22,7 @@ class CommandLineInterface
 
 
 public:
-	CommandLineInterface(const std::string&);
+	CommandLineInterface(const std::string&, const std::string&);
 
 	static const std::map<std::string, CommandLineInterface::Command> vocabulary;
 };

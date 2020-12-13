@@ -1,5 +1,9 @@
 #include "CommandLineInterface.h"
 #include <iostream>
+#include <vector>
+#include "Mosaic.h"
+#include "BasePictures.h"
+#include "PictureTools.h"
 
 const std::map<std::string, CommandLineInterface::Command> CommandLineInterface::vocabulary = {
 		{"mosaic", CommandLineInterface::Command::MOSAIC},
@@ -17,14 +21,16 @@ const std::map<std::string, CommandLineInterface::Command> CommandLineInterface:
 		{"selector--h", CommandLineInterface::Command::SELECTOR_HELP},
 };
 
-CommandLineInterface::CommandLineInterface(const std::string& command)
+CommandLineInterface::CommandLineInterface(const std::string& command, const std::string& filename)
 {
+	BasePictures base(1000);
+
+
 	if (vocabulary.find(command) != vocabulary.end())
 	{
 		switch (vocabulary.find(command)->second)
 		{
 		case CommandLineInterface::Command::MOSAIC:
-
 			break;
 		case CommandLineInterface::Command::MOSAIC_H:
 
@@ -33,7 +39,6 @@ CommandLineInterface::CommandLineInterface(const std::string& command)
 
 			break;
 		case CommandLineInterface::Command::FOLDER: 
-
 			break;
 		case CommandLineInterface::Command::FOLDER_H: 
 

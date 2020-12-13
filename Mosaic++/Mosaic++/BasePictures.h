@@ -50,7 +50,7 @@ public:
 	const map& GetMediumColor() const;
 	const void CreatePictures();
 
-
+	void setFolder(const std::string&);
 	void setPicturesNumber(const std::uint16_t&);
 
 	const uint16_t& getPictureCount() const;

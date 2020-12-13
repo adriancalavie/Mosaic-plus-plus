@@ -147,7 +147,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BasePictures.cpp" />
-    <ClCompile Include="Command.cpp" />
     <ClCompile Include="CommandLineInterface.cpp" />
     <ClCompile Include="Mosaic.cpp" />
     <ClCompile Include="PictureTools.cpp" />
@@ -155,7 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasePictures.h" />
-    <ClInclude Include="Command.h" />
     <ClInclude Include="CommandLineInterface.h" />
     <ClInclude Include="Mosaic.h" />
     <ClInclude Include="PictureTools.h" />
