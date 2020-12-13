@@ -87,7 +87,6 @@ cv::Scalar PictureTools::averageColor(const cv::Mat& image)
 			blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
 			green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
 			red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
-
 		}
 	}
 	red = red / size;

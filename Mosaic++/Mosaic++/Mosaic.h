@@ -15,9 +15,9 @@ private:
 private:
 	static const uint8_t defaultSize = 10;
 	static const uint8_t defaultShape = 1;
-	static void alphaBlending(const std::unordered_map < cv::Scalar, std::string>& dataPictures);
 
 public:
+	static void alphaBlending(cv::Mat&, const cv::Scalar&);
 	friend uint32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
 	static cv::Mat makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const uint8_t& partitionSize = defaultSize, const uint8_t& shape = defaultShape);
 	static cv::Mat makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const uint8_t& partitionSize = defaultSize);

@@ -1,7 +1,7 @@
 #include "Mosaic.h"
 #include "BasePictures.h"
 #include "PictureTools.h"
-
+#include <algorithm>
 
 
 uint32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor)
@@ -13,33 +13,17 @@ uint32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secon
 	return (blueD * blueD + greenD * greenD + redD * redD);
 }
 
-void Mosaic::alphaBlending(const std::unordered_map<cv::Scalar, std::string>& dataPictures)
+void Mosaic::alphaBlending(cv::Mat& image, const cv::Scalar& color)
 {
-	//trying to blend photo mosaic better
-	cv::Mat foreground = cv::imread("");
-	cv::Mat background = cv::imread("");
-	cv::Mat alpha = cv::imread("");
-
-	// Convert Mat to float data type
-	foreground.convertTo(foreground, CV_32FC3);
-	background.convertTo(background, CV_32FC3);
-
-	// Normalize the alpha mask to keep intensity between 0 and 1
-	alpha.convertTo(alpha, CV_32FC3, 1.0 / 255); // 
-
-	// Storage for output image
-	cv::Mat ouImage = cv::Mat::zeros(foreground.size(), foreground.type());
-
-	multiply(alpha, foreground, foreground);
-
-	multiply(cv::Scalar::all(1.0) - alpha, background, background);
-
-	add(foreground, background, ouImage);
-
-	imshow("alpha blended image", ouImage / 255);
-	cv::waitKey(0);
-
-
+	for (auto x = 0; x < image.rows; ++x)
+	{
+		for (auto y = 0; y < image.cols; ++y)
+		{
+			image.at<cv::Vec3b>(x, y)[0] = (image.at<cv::Vec3b>(x, y)[0] + color[0])/2;
+			image.at<cv::Vec3b>(x, y)[1] = (image.at<cv::Vec3b>(x, y)[1] + color[1])/2;
+			image.at<cv::Vec3b>(x, y)[2] = (image.at<cv::Vec3b>(x, y)[2] + color[2])/2;
+		}
+	}
 }
 
 cv::Mat Mosaic::makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const uint8_t& partitionSize, const uint8_t& shape)
