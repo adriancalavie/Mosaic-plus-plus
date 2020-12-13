@@ -49,15 +49,15 @@ cv::Mat PictureTools::cropSquare(const cv::Mat& image, const Point& topL, const 
 	return result;
 }
 
-cv::Mat PictureTools::resize(const cv::Mat& image, const uint16_t& width, const uint16_t& height, const Algorithm& type)
+cv::Mat PictureTools::resize(const cv::Mat& image, const uint16_t& width, const uint16_t& height, const PictureTools::Algorithm& type)
 {
 	switch (type)
 	{
-	case Algorithm::nearestNeighbour:
-		return nearestNeighbour(image, width, height);
+	case PictureTools::Algorithm::nearestNeighbour:
+		return PictureTools::nearestNeighbour(image, width, height);
 
-	case Algorithm::bilinearInterpolation:
-		return bilinearInterpolation(image, width, height);
+	case PictureTools::Algorithm::bilinearInterpolation:
+		return PictureTools::bilinearInterpolation(image, width, height);
 
 	default:
 		return cv::Mat();
