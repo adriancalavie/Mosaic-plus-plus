@@ -66,6 +66,10 @@ public:
 	const std::string& getExtension() const;
 	void setExtension(const std::string&);
 
+	const uint16_t& getNumberPictures() const;
+	void setNumberPictures(const uint16_t&);
+
+
 	void addPicturesMosaic(const bool&);
 
 };

@@ -4,11 +4,10 @@
 #include "StopWatch.h"
 #include "Mosaic.h"
 
-
 int main()
 {
 	//Make mosaic 
-	BasePictures test(1000);
+	BasePictures test(1001);
 	test.addPicturesMosaic(false);
 
 	cv::Mat input = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
@@ -16,7 +15,7 @@ int main()
 	input = PictureTools::resize(input, 1200, 650);
 
 	cv::Mat input2 = Mosaic::makeMosaic(test.GetMediumColor(), input);
-	cv::imwrite("..//Resulting pictures\\1000.jpg", input2);
+	cv::imwrite("..//Resulting pictures\\" + std::to_string(test.getNumberPictures()) + test.getExtension(), input2);
 	cv::imshow("Original", input);
 	cv::imshow("Returned", input2);
 	cv::waitKey(0);

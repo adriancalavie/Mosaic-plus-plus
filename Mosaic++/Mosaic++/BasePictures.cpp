@@ -52,6 +52,16 @@ void BasePictures::setExtension(const std::string& extensionName)
 	m_extension = extensionName;
 }
 
+const uint16_t& BasePictures::getNumberPictures() const
+{
+	return m_numberPictures;
+}
+
+void BasePictures::setNumberPictures(const uint16_t& number)
+{
+	m_numberPictures = number;
+}
+
 void BasePictures::setPicturesNumber(const std::uint16_t& number)
 {
 	this->m_numberPictures = number;

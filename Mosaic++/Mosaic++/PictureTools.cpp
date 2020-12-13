@@ -2,7 +2,6 @@
 #include <iostream>
 #include <unordered_map>
 
-
 uint8_t PictureTools::valueCheck(int number)
 {
 	if (number < 0)
@@ -35,7 +34,7 @@ std::tuple<uint8_t, uint8_t, uint8_t> PictureTools::hueShiftPixel(const uint8_t&
 	return std::make_tuple(valueCheck(resR), valueCheck(resG), valueCheck(resB));
 }
 
-cv::Mat PictureTools::crop(const cv::Mat& image, const Point& topL, const Point& botR)
+cv::Mat PictureTools::cropSquare(const cv::Mat& image, const Point& topL, const Point& botR)
 {
 	uint16_t height = botR.first - topL.first;
 	uint16_t width = botR.second - topL.second;

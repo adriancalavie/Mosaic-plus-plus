@@ -108,7 +108,7 @@ cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& da
 	return result;
 }
 
-void Mosaic::replaceCell(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL)
+void Mosaic::replaceCellRectangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL)
 {
 	assert(originalPicture.empty());
 	for (int index_rows = 0; index_rows < mosaicPhoto.rows; index_rows++)
@@ -118,4 +118,62 @@ void Mosaic::replaceCell(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const P
 			originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[1] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[1]);
 			originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[2] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[2]);
 		}
+}
+
+void Mosaic::replaceCellTriangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL, const int& type)
+{
+	/*
+	| 1 /|		|\ 3 |
+	|  / |		| \  |
+	| /  |		|  \ |
+	|/ 2 |		| 4 \|
+	*/
+	assert(originalPicture.empty());
+	switch (type)
+	{
+	case 1:
+		for (int index_rows = 0; index_rows < mosaicPhoto.rows; index_rows++)
+			for (int index_cols = 0; index_cols < mosaicPhoto.cols - index_rows - 1; index_cols++)
+			{
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[0] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[0]);
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[1] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[1]);
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[2] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[2]);
+			}
+		break;
+	case 2:
+		for (int index_rows = 0; index_rows < mosaicPhoto.rows; index_rows++)
+			for (int index_cols = mosaicPhoto.cols - index_rows - 1; index_cols < mosaicPhoto.cols; index_cols++)
+			{
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[0] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[0]);
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[1] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[1]);
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[2] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[2]);
+			}
+		break;
+	case 3:
+		for (int index_rows = 0; index_rows < mosaicPhoto.rows; index_rows++)
+			for (int index_cols = index_rows; index_cols < mosaicPhoto.cols; index_cols++)
+			{
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[0] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[0]);
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[1] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[1]);
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[2] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[2]);
+			}
+		break;
+	case 4:
+		for (int index_rows = 0; index_rows < mosaicPhoto.rows; index_rows++)
+			for (int index_cols = 0; index_cols < index_rows + 1; index_cols++)
+			{
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[0] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[0]);
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[1] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[1]);
+				originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[2] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[2]);
+			}
+		break;
+	default:
+		break;
+	}
+
+}
+
+void Mosaic::replaceCellDiamond(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& top, const Point& low, const Point& left, const Point& right)
+{
+	//TOO DO
 }
