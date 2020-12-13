@@ -134,7 +134,7 @@ void Mosaic::replaceCellRectangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto
 		}
 }
 
-void Mosaic::replaceCellTriangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL, const int& type)
+void Mosaic::replaceCellTriangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL, const uint8_t& type)
 {
 	/*
 	| 1 /|		|\ 3 |

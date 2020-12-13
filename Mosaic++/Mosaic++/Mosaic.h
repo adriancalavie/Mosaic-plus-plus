@@ -25,7 +25,7 @@ public:
 public:
 	static void replaceCellRectangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL); // for square and rectangle
 
-	static void replaceCellTriangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL, const int& type);
+	static void replaceCellTriangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL, const uint8_t& type);
 	static void replaceCellDiamond(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& top, const Point& low, const Point& left, const Point& right);
 
 private:

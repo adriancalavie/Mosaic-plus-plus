@@ -33,5 +33,12 @@ namespace BasePicturesTest
 			test.CreatePictures();
 			Assert::IsTrue(test.GetMediumColor().size() > 0);
 		}
+
+
+		TEST_METHOD(addPicturesMosaicTest)
+		{
+			std::ifstream in("data_base.txt");
+			Assert::IsTrue(!in.eof());
+		}
 	};
 }
