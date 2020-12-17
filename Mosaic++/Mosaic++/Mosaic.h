@@ -5,27 +5,26 @@
 #include <cstdlib>
 #include "BasePictures.h"
 
+enum class Type { square, rectangle, triangle, diamond };
 
 class Mosaic
 {
-	//private: 
-		//enum class Type { square, rectangle, triangle, diamond };
+	
+
 private:
 	using Point = std::pair <uint16_t, uint16_t>;
-private:
 	static const uint8_t defaultSize = 10;
-	static const uint8_t defaultShape = 1;
 
 public:
 	static void alphaBlending(cv::Mat&, const cv::Scalar&);
 	friend uint32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
-	static cv::Mat makeMosaic(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const uint8_t& partitionSize = defaultSize, const uint8_t& shape = defaultShape, bool blending = false);
+	static cv::Mat makeMosaic(const cv::Mat& image,const BasePictures& basePictures, const Type& type= Type::square,const uint8_t& partitionSize=defaultSize, bool blending = false);
 
 
 public:
 	static void replaceCellRectangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL); // for square and rectangle
 
-	static void replaceCellTriangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL, const uint8_t& type, const Point & = std::make_pair((uint16_t)0, (uint16_t)0),  const Point & = std::make_pair(defaultSize, defaultSize));
+	static void replaceCellTriangle(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& topL, const uint8_t& type, const Point & = std::make_pair((uint16_t)0, (uint16_t)0), const Point & = std::make_pair(defaultSize, defaultSize));
 
 	static void replaceCellDiamond(cv::Mat& originalPicture, cv::Mat& mosaicPhoto, const Point& top);
 

@@ -184,7 +184,7 @@ cv::Scalar PictureTools::averageColor(const cv::Mat& image)
 	return cv::Scalar(blue, green, red);
 }
 
-cv::Scalar PictureTools::averageColor(const cv::Mat& image, const Point& startLocation, const Point& size)
+cv::Scalar PictureTools::averageColorSquare(const cv::Mat& image, const Point& startLocation, const Point& size)
 {
 	assert(!image.empty());
 	double blue, green, red;
@@ -202,6 +202,87 @@ cv::Scalar PictureTools::averageColor(const cv::Mat& image, const Point& startLo
 
 		}
 	}
+	red = red / sizeOfPartition;
+	green = green / sizeOfPartition;
+	blue = blue / sizeOfPartition;
+	red = red * 100;
+	green = green * 100;
+	blue = blue * 100;
+
+	return cv::Scalar(blue, green, red);
+}
+
+cv::Scalar PictureTools::averageColorTriangle(const cv::Mat& image, const Point& startLocation, const Point& size, const uint8_t& type)
+{
+	assert(!image.empty());
+	double blue, green, red;
+	blue = green = red = 0;
+	int sizeOfPartition = (size.first) * (size.second);
+	int rowSize = size.first + startLocation.first;
+	int colSize = size.second + startLocation.second;
+	//std::cout << "Start: " << startLocation.first << " " << startLocation.second << std::endl;
+	//std::cout << "End: " << rowSize << " " << colSize << std::endl <<"type: "<<(int)type<<std::endl<< std::endl;
+	switch(type)
+	{
+	case 1:
+		for (int rows = startLocation.first; rows < rowSize; ++rows)
+		{
+			for (int cols = startLocation.second; cols < colSize-rows; ++cols)
+			{
+				blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
+				green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
+				red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
+
+			}
+		}
+		break;
+	case 2:
+		for (int rows = startLocation.first; rows < rowSize; ++rows)
+		{
+			for (int cols = rowSize-rows; cols < colSize; ++cols)
+			{
+				//std::cout << rows << " " << cols << std::endl;
+				blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
+				green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
+				red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
+			}
+		}
+		break;
+	case 3:
+		for (int rows = startLocation.first; rows < rowSize; ++rows)
+		{
+			for (int cols = rows; cols < colSize; ++cols)
+			{
+				/*if (startLocation.first==0&&startLocation.second==0)
+				{
+					std::cout << "Row: " << rows << " cols: " << cols << std::endl;
+				}*/
+				blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
+				green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
+				red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
+
+			}
+		}
+
+		break;
+	case 4:
+		for (int rows = startLocation.first; rows < rowSize; ++rows)
+		{
+			for (int cols = startLocation.second; cols < rows; ++cols)
+			{
+				blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
+				green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
+				red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
+
+			}
+		}
+
+		break;
+
+	default:
+		break;
+	}
+
 	red = red / sizeOfPartition;
 	green = green / sizeOfPartition;
 	blue = blue / sizeOfPartition;

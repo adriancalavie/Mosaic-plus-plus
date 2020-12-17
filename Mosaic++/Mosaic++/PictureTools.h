@@ -39,7 +39,8 @@ public:
 	static cv::Mat resize(const cv::Mat& image, const uint16_t& width = 0, const uint16_t& height = 0, const Algorithm& type = Algorithm::nearestNeighbour);
 	
 	static cv::Scalar averageColor(const cv::Mat& image);
-	static cv::Scalar averageColor(const cv::Mat& image, const Point& startLocation, const Point& size);
+	static cv::Scalar averageColorSquare(const cv::Mat& image, const Point& startLocation, const Point& size);
+	static cv::Scalar averageColorTriangle(const cv::Mat& image, const Point& startLocation, const Point& size, const uint8_t& type);
 
 	static cv::Mat hueShiftImage(const cv::Mat& image, const uint16_t& angle);
 };
