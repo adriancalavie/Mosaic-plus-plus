@@ -217,68 +217,59 @@ cv::Scalar PictureTools::averageColorTriangle(const cv::Mat& image, const Point&
 	assert(!image.empty());
 	double blue, green, red;
 	blue = green = red = 0;
-	int sizeOfPartition = (size.first) * (size.second);
+	int sizeOfPartition = (size.first) * (size.second)/2;
 	int rowSize = size.first + startLocation.first;
 	int colSize = size.second + startLocation.second;
-	//std::cout << "Start: " << startLocation.first << " " << startLocation.second << std::endl;
-	//std::cout << "End: " << rowSize << " " << colSize << std::endl <<"type: "<<(int)type<<std::endl<< std::endl;
-	switch(type)
+
+	switch (type)
 	{
 	case 1:
-		for (int rows = startLocation.first; rows < rowSize; ++rows)
+		for (int rows = 0; rows < size.first; ++rows)
 		{
-			for (int cols = startLocation.second; cols < colSize-rows; ++cols)
+			for (int cols = 0; cols < size.second - rows; ++cols)
 			{
-				blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
-				green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
-				red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
-
+				blue += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0] / (double)100;
+				green += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1] / (double)100;
+				red += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2] / (double)100;
 			}
 		}
+		
 		break;
 	case 2:
-		for (int rows = startLocation.first; rows < rowSize; ++rows)
+		for (int rows = 0; rows < size.first; ++rows)
 		{
-			for (int cols = rowSize-rows; cols < colSize; ++cols)
+			for (int cols = size.second - rows; cols < size.second; ++cols)
 			{
-				//std::cout << rows << " " << cols << std::endl;
-				blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
-				green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
-				red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
+				blue += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0] / (double)100;
+				green += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1] / (double)100;
+				red += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2] / (double)100;
 			}
 		}
+		
 		break;
 	case 3:
-		for (int rows = startLocation.first; rows < rowSize; ++rows)
+		for (int rows = 0; rows < size.first; ++rows)
 		{
-			for (int cols = rows; cols < colSize; ++cols)
+			for (int cols = rows; cols < size.second; ++cols)
 			{
-				/*if (startLocation.first==0&&startLocation.second==0)
-				{
-					std::cout << "Row: " << rows << " cols: " << cols << std::endl;
-				}*/
-				blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
-				green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
-				red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
-
+				blue += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0] / (double)100;
+				green += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1] / (double)100;
+				red += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2] / (double)100;
 			}
 		}
-
+		
 		break;
 	case 4:
-		for (int rows = startLocation.first; rows < rowSize; ++rows)
+		for (int rows = 0; rows < size.first; ++rows)
 		{
-			for (int cols = startLocation.second; cols < rows; ++cols)
+			for (int cols = 0; cols < rows; ++cols)
 			{
-				blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
-				green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
-				red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
-
+				blue += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0] / (double)100;
+				green += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1] / (double)100;
+				red += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2] / (double)100;
 			}
 		}
-
 		break;
-
 	default:
 		break;
 	}

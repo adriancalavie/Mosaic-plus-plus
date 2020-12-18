@@ -2,7 +2,8 @@
 #include "BasePictures.h"
 #include "PictureTools.h"
 #include <algorithm>
-
+#include <random>
+#include <time.h> 
 
 uint32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor)
 {
@@ -122,10 +123,24 @@ cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 	for (auto x = 0; x < image.cols - 1; x += partitionSize)
 		for (auto y = 0; y < image.rows - 1; y += partitionSize)
 		{
-			cv::Scalar medColor = PictureTools::averageColorTriangle(image, { y,x }, { partitionSize, partitionSize }, 3);
+			//random type triangle 1|2 or 3|4
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_int_distribution<> dis(0, 1);
+			uint8_t type = dis(gen);
 
 			std::string pictureName;
 			int closestDistance = INT_MAX;
+			cv::Scalar medColor;
+
+			//first triangle
+			
+			if (type)
+				medColor = PictureTools::averageColorTriangle(image, { y,x }, { partitionSize, partitionSize }, 1);
+			else
+				medColor = PictureTools::averageColorTriangle(image, { y,x }, { partitionSize, partitionSize }, 3);
+
+			
 			for (auto itr : dataPictures)
 			{
 				int currDistance = euclideanDistance(medColor, itr.first);
@@ -143,11 +158,17 @@ cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 			{
 				alphaBlending(testPhoto, PictureTools::averageColor(testPhoto));
 			}
+			if (type)
+				Mosaic::replaceCellTriangle(result, testPhoto, std::make_pair(y, x), 1, { 0,0 }, { partitionSize, partitionSize });
+			else
+				Mosaic::replaceCellTriangle(result, testPhoto, std::make_pair(y, x), 3, { 0,0 }, { partitionSize, partitionSize });
 
-			Mosaic::replaceCellTriangle(result, testPhoto, std::make_pair(y, x), 3, { 0,0 }, { partitionSize, partitionSize });
-
+			//second triangle
 			closestDistance = INT_MAX;
-			medColor = PictureTools::averageColorTriangle(image, { y , x }, { partitionSize , partitionSize }, 4);
+			if (type)
+				medColor = PictureTools::averageColorTriangle(image, { y,x }, { partitionSize, partitionSize }, 2);
+			else
+				medColor = PictureTools::averageColorTriangle(image, { y,x }, { partitionSize, partitionSize }, 4);
 			for (auto itr : dataPictures)
 			{
 				int currDistance = euclideanDistance(medColor, itr.first);
@@ -159,19 +180,18 @@ cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 
 				}
 			}
-
 			testPhoto = std::move(BasePictures::readPhoto(pictureName));
 			testPhoto = PictureTools::resize(testPhoto, partitionSize, partitionSize);
-			//std::cout << testPhoto.rows << " " << testPhoto.cols << std::endl;
 			if (blending)
 			{
 				alphaBlending(testPhoto, PictureTools::averageColor(testPhoto));
 			}
 
-			Mosaic::replaceCellTriangle(result, testPhoto, std::make_pair(y, x), 4, { 0,0 }, { partitionSize, partitionSize });
+			if (type)
+				Mosaic::replaceCellTriangle(result, testPhoto, std::make_pair(y, x), 2, { 0,0 }, { partitionSize, partitionSize });
+			else
+				Mosaic::replaceCellTriangle(result, testPhoto, std::make_pair(y, x), 4, { 0,0 }, { partitionSize, partitionSize });
 		}
-
-	//TO DO: MAKE IT WORK FOR ALL DIMENSIONS
 
 	return result;
 }
