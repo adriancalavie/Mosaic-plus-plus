@@ -30,6 +30,8 @@ cv::Mat Mosaic::makeMosaic(const cv::Mat& image, const BasePictures& basePicture
 {
 	assert(!image.empty());
 
+	std::cout << "entered make mosaic\n";
+
 	switch (type)
 	{
 	case Type::square:
@@ -60,6 +62,9 @@ int cmmdc(int firstNumber, int secondNumber)
 
 cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize)
 {
+
+	std::cout << "entered make square\n";
+
 	int v1 = image.cols % partitionSize;
 	int v2 = image.rows % partitionSize;
 	bool v3 = v1 || v2;

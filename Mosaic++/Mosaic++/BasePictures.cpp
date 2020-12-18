@@ -118,7 +118,7 @@ void BasePictures::addPicturesMosaic(const bool& modify)
 	{
 		CreatePictures();
 	}
-	std::ifstream in("data_base.txt");
+	std::ifstream in("D:\\Mosaic++\\Mosaic++\\Mosaic++\\data_base.txt");
 	for (int i = 0; i < m_numberPictures; ++i)
 	{
 		std::string line;
