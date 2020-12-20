@@ -13,13 +13,16 @@
 #include <sys/stat.h>   // For stat().
 #include <regex>
 
+//errors
+
 
 class CommandLineInterface
 {
-	static const enum class ParameterType { PATH, EXTENSION, TYPE, NONE };
-	static const std::unordered_set<std::string> knownExtensions;
-	static const std::unordered_set<std::string> commands;
-	static const std::unordered_map<std::string, ParameterType> flags;
+	static const enum class Parameter { PATH, EXTENSION, TYPE, NONE };
+	static const std::unordered_set<std::string> KNOWN_EXTENSIONS;
+	static const std::unordered_set<std::string> COMMANDS;
+	static const std::unordered_map<std::string, Parameter> FLAGS;
+
 public:
 
 	CommandLineInterface(int argc, char* args[]);

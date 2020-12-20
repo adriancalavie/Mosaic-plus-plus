@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="BasePictures.cpp" />
     <ClCompile Include="CommandLineInterface.cpp" />
+    <ClCompile Include="Data.cpp" />
     <ClCompile Include="Mosaic.cpp" />
     <ClCompile Include="PictureTools.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -159,12 +160,10 @@
   <ItemGroup>
     <ClInclude Include="BasePictures.h" />
     <ClInclude Include="CommandLineInterface.h" />
+    <ClInclude Include="Data.h" />
     <ClInclude Include="Mosaic.h" />
     <ClInclude Include="PictureTools.h" />
     <ClInclude Include="StopWatch.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\Documentation\[docs]make_mosaic.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
