@@ -31,6 +31,7 @@ public:
 private:
 	static cv::Mat makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize = defaultSize);
 	static cv::Mat makeTriangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize = defaultSize);
+	static cv::Mat makeDiamond(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize = defaultSize);
 
 };
 

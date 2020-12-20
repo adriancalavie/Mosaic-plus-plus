@@ -40,7 +40,7 @@ cv::Mat Mosaic::makeMosaic(const cv::Mat& image, const BasePictures& basePicture
 	case Type::triangle:
 		return makeTriangle(basePictures.GetMediumColor(), image, blending, partitionSize);
 	case Type::diamond:
-		break;
+		return makeDiamond(basePictures.GetMediumColor(), image, blending, partitionSize);
 	case Type::rectangle:
 		break;
 	default:
@@ -64,7 +64,7 @@ int cmmdc(int firstNumber, int secondNumber)
 cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize)
 {
 
-	std::cout << "entered make square\n";
+	//std::cout << "entered make square\n";
 
 	int v1 = image.cols % partitionSize;
 	int v2 = image.rows % partitionSize;
@@ -84,12 +84,14 @@ cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& da
 
 			std::string pictureName;
 			int closestDistance = INT_MAX;
+			cv::Scalar closestColor = medColor;
 			for (auto itr : dataPictures)
 			{
 				int currDistance = euclideanDistance(medColor, itr.first);
 
 				if (currDistance < closestDistance)
 				{
+					closestColor = itr.first;
 					closestDistance = currDistance;
 					pictureName = itr.second;
 				}
@@ -99,7 +101,7 @@ cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& da
 			testPhoto = PictureTools::resize(testPhoto, partitionSize, partitionSize, PictureTools::Algorithm::bilinearInterpolation);
 			if (blending)
 			{
-				alphaBlending(testPhoto, PictureTools::averageColor(testPhoto));
+				alphaBlending(testPhoto, closestColor); //PictureTools::averageColor(testPhoto));
 			}
 
 			Mosaic::replaceCellRectangle(result, testPhoto, std::make_pair(y, x));
@@ -134,13 +136,13 @@ cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 			cv::Scalar medColor;
 
 			//first triangle
-			
+
 			if (type)
 				medColor = PictureTools::averageColorTriangle(image, { y,x }, { partitionSize, partitionSize }, 1);
 			else
 				medColor = PictureTools::averageColorTriangle(image, { y,x }, { partitionSize, partitionSize }, 3);
 
-			
+
 			for (auto itr : dataPictures)
 			{
 				int currDistance = euclideanDistance(medColor, itr.first);
@@ -182,6 +184,7 @@ cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 			}
 			testPhoto = std::move(BasePictures::readPhoto(pictureName));
 			testPhoto = PictureTools::resize(testPhoto, partitionSize, partitionSize);
+
 			if (blending)
 			{
 				alphaBlending(testPhoto, PictureTools::averageColor(testPhoto));
@@ -192,6 +195,56 @@ cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 			else
 				Mosaic::replaceCellTriangle(result, testPhoto, std::make_pair(y, x), 4, { 0,0 }, { partitionSize, partitionSize });
 		}
+
+	return result;
+}
+
+cv::Mat Mosaic::makeDiamond(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize)
+{
+	int v1 = image.cols % partitionSize;
+	int v2 = image.rows % partitionSize;
+	bool v3 = v1 || v2;
+	assert(!v3);
+
+	//if any pixels would remain after partitioning process, call abort;
+
+
+	cv::Mat result(image.rows, image.cols, CV_8UC3);
+
+	for (auto x = 0; x < image.cols - 1; x += partitionSize)
+		for (auto y = 0; y < image.rows - 1; y += partitionSize)
+		{
+			// compare partitionAverage with mapped images's average;*first implementation using STL vector
+			cv::Scalar medColor = PictureTools::averageColorSquare(image, { y,x }, { partitionSize,partitionSize });
+
+			std::string pictureName;
+			int closestDistance = INT_MAX;
+			cv::Scalar closestColor = medColor;
+			for (auto itr : dataPictures)
+			{
+				int currDistance = euclideanDistance(medColor, itr.first);
+
+				if (currDistance < closestDistance)
+				{
+					closestColor = itr.first;
+					closestDistance = currDistance;
+					pictureName = itr.second;
+				}
+			}
+
+			cv::Mat testPhoto = std::move(BasePictures::readPhoto(pictureName));
+			testPhoto = PictureTools::resize(testPhoto, partitionSize, partitionSize, PictureTools::Algorithm::bilinearInterpolation);
+			if (blending)
+			{
+				alphaBlending(testPhoto, closestColor); //PictureTools::averageColor(testPhoto));
+			}
+
+			Mosaic::replaceCellDiamond(result, testPhoto, std::make_pair(y, x + partitionSize / 2));
+
+			if (x < image.cols - partitionSize - 1 && y < image.rows - partitionSize - 1)
+				Mosaic::replaceCellDiamond(result, testPhoto, std::make_pair(y + partitionSize / 2, x + partitionSize));
+		}
+	//TO DO: MAKE IT WORK FOR ALL DIMENSIONS
 
 	return result;
 }
