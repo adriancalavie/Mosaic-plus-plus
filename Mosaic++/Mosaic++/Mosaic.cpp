@@ -37,18 +37,23 @@ void Mosaic::alphaBlending(cv::Mat& image, const cv::Scalar& color)
 	}
 }
 
-cv::Mat Mosaic::makeMosaic(const cv::Mat& image, const BasePictures& basePictures, const Type& type, const uint8_t& partitionSize, bool blending)
+cv::Mat Mosaic::makeMosaic(const cv::Mat& image, const BasePictures& basePictures, const Method& method, const Type& type, const uint8_t& partitionSize, bool blending)
 {
 	assert(!image.empty());
 
 	std::cout << "entered make mosaic\n";
 
+	cv::Mat copyOriginalImage;
+
 	int v1 = image.cols / partitionSize * partitionSize;
 	int v2 = image.rows / partitionSize * partitionSize;
-
-	cv::Mat copyOriginalImage = image;
-	copyOriginalImage = std::move(PictureTools::resize(image, v1, v2, PictureTools::Algorithm::bilinearInterpolation));
-
+	switch (method)
+	{
+	case Method::cropping:
+		copyOriginalImage = std::move(PictureTools::cropSquare(image, { 0,0 }, { v2,v1 }));
+	case Method::resizing:
+		copyOriginalImage = std::move(PictureTools::resize(image, v1, v2, PictureTools::Algorithm::bilinearInterpolation));
+	}
 	switch (type)
 	{
 	case Type::square:

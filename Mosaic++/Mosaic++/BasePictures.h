@@ -54,7 +54,7 @@ public:
 	void setPicturesNumber(const std::uint16_t&);
 
 	const uint16_t& getPictureCount() const;
-	static cv::Mat readPhoto(const std::string & = "\n", const std::string & = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\Mosaic++\\Pictures for mosaics\\");
+	static cv::Mat readPhoto(const std::string & = "\n", const std::string & = "C:\\Users\\radub\\Desktop\\proiect-modrern-c\\Mosaic++\\Pictures for mosaics\\");
 
 public:
 	const std::string& getFileSource() const;
