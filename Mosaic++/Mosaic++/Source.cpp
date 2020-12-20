@@ -8,14 +8,13 @@ int main()
 {
 	//Make mosaic;
 
-	BasePictures test(5997);
+	BasePictures test(5990);
 	test.addPicturesMosaic(false);
 
 	cv::Mat input = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 
-	input = PictureTools::resize(input, 1200, 700);
-	cv::Mat input3 = Mosaic::makeMosaic(input, test, Type::triangle, 10);
-	cv::imwrite("..//Resulting pictures\\Original" + std::to_string(test.getNumberPictures()) + test.getExtension(), input3);
+	cv::Mat input3 = Mosaic::makeMosaic(input, test, Type::diamond, 5, false);
+	cv::imwrite("..//Resulting pictures\\Original" + std::to_string(test.getNumberPictures()) + "1" + test.getExtension(), input3);
 	cv::imshow("Original", input3);
 	cv::waitKey(0);
 

@@ -284,18 +284,6 @@ cv::Scalar PictureTools::averageColorTriangle(const cv::Mat& image, const Point&
 	return cv::Scalar(blue, green, red);
 }
 
-cv::Scalar PictureTools::averageColorDiamond(const cv::Mat& image, const Point& startLocation, const Point& size)
-{
-	assert(!image.empty());
-	double blue, green, red;
-	blue = green = red = 0;
-	int sizeOfPartition = (size.first) * (size.second);
-	int rowSize = size.first + startLocation.first;
-	int colSize = size.second + startLocation.second;
-
-	return cv::Scalar();
-}
-
 cv::Mat PictureTools::hueShiftImage(const cv::Mat& image, const uint16_t& angle)
 {
 	std::tuple <uint8_t, uint8_t, uint8_t> newColor;

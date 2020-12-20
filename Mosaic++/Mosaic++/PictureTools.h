@@ -41,7 +41,6 @@ public:
 	static cv::Scalar averageColor(const cv::Mat& image);
 	static cv::Scalar averageColorSquare(const cv::Mat& image, const Point& startLocation, const Point& size);
 	static cv::Scalar averageColorTriangle(const cv::Mat& image, const Point& startLocation, const Point& size, const uint8_t& type);
-	static cv::Scalar averageColorDiamond(const cv::Mat& image, const Point& startLocation, const Point& size);
 
 	static cv::Mat hueShiftImage(const cv::Mat& image, const uint16_t& angle);
 };
