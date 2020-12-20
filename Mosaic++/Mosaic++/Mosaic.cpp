@@ -14,6 +14,16 @@ uint32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secon
 	return (blueD * blueD + greenD * greenD + redD * redD);
 }
 
+uint32_t RiemersmaDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor)
+{
+	uint32_t rmean = ((long)firstColor[0] + (long)secondColor[0]) / 2;
+	uint32_t r = (long)firstColor[0] - (long)secondColor[0];
+	uint32_t g = (long)firstColor[1] - (long)secondColor[1];
+	uint32_t b = (long)firstColor[2] - (long)secondColor[2];
+
+	return (((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8);
+}
+
 void Mosaic::alphaBlending(cv::Mat& image, const cv::Scalar& color)
 {
 	for (auto x = 0; x < image.rows; ++x)
@@ -93,7 +103,7 @@ cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& da
 			cv::Scalar closestColor = medColor;
 			for (auto itr : dataPictures)
 			{
-				int currDistance = euclideanDistance(medColor, itr.first);
+				int currDistance = RiemersmaDistance(medColor, itr.first);
 
 				if (currDistance < closestDistance)
 				{

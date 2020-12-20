@@ -18,6 +18,7 @@ private:
 public:
 	static void alphaBlending(cv::Mat&, const cv::Scalar&);
 	friend uint32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
+	friend uint32_t RiemersmaDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
 	static cv::Mat makeMosaic(const cv::Mat& image,const BasePictures& basePictures, const Type& type= Type::square,const uint8_t& partitionSize=defaultSize, bool blending = false);
 
 
