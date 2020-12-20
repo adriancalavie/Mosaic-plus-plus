@@ -39,6 +39,7 @@ void Mosaic::alphaBlending(cv::Mat& image, const cv::Scalar& color)
 
 cv::Mat Mosaic::makeMosaic(const cv::Mat& image, const BasePictures& basePictures, const Method& method, const Type& type, const uint8_t& partitionSize, bool blending)
 {
+	//TODO : change partitionSize to width and height pair
 	assert(!image.empty());
 
 	std::cout << "entered make mosaic\n";
@@ -57,7 +58,7 @@ cv::Mat Mosaic::makeMosaic(const cv::Mat& image, const BasePictures& basePicture
 	switch (type)
 	{
 	case Type::square:
-		return makeSquare(basePictures.GetMediumColor(), copyOriginalImage, blending, partitionSize);
+		return makeRectangle(basePictures.GetMediumColor(), copyOriginalImage, blending, partitionSize);
 	case Type::triangle:
 		return makeTriangle(basePictures.GetMediumColor(), copyOriginalImage, blending, partitionSize);
 	case Type::diamond:
@@ -82,33 +83,28 @@ int cmmdc(int firstNumber, int secondNumber)
 	return secondNumber;
 }
 
-cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize)
-{
 
-	//std::cout << "entered make square\n";
+
+cv::Mat Mosaic::makeRectangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize)
+{
+	//can be used to create squares as well
+	//removed redundant makeSquare function
 
 	int v1 = image.cols % partitionSize;
 	int v2 = image.rows % partitionSize;
-	bool v3 = v1 || v2;
-	assert(!v3);
-
-	//if any pixels would remain after partitioning process, call abort;
-
 
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
 	for (auto x = 0; x < image.cols - 1; x += partitionSize)
 		for (auto y = 0; y < image.rows - 1; y += partitionSize)
 		{
-			// compare partitionAverage with mapped images's average;*first implementation using STL vector
-			cv::Scalar medColor = PictureTools::averageColorSquare(image, { y,x }, { partitionSize,partitionSize });
-
+			cv::Scalar mediumColor = PictureTools::averageColorSquare(image, { y,x }, { partitionSize,partitionSize });
 			std::string pictureName;
 			int closestDistance = INT_MAX;
-			cv::Scalar closestColor = medColor;
+			cv::Scalar closestColor = mediumColor;
 			for (auto itr : dataPictures)
 			{
-				int currDistance = RiemersmaDistance(medColor, itr.first);
+				int currDistance = RiemersmaDistance(mediumColor, itr.first);
 
 				if (currDistance < closestDistance)
 				{
@@ -122,20 +118,13 @@ cv::Mat Mosaic::makeSquare(const std::unordered_map<cv::Scalar, std::string>& da
 			testPhoto = PictureTools::resize(testPhoto, partitionSize, partitionSize, PictureTools::Algorithm::bilinearInterpolation);
 			if (blending)
 			{
-				alphaBlending(testPhoto, closestColor); //PictureTools::averageColor(testPhoto));
+				alphaBlending(testPhoto, closestColor);
 			}
 
 			Mosaic::replaceCellRectangle(result, testPhoto, std::make_pair(y, x));
 		}
 
-	//TO DO: MAKE IT WORK FOR ALL DIMENSIONS
-
 	return result;
-}
-
-cv::Mat Mosaic::makeRectangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize)
-{
-	return cv::Mat();
 }
 
 cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize)
