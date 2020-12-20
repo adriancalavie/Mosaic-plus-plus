@@ -38,10 +38,29 @@ namespace MosaicTest
 
 		}
 
-		TEST_METHOD(MakeTest)
+		TEST_METHOD(Riemersma)
 		{
-			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
-			//TO DO
+			uint32_t first = INT_MAX;
+			uint32_t second = INT_MAX;
+			bool indexEuclid;
+			bool indexRiemersma;
+
+			cv::Scalar color1(0, 0, 1);
+			cv::Scalar color2(255, 255, 255);
+
+			cv::Scalar color3(128, 128, 128);
+
+			first = euclideanDistance(color1, color3);
+			second = euclideanDistance(color2, color3);
+
+			indexEuclid = first < second ? true : false;
+
+			first = RiemersmaDistance(color1, color3);
+			second = RiemersmaDistance(color2, color3);
+
+			indexRiemersma = first < second ? true : false;
+
+			Assert::AreNotEqual(indexEuclid, indexRiemersma);
 		}
 	};
 }
