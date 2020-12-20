@@ -1,80 +1,23 @@
 #include "CommandLineInterface.h"
-#include <iostream>
-#include <vector>
-#include "Mosaic.h"
-#include "BasePictures.h"
-#include "PictureTools.h"
 
-const std::map<std::string, CommandLineInterface::Command> CommandLineInterface::vocabulary = {
-		{"mosaic", CommandLineInterface::Command::MOSAIC},
-		{"mosaic-h", CommandLineInterface::Command::MOSAIC_H},
-		{"mosaic--h", CommandLineInterface::Command::MOSAIC_HELP},
-		{"folder", CommandLineInterface::Command::FOLDER},
-		{"folder-h", CommandLineInterface::Command::FOLDER_H},
-		{"folder--h", CommandLineInterface::Command::FOLDER_HELP},
-		{"compile", CommandLineInterface::Command::COMPILE},
-		{"compile-h", CommandLineInterface::Command::COMPILE_H},
-		{"compile--h", CommandLineInterface::Command::COMPILE_HELP},
-		{"selectortriangle", CommandLineInterface::Command::SELECTOR_TRIANGLE},
-		{"selectorrectangle", CommandLineInterface::Command::SELECTOR_RECTANGLE},
-		{"selector-h", CommandLineInterface::Command::SELECTOR_H},
-		{"selector--h", CommandLineInterface::Command::SELECTOR_HELP},
+const std::unordered_map<std::string, CommandLineInterface::ParameterType> CommandLineInterface::flags = {
+	{"--shape",		ParameterType::TYPE},
+	{"-s",			ParameterType::TYPE},
+
+	{"--extension",	ParameterType::EXTENSION},
+	{"-e",			ParameterType::EXTENSION},
+
+	{"--directory",	ParameterType::PATH},
+	{"-d",			ParameterType::PATH},
+
+	{"--help",		ParameterType::NONE},
+	{"-h",			ParameterType::NONE},
+
+	{"--version",	ParameterType::NONE},
+	{"-v",			ParameterType::NONE}
 };
 
-CommandLineInterface::CommandLineInterface(const std::string& command, const std::string& filename)
-{
-	BasePictures base(1000);
+const std::unordered_set<std::string> CommandLineInterface::commands = { "make", "set_img_pool_dir" };
 
 
-	if (vocabulary.find(command) != vocabulary.end())
-	{
-		switch (vocabulary.find(command)->second)
-		{
-		case CommandLineInterface::Command::MOSAIC:
-			break;
-		case CommandLineInterface::Command::MOSAIC_H:
-
-			break;
-		case CommandLineInterface::Command::MOSAIC_HELP: 
-
-			break;
-		case CommandLineInterface::Command::FOLDER: 
-			break;
-		case CommandLineInterface::Command::FOLDER_H: 
-
-			break;
-		case CommandLineInterface::Command::FOLDER_HELP:
-
-			break;
-		case CommandLineInterface::Command::COMPILE:
-
-			break;
-		case CommandLineInterface::Command::COMPILE_H: 
-
-			break;
-		case CommandLineInterface::Command::COMPILE_HELP:
-
-			break;
-		case CommandLineInterface::Command::SELECTOR_TRIANGLE:
-
-			break;
-		case CommandLineInterface::Command::SELECTOR_RECTANGLE:
-
-			break;
-		case CommandLineInterface::Command::SELECTOR_H: 
-
-			break;
-		case CommandLineInterface::Command::SELECTOR_HELP:
-
-			break;
-
-		default:
-			std::cerr << "how on earth did you manage to get here?" << std::endl; 
-			break;
-		}
-	}
-	else
-	{
-		std::cerr << "Bad input";
-	}
-}
+const std::unordered_set<std::string> CommandLineInterface::knownExtensions = { "jpg", "png" };

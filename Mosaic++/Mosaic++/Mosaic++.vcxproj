@@ -165,7 +165,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Documentation\[docs]make_mosaic.txt" />
-    <Text Include="..\Documentation\[docs]select_images_folder.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
