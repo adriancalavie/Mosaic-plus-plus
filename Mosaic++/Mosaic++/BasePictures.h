@@ -36,7 +36,7 @@ private:
 	std::uint16_t m_numberPictures;
 	map m_mediumColor;
 
-public:
+
 	std::string m_source;
     std::string m_processedPictures;
 	std::string m_extension;
