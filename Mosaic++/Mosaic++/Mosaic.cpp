@@ -134,7 +134,6 @@ cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 	bool v3 = v1 || v2;
 	assert(!v3);
 
-
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
 	for (auto x = 0; x < image.cols - 1; x += partitionSize)
