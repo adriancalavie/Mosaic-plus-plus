@@ -5,8 +5,10 @@
 #include <cstdlib>
 #include "BasePictures.h"
 
-enum class Type { square, rectangle, triangle, diamond };
-enum class Method {resizing, cropping};
+enum class Type { SQUARE, RECTANGLE, TRIANGLE, DIAMOND };
+enum class Method {RESIZING, CROPPING};
+
+
 
 class Mosaic
 {
@@ -20,7 +22,7 @@ public:
 	static void alphaBlending(cv::Mat&, const cv::Scalar&);
 	friend uint32_t euclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
 	friend uint32_t RiemersmaDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
-	static cv::Mat makeMosaic(const cv::Mat& image,const BasePictures& basePictures, const Method& method, const Type& type= Type::square,const uint8_t& partitionSize=defaultSize, bool blending = false);
+	static cv::Mat makeMosaic(const cv::Mat& image,const BasePictures& basePictures, const Method& method, const Type& type= Type::SQUARE,const uint8_t& partitionSize=defaultSize, bool blending = false);
 
 
 public:

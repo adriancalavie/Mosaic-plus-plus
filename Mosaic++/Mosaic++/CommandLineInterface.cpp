@@ -118,7 +118,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params)
 	{
 		cv::Mat input = cv::imread(image, cv::IMREAD_COLOR);
 		input = PictureTools::resize(input, 1200, 700);
-		cv::Mat input3 = Mosaic::makeMosaic(input, test, Type::square, 10);
+		cv::Mat input3 = Mosaic::makeMosaic(input, test,Method::RESIZING, Type::SQUARE, 10);
 
 		cv::imwrite("D:\\Mosaic++\\Mosaic++\\Resulting pictures\\" + std::to_string(test.getNumberPictures()) + test.getExtension(), input3);
 

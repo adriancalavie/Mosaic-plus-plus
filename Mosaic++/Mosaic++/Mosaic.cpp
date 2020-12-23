@@ -50,20 +50,20 @@ cv::Mat Mosaic::makeMosaic(const cv::Mat& image, const BasePictures& basePicture
 	int v2 = image.rows / partitionSize * partitionSize;
 	switch (method)
 	{
-	case Method::cropping:
+	case Method::CROPPING:
 		copyOriginalImage = std::move(PictureTools::cropSquare(image, { 0,0 }, { v2,v1 }));
-	case Method::resizing:
+	case Method::RESIZING:
 		copyOriginalImage = std::move(PictureTools::resize(image, v1, v2, PictureTools::Algorithm::bilinearInterpolation));
 	}
 	switch (type)
 	{
-	case Type::square:
+	case Type::SQUARE:
 		return makeRectangle(basePictures.GetMediumColor(), copyOriginalImage, blending, partitionSize);
-	case Type::triangle:
+	case Type::TRIANGLE:
 		return makeTriangle(basePictures.GetMediumColor(), copyOriginalImage, blending, partitionSize);
-	case Type::diamond:
+	case Type::DIAMOND:
 		return makeDiamond(basePictures.GetMediumColor(), copyOriginalImage, blending, partitionSize);
-	case Type::rectangle:
+	case Type::RECTANGLE:
 		return makeRectangle(basePictures.GetMediumColor(), copyOriginalImage, blending, partitionSize);
 	default:
 		break;
@@ -159,7 +159,7 @@ cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 
 			for (auto itr : dataPictures)
 			{
-				int currDistance = euclideanDistance(medColor, itr.first);
+				int currDistance = RiemersmaDistance(medColor, itr.first);
 
 				if (currDistance < closestDistance)
 				{
