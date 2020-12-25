@@ -42,7 +42,7 @@ cv::Mat Mosaic::makeMosaic(const cv::Mat& image, const BasePictures& basePicture
 	//TODO : change partitionSize to width and height pair
 	assert(!image.empty());
 
-	std::cout << "entered make mosaic\n";
+	//std::cout << "entered make mosaic\n";
 
 	cv::Mat copyOriginalImage;
 

@@ -1,5 +1,4 @@
 #include "CommandLineInterface.h"
-#include "Data.h"
 
 
 const std::unordered_map<std::string, CommandLineInterface::Parameter> CommandLineInterface::FLAGS = {
@@ -88,8 +87,10 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 				}
 			}
 
-
-			make(commandParams);
+			if (flagsParams.size() > 0)
+				make(commandParams, flagsParams);
+			else
+				make(commandParams);
 		}
 		else
 		{
@@ -110,26 +111,103 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 void CommandLineInterface::make(const std::vector<std::string>& params)
 {
 
-	BasePictures test(5900);
+	BasePictures test;
+	test.setPicturesNumber(1000);
+	test.setFileSource("D:\\Mosaic++\\Mosaic++\\Base pictures\\");
+	test.setDataBase("D:\\Mosaic++\\Mosaic++\\Mosaic++\\data_base.txt");
+	test.setFileDestination("D:\\Mosaic++\\Mosaic++\\Pictures for mosaics\\");
 	test.addPicturesMosaic(false);
 
 
-	for (auto image : params)
+	for (const auto& image : params)
 	{
 		cv::Mat input = cv::imread(image, cv::IMREAD_COLOR);
+
+		/*cv::imshow("Original", input);*/
+		cv::waitKey(0);
+
 		input = PictureTools::resize(input, 1200, 700);
-		cv::Mat input3 = Mosaic::makeMosaic(input, test,Method::RESIZING, Type::SQUARE, 10);
+		cv::Mat output = Mosaic::makeMosaic(input, test, Method::RESIZING, Type::SQUARE, 10);
 
-		cv::imwrite("D:\\Mosaic++\\Mosaic++\\Resulting pictures\\" + std::to_string(test.getNumberPictures()) + test.getExtension(), input3);
+		cv::imwrite("D:\\Mosaic++\\Mosaic++\\Resulting pictures\\" + std::to_string(test.getNumberPictures()) + test.getExtension(), output);
 
-		cv::imshow("CommandTest_1.2_", input3);
+		cv::imshow("Made with Mosaic++", output);
 		cv::waitKey(0);
 	}
 }
 
-void CommandLineInterface::make(const std::vector<const std::string&>& params, const std::unordered_map<std::string, std::string>& flags)
+void CommandLineInterface::make(const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags)
 {
-	//TODO implementation of this
+	/*std::cout << "entered on custom make";*/
+
+	std::string extension = "jpg";
+	Type shape = Type::RECTANGLE;
+	std::string directory = "D:\\Mosaic++\\Mosaic++\\Resulting pictures\\";
+
+	for (auto& flag : flags)
+	{
+		switch (FLAGS.find(flag.first)->second)
+		{
+		case Parameter::TYPE:
+			if (flag.second == "rectangle")
+				shape = Type::RECTANGLE;
+			else if (flag.second == "diamond")
+				shape = Type::DIAMOND;
+			else if (flag.second == "triangle")
+				shape = Type::TRIANGLE;
+			else
+				std::cerr << Data::Errors::WRONG_ARGUMENT;
+			break;
+
+		case Parameter::EXTENSION:
+
+			if (KNOWN_EXTENSIONS.find(flag.second) != KNOWN_EXTENSIONS.end())
+			{
+				extension = flag.second;
+			}
+			else
+				std::cerr << Data::Errors::WRONG_ARGUMENT;
+			break;
+
+		case Parameter::PATH:
+
+			if (isPath(flag.second))
+			{
+				directory = flag.second;
+			}
+			else
+				std::cerr << Data::Errors::WRONG_ARGUMENT;
+			break;
+		default:
+			std::cerr << "\nHow on earth did you end up in here?\n";
+			break;
+		}
+
+
+	}
+	
+	BasePictures imagesPool;
+	imagesPool.setPicturesNumber(1000);
+	imagesPool.setFileSource("D:\\Mosaic++\\Mosaic++\\Base pictures\\");
+	imagesPool.setDataBase("D:\\Mosaic++\\Mosaic++\\Mosaic++\\data_base.txt");
+	imagesPool.setFileDestination("D:\\Mosaic++\\Mosaic++\\Pictures for mosaics\\");
+	imagesPool.addPicturesMosaic(false);
+
+	for (const auto& image : params)
+	{
+		cv::Mat input = cv::imread(image, cv::IMREAD_COLOR);
+
+		/*cv::imshow("Original", input);*/
+		cv::waitKey(0);
+
+		input = PictureTools::resize(input, 1200, 700);
+		cv::Mat output = Mosaic::makeMosaic(input, imagesPool, Method::RESIZING, shape, 10);
+
+		cv::imwrite(directory + "Output." + extension, output);
+		
+		cv::imshow("Made with Mosaic++", output);
+		cv::waitKey(0);
+	}
 }
 
 void CommandLineInterface::make(const std::string& flag)

@@ -3,10 +3,10 @@
 //ATTENTION: HARDCODED FOR "make" COMMAND ONLY!!!
 
 #include <iostream>
-#include "BasePictures.h"
 #include "PictureTools.h"
 #include "StopWatch.h"
 #include "Mosaic.h"
+#include "Data.h"
 #include <unordered_set>
 #include <io.h>   // For access().
 #include <sys/types.h>  // For stat().
@@ -28,7 +28,7 @@ public:
 	CommandLineInterface(int argc, char* args[]);
 
 	void make(const std::vector<std::string>& params);
-	void make(const std::vector<const std::string&>& params, const std::unordered_map<std::string, std::string>& flags);
+	void make(const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags);
 	void make(const std::string& flag);
 private:
 
