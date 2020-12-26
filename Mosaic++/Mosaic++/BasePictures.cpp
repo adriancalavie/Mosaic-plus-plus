@@ -1,13 +1,14 @@
 #include "BasePictures.h"
-#include "PictureTools.h"
 
 
-BasePictures::BasePictures(const uint16_t& numberPictures, const std::string& fileBasePictures, const std::string& filePicturesForMosaic, const std::string& extension)
+
+BasePictures::BasePictures()
 {
-	m_numberPictures = numberPictures;
-	m_extension = extension;
-	m_source = fileBasePictures;
-	m_processedPictures = filePicturesForMosaic;
+	m_numberPictures =0 ;
+	m_extension ="" ;
+	m_source = Data::Defaults::PATH_BASE_PICTURES;
+	m_processedPictures = Data::Defaults::PATH_PICTURES_FOR_MOSAIC;
+	m_dataBase = Data::Defaults::PATH_DATA_BASE_FILE;
 }
 
 const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const
@@ -103,16 +104,6 @@ void BasePictures::setFileDestination(const std::string& source)
 {
 	m_processedPictures = source;
 }
-
-size_t BasePictures::HashKey::operator()(const cv::Scalar& toHash) const
-{
-	size_t res = 17;
-	res = res * 31 + std::hash<double>()(toHash.val[0]);
-	res = res * 31 + std::hash<double>()(toHash.val[1]);
-	res = res * 31 + std::hash<double>()(toHash.val[2]);
-	return res;
-}
-
 
 void BasePictures::addPicturesMosaic(const bool& modify)
 {

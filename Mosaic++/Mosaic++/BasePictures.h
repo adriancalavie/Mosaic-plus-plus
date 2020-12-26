@@ -8,6 +8,8 @@
 #include <opencv2/imgproc.hpp>
 #include <unordered_map>
 #include <filesystem>
+#include "Data.h"
+#include "PictureTools.h"
 
 template <>
 struct std::hash<cv::Scalar>
@@ -27,12 +29,6 @@ class BasePictures
 	using map = std::unordered_map<cv::Scalar, std::string>;
 
 private:
-	struct HashKey
-	{
-		size_t operator()(const cv::Scalar& toHash) const;
-	};
-
-private:
 	std::uint16_t m_numberPictures;
 	map m_mediumColor;
 
@@ -40,12 +36,10 @@ private:
 	std::string m_source;
     std::string m_processedPictures;
 	std::string m_extension;
-
 	std::string m_dataBase;
 
-
 public:
-	BasePictures(const uint16_t& = 0, const std::string& = "", const std::string& = "", const std::string& = ".jpg");
+	BasePictures();
 
 	const map& GetMediumColor() const;
 	const void CreatePictures();
@@ -54,7 +48,7 @@ public:
 	void setPicturesNumber(const std::uint16_t&);
 
 	const uint16_t& getPictureCount() const;
-	static cv::Mat readPhoto(const std::string & = "\n", const std::string & = "D:\\Mosaic++\\Mosaic++\\Pictures for mosaics\\");
+	static cv::Mat readPhoto(const std::string & = "\n", const std::string & = Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
 
 public:
 	const std::string& getFileSource() const;
