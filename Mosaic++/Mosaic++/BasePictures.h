@@ -34,12 +34,11 @@ private:
 
 
 	std::string m_source;
-    std::string m_processedPictures;
 	std::string m_extension;
 	std::string m_dataBase;
 
 public:
-	BasePictures();
+	BasePictures(const uint16_t & = 0);
 
 	const map& GetMediumColor() const;
 	const void CreatePictures();
@@ -54,12 +53,9 @@ public:
 	const std::string& getFileSource() const;
 	void setFileSource(const std::string&);
 
-	const std::string& getFileDestination() const;
-	void setFileDestination(const std::string&);
-
 	const std::string& getExtension() const;
 	void setExtension(const std::string&);
-	
+
 	const uint16_t& getNumberPictures() const;
 	void setNumberPictures(const uint16_t&);
 

@@ -115,7 +115,6 @@ void CommandLineInterface::make(const std::vector<std::string>& params)
 	test.setPicturesNumber(1000);
 	test.setFileSource("D:\\Mosaic++\\Mosaic++\\Base pictures\\");
 	test.setDataBase("D:\\Mosaic++\\Mosaic++\\Mosaic++\\data_base.txt");
-	test.setFileDestination("D:\\Mosaic++\\Mosaic++\\Pictures for mosaics\\");
 	test.addPicturesMosaic(false);
 
 
@@ -190,7 +189,6 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 	imagesPool.setPicturesNumber(1000);
 	imagesPool.setFileSource("D:\\Mosaic++\\Mosaic++\\Base pictures\\");
 	imagesPool.setDataBase("D:\\Mosaic++\\Mosaic++\\Mosaic++\\data_base.txt");
-	imagesPool.setFileDestination("D:\\Mosaic++\\Mosaic++\\Pictures for mosaics\\");
 	imagesPool.addPicturesMosaic(false);
 
 	for (const auto& image : params)

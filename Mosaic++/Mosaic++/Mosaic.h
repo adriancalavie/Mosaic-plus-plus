@@ -4,6 +4,7 @@
 #include <opencv2/imgproc.hpp>
 #include <cstdlib>
 #include "BasePictures.h"
+#include "Data.h"
 
 enum class Type { SQUARE, RECTANGLE, TRIANGLE, DIAMOND };
 enum class Method { CROPPING, RESIZING };
