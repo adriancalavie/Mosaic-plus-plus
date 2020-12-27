@@ -259,14 +259,53 @@ void CommandLineInterface::make()
 
 void CommandLineInterface::commandController(const std::string& command, const std::vector<std::string>& params)
 {
+	if (command == "make")
+	{
+		make(params);
+		return;
+	}
+
+	if (command == "set_img_pool_dir")
+	{
+		setImgPoolDir(params);
+		return;
+	}
+
+	std::cout << "\nHow did you end up in here?";
 }
 
 void CommandLineInterface::commandController(const std::string& command, const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags)
 {
+	if (command == "make")
+	{
+		make(params, flags);
+		return;
+	}
+
+	if (command == "set_img_pool_dir")
+	{
+		setImgPoolDir(params, flags);
+		return;
+	}
+
+	std::cout << "\nHow did you end up in here?";
 }
 
 void CommandLineInterface::commandController(const std::string& command)
 {
+	if (command == "make")
+	{
+		make();
+		return;
+	}
+
+	if (command == "set_img_pool_dir")
+	{
+		setImgPoolDir();
+		return;
+	}
+
+	std::cout << "\nHow did you end up in here?";
 }
 
 void CommandLineInterface::setImgPoolDir(const std::vector<std::string>& params)
@@ -279,6 +318,7 @@ void CommandLineInterface::setImgPoolDir(const std::vector<std::string>& params,
 
 void CommandLineInterface::setImgPoolDir()
 {
+	std::cout << Data::Info::HELP_LEVEL.at(Data::HelpTypes::SET_POOL_HELP);
 }
 
 inline bool CommandLineInterface::isExtension(const std::string& parameter)
