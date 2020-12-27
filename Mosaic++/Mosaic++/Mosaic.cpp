@@ -117,6 +117,7 @@ cv::Mat Mosaic::makeRectangle(const std::unordered_map<cv::Scalar, std::string>&
 				}
 			}
 
+			std::cout << pictureName << std::endl;
 			cv::Mat testPhoto = std::move(BasePictures::readPhoto(pictureName));
 			testPhoto = PictureTools::resize(testPhoto, partitionSize, partitionSize, PictureTools::Algorithm::bilinearInterpolation);
 			if (blending)
@@ -250,6 +251,7 @@ cv::Mat Mosaic::makeDiamond(const std::unordered_map<cv::Scalar, std::string>& d
 				}
 			}
 
+			std::cout << pictureName << std::endl;
 			cv::Mat testPhoto = std::move(BasePictures::readPhoto(pictureName));
 			testPhoto = std::move(PictureTools::resize(testPhoto, partitionSize, partitionSize, PictureTools::Algorithm::bilinearInterpolation));
 			if (blending)

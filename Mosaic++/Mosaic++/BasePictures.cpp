@@ -102,6 +102,7 @@ void BasePictures::addPicturesMosaic(const bool& modify)
 	{
 		CreatePictures();
 	}
+
 	std::ifstream in(m_dataBase);
 	for (int i = 0; i < m_numberPictures; ++i)
 	{
