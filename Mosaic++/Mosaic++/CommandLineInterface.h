@@ -18,10 +18,17 @@
 
 class CommandLineInterface
 {
+private:
 	static const enum class Parameter { PATH, EXTENSION, TYPE, SIZE, METHOD, NONE };
+
+	static const enum class PathType {SOURCE, PROCESSED, DATABASE, NUMBER_PHOTOS};
+
 	static const std::unordered_set<std::string> KNOWN_EXTENSIONS;
 	static const std::unordered_set<std::string> COMMANDS;
 	static const std::unordered_map<std::string, Parameter> FLAGS;
+	static std::unordered_map<std::string, PathType> PATHS;
+
+	//static std::string DEFAULT_PATH;
 
 public:
 
@@ -30,6 +37,9 @@ public:
 	void make(const std::vector<std::string>& params);
 	void make(const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags);
 	void make(const std::string& flag);
+
+	void setImgPoolDir(const std::vector<std::string>& paths);
+
 private:
 
 	inline bool isExtension(const std::string& parameter);

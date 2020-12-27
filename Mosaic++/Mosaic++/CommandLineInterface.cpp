@@ -5,7 +5,7 @@ const std::unordered_map<std::string, CommandLineInterface::Parameter> CommandLi
 	{"--shape",				Parameter::TYPE},
 	{"-s",					Parameter::TYPE},
 
-	{"--partiton_size",		Parameter::SIZE},
+	{"--partiton",		Parameter::SIZE},
 	{"-p",					Parameter::SIZE},
 
 	{"--method",			Parameter::METHOD},
@@ -22,6 +22,17 @@ const std::unordered_map<std::string, CommandLineInterface::Parameter> CommandLi
 
 	{"--version",			Parameter::NONE},
 	{"-v",					Parameter::NONE}
+};
+
+std::unordered_map<std::string, CommandLineInterface::PathType> CommandLineInterface::PATHS = {
+	{Data::Defaults::PARENT_PATH,				PathType::SOURCE},
+
+	{Data::Defaults::PARENT_PATH,				PathType::PROCESSED},
+
+	{Data::Defaults::PARENT_PATH,				PathType::DATABASE},
+
+	{"10",										PathType::NUMBER_PHOTOS}
+
 };
 
 const std::unordered_set<std::string> CommandLineInterface::COMMANDS = { "make", "set_img_pool_dir" };
@@ -77,9 +88,8 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 					}
 
 				}
-				else
-					//else, if we find a command parameter
-				{
+				else if (COMMANDS.find(std::string(args[i])) != COMMANDS.end())
+						//else, if we find a command parameter
 					if (isPath(argument) && isFile(argument))//TODO: optimise for set_img_pool_dir
 						//if we have an image as an input
 					{
@@ -90,6 +100,9 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 					{
 						std::cerr << Data::Errors::WRONG_INPUT;
 					}
+				else
+				{
+					goto ERROR;
 				}
 			}
 
@@ -103,11 +116,12 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 			if (FLAGS.find(std::string(args[1])) != FLAGS.end() && FLAGS.at(std::string(args[1])) == Parameter::NONE)
 				//if instead of a command, we find a help or version request
 			{
-				//TODO: show all documentation on all the commands
+				std::cout << Data::Info::GENERAL_HELP;
 			}
 			else
 			{
-				std::cerr << Data::Errors::UNKNOWN_COMMAND;
+				ERROR:
+					std::cerr << Data::Errors::UNKNOWN_COMMAND;
 			}
 		}
 	}
@@ -147,6 +161,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 	std::string extension = "jpg";
 	Type shape = Type::RECTANGLE;
 	Method methodMosaication = Method::RESIZING;
+	int inputSize;
 	uint8_t partitionSize = Mosaic::getDefaultSize();
 	std::string directory = "D:\\Mosaic++\\Mosaic++\\Resulting pictures\\";
 
@@ -166,7 +181,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 			break;
 
 		case Parameter::SIZE:
-			int inputSize = atoi(flag.second.c_str());
+			inputSize = std::move(std::stoi(flag.second));
 			if (inputSize <= UINT8_MAX)
 				partitionSize = inputSize;
 			else
@@ -244,6 +259,11 @@ void CommandLineInterface::make(const std::string& flag)
 	{
 		std::cout << Data::Info::MAKE_HELP;
 	}
+}
+
+void CommandLineInterface::setImgPoolDir(const std::vector<std::string>& paths)
+{
+
 }
 
 inline bool CommandLineInterface::isExtension(const std::string& parameter)
