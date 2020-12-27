@@ -24,14 +24,14 @@ const std::unordered_map<std::string, CommandLineInterface::Parameter> CommandLi
 	{"-v",					Parameter::VERSION}
 };
 
-std::unordered_map<std::string, CommandLineInterface::PathType> CommandLineInterface::PATHS = {
-	{Data::Defaults::PARENT_PATH,				PathType::SOURCE},
+std::unordered_map<CommandLineInterface::PathType, std::string> CommandLineInterface::PATHS = {
+	{PathType::SOURCE,						    Data::Defaults::PARENT_PATH},
 
-	{Data::Defaults::PARENT_PATH,				PathType::PROCESSED},
+	{PathType::PROCESSED,						Data::Defaults::PARENT_PATH},
 
-	{Data::Defaults::PARENT_PATH,				PathType::DATABASE},
+	{PathType::DATABASE,						Data::Defaults::PARENT_PATH},
 
-	{"10",										PathType::NUMBER_PHOTOS}
+	{PathType::NUMBER_PHOTOS,					"10"}
 
 };
 
@@ -102,6 +102,7 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 					else
 					{
 						std::cerr << Data::Errors::WRONG_INPUT;
+						return;
 					}
 				}
 			}
@@ -230,9 +231,9 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 	}
 
 	BasePictures imagesPool;
-	imagesPool.setPicturesNumber(1000);
-	imagesPool.setFileSource("D:\\Mosaic++\\Mosaic++\\Base pictures\\");
-	imagesPool.setDataBase("D:\\Mosaic++\\Mosaic++\\Mosaic++\\data_base.txt");
+	imagesPool.setPicturesNumber(std::move(std::stoi(CommandLineInterface::PATHS.at(CommandLineInterface::PathType::NUMBER_PHOTOS))));
+	imagesPool.setFileSource(CommandLineInterface::PATHS.at(CommandLineInterface::PathType::SOURCE));//D:\\Mosaic++\\Mosaic++\\Base pictures\\;
+	imagesPool.setDataBase(CommandLineInterface::PATHS.at(CommandLineInterface::PathType::DATABASE));//D:\\Mosaic++\\Mosaic++\\Mosaic++\\data_base.txt;
 	imagesPool.addPicturesMosaic(false);
 
 	for (const auto& image : params)
@@ -310,10 +311,62 @@ void CommandLineInterface::commandController(const std::string& command)
 
 void CommandLineInterface::setImgPoolDir(const std::vector<std::string>& params)
 {
+	if (params.size() < 3)
+	{
+		std::cerr << Data::Errors::PARAMETER_COUNT;
+		return;
+	}
+
+	std::string source;
+	std::string databaseFile;
+	std::string number;
+
+	//
+	source = params[0];
+	std::cout << source << std::endl;
+	number = params[1];
+	std::cout << number << std::endl;
+	databaseFile = params[2];
+	std::cout << databaseFile << std::endl;
+
+	if (isFile(databaseFile))
+	{
+		this->PATHS.at(CommandLineInterface::PathType::SOURCE) = source;
+		this->PATHS.at(CommandLineInterface::PathType::NUMBER_PHOTOS) = number;
+		this->PATHS.at(CommandLineInterface::PathType::DATABASE) = databaseFile;
+	}
+	else
+		std::cerr << Data::Errors::WRONG_ARGUMENT;
 }
 
 void CommandLineInterface::setImgPoolDir(const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags)
 {
+	if (params.size() < 3)
+	{
+		std::cerr << Data::Errors::PARAMETER_COUNT;
+		return;
+	}
+
+	std::string source;
+	std::string databaseFile;
+	std::string number;
+
+	//
+	source = params[0];
+	std::cout << source << std::endl;
+	number = params[1];
+	std::cout << number << std::endl;
+	databaseFile = params[2];
+	std::cout << databaseFile << std::endl;
+
+	if (isFile(databaseFile))
+	{
+		this->PATHS.at(CommandLineInterface::PathType::SOURCE) = source;
+		this->PATHS.at(CommandLineInterface::PathType::NUMBER_PHOTOS) = number;
+		this->PATHS.at(CommandLineInterface::PathType::DATABASE) = databaseFile;
+	}
+	else
+		std::cerr << Data::Errors::WRONG_ARGUMENT;
 }
 
 void CommandLineInterface::setImgPoolDir()
