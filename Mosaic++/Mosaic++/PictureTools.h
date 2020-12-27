@@ -1,3 +1,5 @@
+
+
 #pragma once
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -7,7 +9,14 @@
 #include <tuple>
 
 
-class PictureTools
+#ifdef PICUTRE_TOOLS_EXPORTS
+	#define PPICUTRE_TOOLS_API __declspec(dllexport)
+#else
+	#define PPICUTRE_TOOLS_API __declspec(dllimport)
+#endif
+
+
+class PICUTRE_TOOLS_EXPORTS PictureTools
 {
 public:
 	enum class Algorithm : uint8_t
