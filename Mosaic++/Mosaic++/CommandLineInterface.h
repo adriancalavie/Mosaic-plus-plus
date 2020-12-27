@@ -19,7 +19,7 @@
 class CommandLineInterface
 {
 private:
-	static const enum class Parameter { PATH, EXTENSION, TYPE, SIZE, METHOD, NONE };
+	static const enum class Parameter { PATH, EXTENSION, TYPE, SIZE, METHOD, HELP, VERSION };
 
 	static const enum class PathType {SOURCE, PROCESSED, DATABASE, NUMBER_PHOTOS};
 
@@ -36,9 +36,16 @@ public:
 
 	void make(const std::vector<std::string>& params);
 	void make(const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags);
-	void make(const std::string& flag);
+	void make();
 
-	void setImgPoolDir(const std::vector<std::string>& paths);
+	void setImgPoolDir(const std::vector<std::string>& params);
+	void setImgPoolDir(const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags);
+	void setImgPoolDir();
+
+	void commandController(const std::string& command, const std::vector<std::string>& params);
+	void commandController(const std::string& command, const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags);
+	void commandController(const std::string& command);
+
 
 private:
 

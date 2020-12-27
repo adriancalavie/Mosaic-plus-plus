@@ -6,7 +6,7 @@
 class Data
 {
 
-private:
+public:
 	static const enum class HelpTypes { MAKE_HELP, GENERAL_HELP, SET_POOL_HELP };
 
 public:
@@ -16,7 +16,7 @@ public:
 	public:
 		static const std::string VERSION;
 		
-		static const std::unordered_map<std::string, HelpTypes>	HELP_LEVEL;
+		static const std::unordered_map<HelpTypes, std::string>	HELP_LEVEL;
 
 		static const std::string MAKE_HELP;
 		static const std::string GENERAL_HELP;

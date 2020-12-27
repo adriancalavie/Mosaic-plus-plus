@@ -5,7 +5,7 @@ const std::unordered_map<std::string, CommandLineInterface::Parameter> CommandLi
 	{"--shape",				Parameter::TYPE},
 	{"-s",					Parameter::TYPE},
 
-	{"--partiton",		Parameter::SIZE},
+	{"--partiton",			Parameter::SIZE},
 	{"-p",					Parameter::SIZE},
 
 	{"--method",			Parameter::METHOD},
@@ -17,11 +17,11 @@ const std::unordered_map<std::string, CommandLineInterface::Parameter> CommandLi
 	{"--directory",			Parameter::PATH},
 	{"-d",					Parameter::PATH},
 
-	{"--help",				Parameter::NONE},
-	{"-h",					Parameter::NONE},
+	{"--help",				Parameter::HELP},
+	{"-h",					Parameter::HELP},
 
-	{"--version",			Parameter::NONE},
-	{"-v",					Parameter::NONE}
+	{"--version",			Parameter::VERSION},
+	{"-v",					Parameter::VERSION}
 };
 
 std::unordered_map<std::string, CommandLineInterface::PathType> CommandLineInterface::PATHS = {
@@ -49,9 +49,11 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 	else
 		//if we have enough arguments
 	{
-		if (COMMANDS.find(std::string(args[1])) != COMMANDS.end())
+		auto command = COMMANDS.find(std::string(args[1]));
+		if (command != COMMANDS.end())
 			//if we have a valid command as a first argument
 		{
+
 			bool hasParams = false;
 			std::unordered_map<std::string, std::string> flagsParams;
 			std::vector<std::string> commandParams;
@@ -65,9 +67,9 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 					//if we found a flag
 				{
 
-					if (FLAGS.at(argument) == Parameter::NONE)
+					if (FLAGS.at(argument) == Parameter::HELP)//if -h
 					{
-						make(argument);
+						commandController(*command);
 						return;
 					}
 					else
@@ -88,8 +90,9 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 					}
 
 				}
-				else if (COMMANDS.find(std::string(args[i])) != COMMANDS.end())
-						//else, if we find a command parameter
+				else/* if (COMMANDS.find(std::string(args[i])) != COMMANDS.end())*/
+				{
+					//else, if we find a command parameter
 					if (isPath(argument) && isFile(argument))//TODO: optimise for set_img_pool_dir
 						//if we have an image as an input
 					{
@@ -100,28 +103,31 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 					{
 						std::cerr << Data::Errors::WRONG_INPUT;
 					}
-				else
-				{
-					goto ERROR;
 				}
 			}
 
 			if (flagsParams.size() > 0)
-				make(commandParams, flagsParams);
+				commandController(*command, commandParams, flagsParams);
 			else
-				make(commandParams);
+				commandController(*command, commandParams);
 		}
 		else
 		{
-			if (FLAGS.find(std::string(args[1])) != FLAGS.end() && FLAGS.at(std::string(args[1])) == Parameter::NONE)
+			if (FLAGS.find(std::string(args[1])) != FLAGS.end())
 				//if instead of a command, we find a help or version request
 			{
-				std::cout << Data::Info::GENERAL_HELP;
+				if (FLAGS.at(std::string(args[1])) == Parameter::HELP)
+				{
+					std::cout << Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP);
+				}
+				else if (FLAGS.at(std::string(args[1])) == Parameter::VERSION)
+				{
+					std::cout << Data::Info::VERSION;
+				}
 			}
 			else
 			{
-				ERROR:
-					std::cerr << Data::Errors::UNKNOWN_COMMAND;
+				std::cerr << Data::Errors::UNKNOWN_COMMAND;
 			}
 		}
 	}
@@ -222,7 +228,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 
 
 	}
-	
+
 	BasePictures imagesPool;
 	imagesPool.setPicturesNumber(1000);
 	imagesPool.setFileSource("D:\\Mosaic++\\Mosaic++\\Base pictures\\");
@@ -240,30 +246,39 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 		cv::Mat output = Mosaic::makeMosaic(input, imagesPool, methodMosaication, shape, partitionSize);
 
 		cv::imwrite(directory + "Output." + extension, output);
-		
+
 		cv::imshow("Made with Mosaic++", output);
 		cv::waitKey(0);
 	}
 }
 
-void CommandLineInterface::make(const std::string& flag)
+void CommandLineInterface::make()
 {
-	if (flag == "-v" || flag == "--version")
-	{
-		std::cout << Data::Info::VERSION;
-		return;
-	}
-
-
-	if (flag == "-h" || flag == "--help")
-	{
-		std::cout << Data::Info::MAKE_HELP;
-	}
+	std::cout << Data::Info::HELP_LEVEL.at(Data::HelpTypes::MAKE_HELP);
 }
 
-void CommandLineInterface::setImgPoolDir(const std::vector<std::string>& paths)
+void CommandLineInterface::commandController(const std::string& command, const std::vector<std::string>& params)
 {
+}
 
+void CommandLineInterface::commandController(const std::string& command, const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags)
+{
+}
+
+void CommandLineInterface::commandController(const std::string& command)
+{
+}
+
+void CommandLineInterface::setImgPoolDir(const std::vector<std::string>& params)
+{
+}
+
+void CommandLineInterface::setImgPoolDir(const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags)
+{
+}
+
+void CommandLineInterface::setImgPoolDir()
+{
 }
 
 inline bool CommandLineInterface::isExtension(const std::string& parameter)
@@ -309,7 +324,7 @@ inline bool CommandLineInterface::isType(const std::string& parameter)
 
 inline bool CommandLineInterface::isSize(const std::string& parameter)
 {
-	std::regex isNumber("[1-9]+[0-9]*"); 
+	std::regex isNumber("[1-9]+[0-9]*");
 
 	return std::regex_match(parameter, isNumber);
 }
@@ -345,7 +360,8 @@ inline bool CommandLineInterface::inCheck(const std::string& flag, const std::st
 		return isMethod(parameter);
 		break;
 
-	case Parameter::NONE:
+	case Parameter::HELP:
+	case Parameter::VERSION:
 	default:
 		std::cerr << "No idea how you got here";
 		break;
