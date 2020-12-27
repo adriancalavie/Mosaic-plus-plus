@@ -14,7 +14,7 @@ namespace MosaicTest
 	{
 	public:
 
-		TEST_METHOD(euclideanDistanceTest)
+		TEST_METHOD(TestEuclideanDistance)
 		{
 			cv::Scalar color1(0, 0, 1);
 			cv::Scalar color2(255, 255, 255);
@@ -27,7 +27,7 @@ namespace MosaicTest
 
 		}
 
-		TEST_METHOD(BlendingTest)
+		TEST_METHOD(TestBlending)
 		{
 			cv::Scalar color2(255, 255, 255);
 			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
@@ -38,7 +38,7 @@ namespace MosaicTest
 
 		}
 
-		TEST_METHOD(Riemersma)
+		TEST_METHOD(TestRiemersma)
 		{
 			uint32_t first = INT_MAX;
 			uint32_t second = INT_MAX;

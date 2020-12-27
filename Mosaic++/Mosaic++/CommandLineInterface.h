@@ -18,7 +18,7 @@
 
 class CommandLineInterface
 {
-	static const enum class Parameter { PATH, EXTENSION, TYPE, NONE };
+	static const enum class Parameter { PATH, EXTENSION, TYPE, SIZE, METHOD, NONE };
 	static const std::unordered_set<std::string> KNOWN_EXTENSIONS;
 	static const std::unordered_set<std::string> COMMANDS;
 	static const std::unordered_map<std::string, Parameter> FLAGS;
@@ -35,6 +35,8 @@ private:
 	inline bool isExtension(const std::string& parameter);
 	inline bool isDir(const std::string& parameter);
 	inline bool isType(const std::string& parameter);
+	inline bool isSize(const std::string& parameter);
+	inline bool isMethod(const std::string& parameter);
 	inline bool inCheck(const std::string& flag, const std::string& parameter);
 	inline bool isFile(const std::string& parameter);
 	inline bool isPath(const std::string& parameter);

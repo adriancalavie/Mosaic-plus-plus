@@ -7,6 +7,7 @@ BasePictures::BasePictures(const uint16_t& number)
 	m_numberPictures = number;
 	m_extension = "";
 	m_source = Data::Defaults::PATH_BASE_PICTURES;
+	m_processedPictures = Data::Defaults::PATH_PICTURES_FOR_MOSAIC;
 	m_dataBase = Data::Defaults::PATH_DATA_BASE_FILE;
 }
 
@@ -29,7 +30,7 @@ const void BasePictures::CreatePictures()
 			<< aux[1] << " "
 			<< aux[2] << " "
 			<< entry.path().string().substr(m_source.size() + 1) << std::endl;
-		cv::imwrite(Data::Defaults::PATH_PICTURES_FOR_MOSAIC + entry.path().string().substr(m_source.size()), img);
+		cv::imwrite(m_processedPictures + entry.path().string().substr(m_source.size()), img);
 		assert(!img.empty());
 	}
 	out.close();
@@ -94,7 +95,15 @@ void BasePictures::setFileSource(const std::string& source)
 	m_source = source;
 }
 
+const std::string& BasePictures::getFileDestination() const
+{
+	return m_processedPictures;
+}
 
+void BasePictures::setFileDestination(const std::string& source)
+{
+	m_processedPictures = source;
+}
 
 void BasePictures::addPicturesMosaic(const bool& modify)
 {
@@ -120,7 +129,7 @@ void BasePictures::addPicturesMosaic(const bool& modify)
 		aux[2] = std::move(std::stod(item));
 		std::getline(ss, item, ' ');
 		cv::Mat validation;
-		validation = cv::imread(Data::Defaults::PATH_PICTURES_FOR_MOSAIC + item, cv::IMREAD_COLOR);
+		validation = cv::imread(m_processedPictures + item, cv::IMREAD_COLOR);
 		if (!validation.empty())
 			m_mediumColor.insert(std::make_pair(std::move(aux), std::move(item)));
 	}

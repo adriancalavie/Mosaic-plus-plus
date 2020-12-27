@@ -69,7 +69,7 @@ namespace PictureToolsTest
 
 		}
 
-		TEST_METHOD(ResizeNeighbour)
+		TEST_METHOD(TestResizeNeighbour)
 		{
 			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 
@@ -81,7 +81,7 @@ namespace PictureToolsTest
 			Assert::IsTrue(!testImage.empty());
 		}
 
-		TEST_METHOD(ResizeBilinearInterpolation)
+		TEST_METHOD(TestResizeBilinearInterpolation)
 		{
 			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 
@@ -93,7 +93,7 @@ namespace PictureToolsTest
 			Assert::IsTrue(!testImage.empty());
 		}
 
-		TEST_METHOD(Crop)
+		TEST_METHOD(TestCrop)
 		{
 			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 
@@ -111,7 +111,7 @@ namespace PictureToolsTest
 
 			Assert::IsTrue(isEqual);
 		}
-		TEST_METHOD(HueShiftImage)
+		TEST_METHOD(TestHueShiftImage)
 		{
 			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 			cv::Mat hueShiftedImage = PictureTools::hueShiftImage(testImage, 45);

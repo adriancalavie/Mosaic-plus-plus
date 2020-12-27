@@ -13,8 +13,6 @@ enum class Method { CROPPING, RESIZING };
 
 class Mosaic
 {
-
-
 private:
 	using Point = std::pair <uint16_t, uint16_t>;
 	static const uint8_t defaultSize = 10;
@@ -25,13 +23,15 @@ public:
 	friend uint32_t RiemersmaDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
 	static cv::Mat makeMosaic(const cv::Mat& image, const BasePictures& basePictures, const Method& method, const Type& type = Type::SQUARE, const uint8_t& partitionSize = defaultSize, bool blending = false);
 
-
 public:
 	static void replaceCellRectangle(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto, const Point& topL); // for square and rectangle
 
 	static void replaceCellTriangle(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto, const Point& topL, const uint8_t& type, const Point & = std::make_pair((uint16_t)0, (uint16_t)0), const Point & = std::make_pair(defaultSize, defaultSize));
 
 	static void replaceCellDiamond(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto, const Point& top);
+
+public:
+	static uint8_t getDefaultSize();
 
 private:
 	static cv::Mat makeRectangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize = defaultSize);

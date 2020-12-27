@@ -14,6 +14,8 @@ const std::string Data::Errors::UNKNOWN_COMMAND = "Unknown command used";
 const std::string Data::Errors::WRONG_ARGUMENT_ORDER = "Wrong agrument order";
 const std::string Data::Errors::WRONG_INPUT = "The argument may be an unsupported file extension or an invalid path(check for file existence!)";
 const std::string Data::Errors::WRONG_ARGUMENT = "One or more arguments are invalid";
+
+const std::string Data::Errors::OUT_OF_BOUNDS = "Partitioning size is too large\Expected bounds ~~~ [0-512) ~~~";
 //ERRORS END
 
 

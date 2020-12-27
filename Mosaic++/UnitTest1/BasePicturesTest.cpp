@@ -14,20 +14,20 @@ namespace BasePicturesTest
 	{
 	public:
 
-		TEST_METHOD(Constructor)
+		TEST_METHOD(TestConstructor)
 		{
 			BasePictures pictures(1000);
 			Assert::IsTrue(pictures.getPictureCount() == 1000);
 			//Assert::IsTrue(pictures.getExtension() == ".jpg");
 		}
 
-		TEST_METHOD(ReadPhoto)
+		TEST_METHOD(TestReadPhoto)
 		{
 			cv::Mat image=BasePictures::readPhoto("0.jpg");
 			Assert::IsTrue(!image.empty());
 		}
 
-		TEST_METHOD(AddPicturesInUnordered_Map)
+		TEST_METHOD(TestAddPicturesInUnordered_Map)
 		{
 			BasePictures test(10);
 			test.CreatePictures();
@@ -35,7 +35,7 @@ namespace BasePicturesTest
 		}
 
 
-		TEST_METHOD(addPicturesMosaicTest)
+		TEST_METHOD(TestAddPicturesMosaicTest)
 		{
 			std::ifstream in("data_base.txt");
 			Assert::IsTrue(!in.eof());

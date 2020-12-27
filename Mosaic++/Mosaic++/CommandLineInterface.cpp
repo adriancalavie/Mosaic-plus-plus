@@ -2,20 +2,26 @@
 
 
 const std::unordered_map<std::string, CommandLineInterface::Parameter> CommandLineInterface::FLAGS = {
-	{"--shape",		Parameter::TYPE},
-	{"-s",			Parameter::TYPE},
+	{"--shape",				Parameter::TYPE},
+	{"-s",					Parameter::TYPE},
 
-	{"--extension",	Parameter::EXTENSION},
-	{"-e",			Parameter::EXTENSION},
+	{"--partiton_size",		Parameter::SIZE},
+	{"-p",					Parameter::SIZE},
 
-	{"--directory",	Parameter::PATH},
-	{"-d",			Parameter::PATH},
+	{"--method",			Parameter::METHOD},
+	{"-m",					Parameter::METHOD},
 
-	{"--help",		Parameter::NONE},
-	{"-h",			Parameter::NONE},
+	{"--extension",			Parameter::EXTENSION},
+	{"-e",					Parameter::EXTENSION},
 
-	{"--version",	Parameter::NONE},
-	{"-v",			Parameter::NONE}
+	{"--directory",			Parameter::PATH},
+	{"-d",					Parameter::PATH},
+
+	{"--help",				Parameter::NONE},
+	{"-h",					Parameter::NONE},
+
+	{"--version",			Parameter::NONE},
+	{"-v",					Parameter::NONE}
 };
 
 const std::unordered_set<std::string> CommandLineInterface::COMMANDS = { "make", "set_img_pool_dir" };
@@ -125,7 +131,6 @@ void CommandLineInterface::make(const std::vector<std::string>& params)
 		/*cv::imshow("Original", input);*/
 		cv::waitKey(0);
 
-		input = PictureTools::resize(input, 1200, 700);
 		cv::Mat output = Mosaic::makeMosaic(input, test, Method::RESIZING, Type::SQUARE, 10);
 
 		cv::imwrite("D:\\Mosaic++\\Mosaic++\\Resulting pictures\\" + std::to_string(test.getNumberPictures()) + test.getExtension(), output);
@@ -141,6 +146,8 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 
 	std::string extension = "jpg";
 	Type shape = Type::RECTANGLE;
+	Method methodMosaication = Method::RESIZING;
+	uint8_t partitionSize = Mosaic::getDefaultSize();
 	std::string directory = "D:\\Mosaic++\\Mosaic++\\Resulting pictures\\";
 
 	for (auto& flag : flags)
@@ -158,8 +165,24 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 				std::cerr << Data::Errors::WRONG_ARGUMENT;
 			break;
 
-		case Parameter::EXTENSION:
+		case Parameter::SIZE:
+			int inputSize = atoi(flag.second.c_str());
+			if (inputSize <= UINT8_MAX)
+				partitionSize = inputSize;
+			else
+				std::cerr << Data::Errors::OUT_OF_BOUNDS;
+			break;
 
+		case Parameter::METHOD:
+			if (flag.second == "cropp")
+				methodMosaication = Method::CROPPING;
+			else if (flag.second == "resize")
+				methodMosaication = Method::RESIZING;
+			else
+				std::cerr << Data::Errors::WRONG_ARGUMENT;
+			break;
+
+		case Parameter::EXTENSION:
 			if (KNOWN_EXTENSIONS.find(flag.second) != KNOWN_EXTENSIONS.end())
 			{
 				extension = flag.second;
@@ -199,7 +222,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 		cv::waitKey(0);
 
 		input = PictureTools::resize(input, 1200, 700);
-		cv::Mat output = Mosaic::makeMosaic(input, imagesPool, Method::RESIZING, shape, 10);
+		cv::Mat output = Mosaic::makeMosaic(input, imagesPool, methodMosaication, shape, partitionSize);
 
 		cv::imwrite(directory + "Output." + extension, output);
 		
@@ -259,7 +282,23 @@ inline bool CommandLineInterface::isDir(const std::string& parameter)
 
 inline bool CommandLineInterface::isType(const std::string& parameter)
 {
-	return (parameter == "diamond" || parameter == "rectangle" || parameter == "square" || parameter == "triangle");
+	std::regex poolType("diamond|rectangle|square|triangle", std::regex_constants::icase);
+
+	return std::regex_match(parameter, poolType);
+}
+
+inline bool CommandLineInterface::isSize(const std::string& parameter)
+{
+	std::regex isNumber("[1-9]+[0-9]*"); 
+
+	return std::regex_match(parameter, isNumber);
+}
+
+inline bool CommandLineInterface::isMethod(const std::string& parameter)
+{
+	std::regex poolMethod("cropp|resize", std::regex_constants::icase);
+
+	return std::regex_match(parameter, poolMethod);
 }
 
 inline bool CommandLineInterface::inCheck(const std::string& flag, const std::string& parameter)
@@ -276,6 +315,14 @@ inline bool CommandLineInterface::inCheck(const std::string& flag, const std::st
 
 	case Parameter::TYPE:
 		return isType(parameter);
+		break;
+
+	case Parameter::SIZE:
+		return isSize(parameter);
+		break;
+
+	case Parameter::METHOD:
+		return isMethod(parameter);
 		break;
 
 	case Parameter::NONE:

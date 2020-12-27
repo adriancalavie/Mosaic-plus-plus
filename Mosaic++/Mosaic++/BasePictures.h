@@ -35,6 +35,7 @@ private:
 
 	std::string m_source;
 	std::string m_extension;
+	std::string m_processedPictures;
 	std::string m_dataBase;
 
 public:
@@ -52,6 +53,9 @@ public:
 public:
 	const std::string& getFileSource() const;
 	void setFileSource(const std::string&);
+
+	const std::string& getFileDestination() const;
+	void setFileDestination(const std::string&);
 
 	const std::string& getExtension() const;
 	void setExtension(const std::string&);
