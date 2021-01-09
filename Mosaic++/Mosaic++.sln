@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mosaic++", "Mosaic++\Mosaic
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestMosaic++", "UnitTest1\UnitTest1.vcxproj", "{CE51823A-697A-45A7-9B1D-3270C76D979F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Picture Tools", "Picture Tools\Picture Tools.vcxproj", "{11830F8B-52B4-467E-9A3D-151A282D6D54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{CE51823A-697A-45A7-9B1D-3270C76D979F}.Release|x64.Build.0 = Release|x64
 		{CE51823A-697A-45A7-9B1D-3270C76D979F}.Release|x86.ActiveCfg = Release|Win32
 		{CE51823A-697A-45A7-9B1D-3270C76D979F}.Release|x86.Build.0 = Release|Win32
+		{11830F8B-52B4-467E-9A3D-151A282D6D54}.Debug|x64.ActiveCfg = Debug|x64
+		{11830F8B-52B4-467E-9A3D-151A282D6D54}.Debug|x64.Build.0 = Debug|x64
+		{11830F8B-52B4-467E-9A3D-151A282D6D54}.Debug|x86.ActiveCfg = Debug|Win32
+		{11830F8B-52B4-467E-9A3D-151A282D6D54}.Debug|x86.Build.0 = Debug|Win32
+		{11830F8B-52B4-467E-9A3D-151A282D6D54}.Release|x64.ActiveCfg = Release|x64
+		{11830F8B-52B4-467E-9A3D-151A282D6D54}.Release|x64.Build.0 = Release|x64
+		{11830F8B-52B4-467E-9A3D-151A282D6D54}.Release|x86.ActiveCfg = Release|Win32
+		{11830F8B-52B4-467E-9A3D-151A282D6D54}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

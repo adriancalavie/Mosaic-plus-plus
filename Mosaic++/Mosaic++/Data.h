@@ -21,7 +21,6 @@ public:
 		static const std::string MAKE_HELP;
 		static const std::string GENERAL_HELP;
 		static const std::string SET_POOL_HELP;
-
 	};
 	static class Errors
 	{

@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "../Mosaic++/PictureTools.h"
-#include "../Mosaic++/PictureTools.cpp"
+#include "../Picture Tools/PictureTools.h"
 #include "../Mosaic++/StopWatch.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <tuple>
+#include <iostream>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -64,7 +64,7 @@ namespace PictureToolsTest
 			swCVCrop.tock();
 			*/
 
-			std::cout << swMine.report_ms;
+			std::cout << swMine.report_ms();
 			//Assert::AreEqual(swPTCrop, swCVCrop);
 
 		}

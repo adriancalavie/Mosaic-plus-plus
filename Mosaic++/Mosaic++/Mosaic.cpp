@@ -1,6 +1,6 @@
 #include "Mosaic.h"
 #include "BasePictures.h"
-#include "PictureTools.h"
+#include "../Picture Tools/PictureTools.h"
 #include <algorithm>
 #include <random>
 #include <time.h> 

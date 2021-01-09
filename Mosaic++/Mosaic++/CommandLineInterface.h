@@ -3,7 +3,7 @@
 //ATTENTION: HARDCODED FOR "make" COMMAND ONLY!!!
 
 #include <iostream>
-#include "PictureTools.h"
+#include "../Picture Tools/PictureTools.h"
 #include "StopWatch.h"
 #include "Mosaic.h"
 #include "Data.h"

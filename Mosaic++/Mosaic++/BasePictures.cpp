@@ -1,7 +1,5 @@
 #include "BasePictures.h"
 
-
-
 BasePictures::BasePictures(const uint16_t& number)
 {
 	m_numberPictures = number;
@@ -18,10 +16,10 @@ const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor(
 
 const void BasePictures::CreatePictures()
 {
+	
 	std::ofstream out(m_dataBase);
-	for (const auto& entry : std::filesystem::directory_iterator(m_source))
+	/*for (const auto& entry : std::filesystem::directory_iterator(m_source))
 	{
-
 		cv::Mat img = cv::imread(entry.path().string(), cv::IMREAD_COLOR);
 
 		cv::Scalar aux = PictureTools::averageColor(img);
@@ -33,7 +31,7 @@ const void BasePictures::CreatePictures()
 		cv::imwrite(m_processedPictures + entry.path().string().substr(m_source.size()), img);
 		assert(!img.empty());
 	}
-	out.close();
+	out.close();*/
 }
 
 

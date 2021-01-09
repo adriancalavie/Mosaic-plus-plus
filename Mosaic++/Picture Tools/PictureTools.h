@@ -9,14 +9,13 @@
 #include <tuple>
 
 
-#ifdef PICUTRE_TOOLS_EXPORTS
-	#define PPICUTRE_TOOLS_API __declspec(dllexport)
+#ifdef PICTURETOOLS_EXPORTS
+	#define PICTURE_TOOLS_API __declspec(dllexport)
 #else
-	#define PPICUTRE_TOOLS_API __declspec(dllimport)
+	#define PICTURE_TOOLS_API __declspec(dllimport)
 #endif
 
-
-class PICUTRE_TOOLS_EXPORTS PictureTools
+class PICTURE_TOOLS_API PictureTools
 {
 public:
 	enum class Algorithm : uint8_t
