@@ -19,9 +19,9 @@
 class CommandLineInterface
 {
 private:
-	static const enum class Parameter { PATH, EXTENSION, TYPE, SIZE, METHOD, HELP, VERSION };
+	static enum class Parameter { PATH, EXTENSION, TYPE, SIZE, METHOD, HELP, VERSION };
 
-	static const enum class PathType {SOURCE, PROCESSED, DATABASE, NUMBER_PHOTOS};
+	static enum class PathType {SOURCE, PROCESSED, DATABASE, NUMBER_PHOTOS};
 
 	static const std::unordered_set<std::string> KNOWN_EXTENSIONS;
 	static const std::unordered_set<std::string> COMMANDS;

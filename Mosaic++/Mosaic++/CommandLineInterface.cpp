@@ -137,28 +137,9 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 
 void CommandLineInterface::make(const std::vector<std::string>& params)
 {
+	const std::unordered_map<std::string, std::string>& emptyFlags = {};
 
-	BasePictures test;
-	test.setPicturesNumber(1000);
-	test.setFileSource("D:\\Mosaic++\\Mosaic++\\Base pictures\\");
-	test.setDataBase("D:\\Mosaic++\\Mosaic++\\Mosaic++\\data_base.txt");
-	test.addPicturesMosaic(false);
-
-
-	for (const auto& image : params)
-	{
-		cv::Mat input = cv::imread(image, cv::IMREAD_COLOR);
-
-		/*cv::imshow("Original", input);*/
-		cv::waitKey(0);
-
-		cv::Mat output = Mosaic::makeMosaic(input, test, Method::RESIZING, Type::SQUARE, 10);
-
-		cv::imwrite("D:\\Mosaic++\\Mosaic++\\Resulting pictures\\" + std::to_string(test.getNumberPictures()) + test.getExtension(), output);
-
-		cv::imshow("Made with Mosaic++", output);
-		cv::waitKey(0);
-	}
+	make(params, emptyFlags);
 }
 
 void CommandLineInterface::make(const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags)

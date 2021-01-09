@@ -7,7 +7,11 @@ class Data
 {
 
 public:
-	static const enum class HelpTypes { MAKE_HELP, GENERAL_HELP, SET_POOL_HELP };
+	static const enum class HelpTypes { 
+		MAKE_HELP, 
+		GENERAL_HELP, 
+		SET_POOL_HELP
+	};
 
 public:
 
