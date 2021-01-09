@@ -6,8 +6,18 @@
 #include "BasePictures.h"
 #include "Data.h"
 
-enum class Type { SQUARE, RECTANGLE, TRIANGLE, DIAMOND };
-enum class Method { CROPPING, RESIZING };
+enum class Method {
+	CROPPING,
+	RESIZING
+};
+
+enum class Type {
+	SQUARE,
+	RECTANGLE,
+	TRIANGLE,
+	DIAMOND
+};
+
 
 
 

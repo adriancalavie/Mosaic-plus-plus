@@ -15,7 +15,8 @@ public:
 	void tock() { d += clock::now() - p; }
 	void reset() { d = clock::duration::zero(); }
 
-	template <typename S> unsigned long long int report() const
+	template <typename S> 
+	unsigned long long int report() const
 	{
 		return std::chrono::duration_cast<S>(d).count();
 	}

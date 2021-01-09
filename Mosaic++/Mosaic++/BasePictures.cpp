@@ -1,28 +1,29 @@
 #include "BasePictures.h"
 
-BasePictures::BasePictures(const uint16_t& number)
+BasePictures::BasePictures(const uint16_t& number) :
+	m_numberPictures(number),
+	m_extension(""),
+	m_source(Data::Defaults::PATH_BASE_PICTURES),
+	m_processedPictures(Data::Defaults::PATH_PICTURES_FOR_MOSAIC),
+	m_dataBase(Data::Defaults::PATH_DATA_BASE_FILE)
 {
-	m_numberPictures = number;
-	m_extension = "";
-	m_source = Data::Defaults::PATH_BASE_PICTURES;
-	m_processedPictures = Data::Defaults::PATH_PICTURES_FOR_MOSAIC;
-	m_dataBase = Data::Defaults::PATH_DATA_BASE_FILE;
+	// empty
 }
 
-const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const
+const [[nodiscard]] std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const noexcept
 {
 	return m_mediumColor;
 }
 
 const void BasePictures::CreatePictures()
 {
-	
+
 	std::ofstream out(m_dataBase);
-	/*for (const auto& entry : std::filesystem::directory_iterator(m_source))
+	for (const auto& entry : std::filesystem::directory_iterator(m_source))
 	{
 		cv::Mat img = cv::imread(entry.path().string(), cv::IMREAD_COLOR);
 
-		cv::Scalar aux = PictureTools::averageColor(img);
+		cv::Scalar aux = PictureTools::averageColorRectangle(img, { 0, 0 }, { img.rows, img.cols });
 		img = PictureTools::resize(img, 10, 10);
 		out << aux[0] << " "
 			<< aux[1] << " "
@@ -31,7 +32,7 @@ const void BasePictures::CreatePictures()
 		cv::imwrite(m_processedPictures + entry.path().string().substr(m_source.size()), img);
 		assert(!img.empty());
 	}
-	out.close();*/
+	out.close();
 }
 
 
@@ -73,17 +74,17 @@ void BasePictures::setPicturesNumber(const std::uint16_t& number)
 	this->m_numberPictures = number;
 }
 
-const uint16_t& BasePictures::getPictureCount() const
+const [[nodiscard]] uint16_t& BasePictures::getPictureCount() const
 {
 	return this->m_numberPictures;
 }
 
-const std::string& BasePictures::getExtension() const
+const [[nodiscard]] std::string& BasePictures::getExtension() const
 {
 	return m_extension;
 }
 
-const std::string& BasePictures::getFileSource() const
+const [[nodiscard]] std::string& BasePictures::getFileSource() const
 {
 	return m_source;
 }
@@ -93,7 +94,7 @@ void BasePictures::setFileSource(const std::string& source)
 	m_source = source;
 }
 
-const std::string& BasePictures::getFileDestination() const
+const [[nodiscard]] std::string& BasePictures::getFileDestination() const
 {
 	return m_processedPictures;
 }
@@ -105,10 +106,7 @@ void BasePictures::setFileDestination(const std::string& source)
 
 void BasePictures::addPicturesMosaic(const bool& modify)
 {
-	if (modify)
-	{
-		CreatePictures();
-	}
+	if (modify) { CreatePictures(); }
 
 	std::ifstream in(m_dataBase);
 	for (int i = 0; i < m_numberPictures; ++i)

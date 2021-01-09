@@ -53,10 +53,10 @@ cv::Mat PictureTools::resize(const cv::Mat& image, const uint16_t& width, const 
 {
 	switch (type)
 	{
-	case PictureTools::Algorithm::nearestNeighbour:
+	case PictureTools::Algorithm::NEAREST_NEIGHBOUR:
 		return PictureTools::nearestNeighbour(image, width, height);
 
-	case PictureTools::Algorithm::bilinearInterpolation:
+	case PictureTools::Algorithm::BILINEAR_INTERPOLATION:
 		return PictureTools::bilinearInterpolation(image, width, height);
 
 	default:
@@ -89,16 +89,16 @@ cv::Mat PictureTools::nearestNeighbour(const cv::Mat& image, const uint16_t& wid
 
 double PictureTools::interpolation(double firstNeighbour, double secondNeighbour, double proportion)
 {
-	return std::move((secondNeighbour - firstNeighbour) * proportion + firstNeighbour);
+	return (secondNeighbour - firstNeighbour) * proportion + firstNeighbour;
 }
 
 cv::Vec3b PictureTools::interpolation(const cv::Vec3b& firstNeighbour, const cv::Vec3b& secondNeighbour, double proportion)
 {
-	return std::move(cv::Vec3b(
+	return cv::Vec3b(
 		static_cast<uchar>(interpolation(firstNeighbour[0], secondNeighbour[0], proportion)),
 		static_cast<uchar>(interpolation(firstNeighbour[1], secondNeighbour[1], proportion)),
 		static_cast<uchar>(interpolation(firstNeighbour[2], secondNeighbour[2], proportion))
-	));
+	);
 }
 
 cv::Mat PictureTools::bilinearInterpolation(const cv::Mat& image, const uint16_t& width, const uint16_t& height)
@@ -159,32 +159,8 @@ cv::Mat PictureTools::bilinearInterpolation(const cv::Mat& image, const uint16_t
 	return newImage;
 }
 
-cv::Scalar PictureTools::averageColor(const cv::Mat& image)
-{
-	assert(!image.empty());
-	double blue, green, red;
-	blue = green = red = 0;
-	int size = (image.rows) * (image.cols);
-	for (int rows = 0; rows < image.rows; ++rows)
-	{
-		for (int cols = 0; cols < image.cols; ++cols)
-		{
-			blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
-			green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
-			red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
-		}
-	}
-	red = red / size;
-	green = green / size;
-	blue = blue / size;
-	red = red * 100;
-	green = green * 100;
-	blue = blue * 100;
 
-	return cv::Scalar(blue, green, red);
-}
-
-cv::Scalar PictureTools::averageColorSquare(const cv::Mat& image, const Point& startLocation, const Point& size)
+cv::Scalar PictureTools::averageColorRectangle(const cv::Mat& image, const Point& startLocation, const Point& size)
 {
 	assert(!image.empty());
 	double blue, green, red;
@@ -217,7 +193,7 @@ cv::Scalar PictureTools::averageColorTriangle(const cv::Mat& image, const Point&
 	assert(!image.empty());
 	double blue, green, red;
 	blue = green = red = 0;
-	int sizeOfPartition = (size.first) * (size.second)/2;
+	int sizeOfPartition = (size.first) * (size.second) / 2;
 	int rowSize = size.first + startLocation.first;
 	int colSize = size.second + startLocation.second;
 
@@ -233,7 +209,7 @@ cv::Scalar PictureTools::averageColorTriangle(const cv::Mat& image, const Point&
 				red += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2] / (double)100;
 			}
 		}
-		
+
 		break;
 	case 2:
 		for (int rows = 0; rows < size.first; ++rows)
@@ -245,7 +221,7 @@ cv::Scalar PictureTools::averageColorTriangle(const cv::Mat& image, const Point&
 				red += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2] / (double)100;
 			}
 		}
-		
+
 		break;
 	case 3:
 		for (int rows = 0; rows < size.first; ++rows)
@@ -257,7 +233,7 @@ cv::Scalar PictureTools::averageColorTriangle(const cv::Mat& image, const Point&
 				red += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2] / (double)100;
 			}
 		}
-		
+
 		break;
 	case 4:
 		for (int rows = 0; rows < size.first; ++rows)
