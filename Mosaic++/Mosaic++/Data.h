@@ -30,6 +30,7 @@ public:
 	{
 	public:
 		static const std::string PARAMETER_COUNT;
+		static const std::string WRONG_PARAMETER;
 		static const std::string UNKNOWN_COMMAND;
 		static const std::string WRONG_ARGUMENT_ORDER;
 		static const std::string WRONG_INPUT;

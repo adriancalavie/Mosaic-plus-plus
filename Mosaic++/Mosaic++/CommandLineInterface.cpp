@@ -27,19 +27,128 @@ const std::unordered_map<std::string, CommandLineInterface::Parameter> CommandLi
 std::unordered_map<CommandLineInterface::PathType, std::string> CommandLineInterface::PATHS = {
 	{PathType::SOURCE,						    Data::Defaults::PARENT_PATH},
 
-	{PathType::PROCESSED,						Data::Defaults::PARENT_PATH},
+	{PathType::PROCESSED,						Data::Defaults::PATH_PICTURES_FOR_MOSAIC},
 
-	{PathType::DATABASE,						Data::Defaults::PARENT_PATH},
+	{PathType::DATABASE,						Data::Defaults::PATH_DATA_BASE_FILE},
 
 	{PathType::NUMBER_PHOTOS,					"10"}
 
 };
 
-const std::unordered_set<std::string> CommandLineInterface::COMMANDS = { "make", "set_img_pool_dir" };
+const std::unordered_map<std::string, std::unordered_set<std::string>> CommandLineInterface::COMMANDS = {
+	{
+		"make",											{
+														 "-s", "--shape",
+														 "-p","--partiton",
+														 "--method","-m",
+														 "--help","-h"
+														}		
+	},
 
+	{
+		"set_img_pool_dir",								{
+														 "-d","--directory", 
+														 "-h","--help"
+														}
+	}
+};
+
+////const std::unordered_map<CommandLineInterface::Parameter, Data::Errors, > CommandLineInterface::PARAMS_TYPE_ERROR = {
+//
+//	{Parameter::TYPE			Data::Errors::}
+//
+//};
 
 const std::unordered_set<std::string> CommandLineInterface::KNOWN_EXTENSIONS = { "jpg", "png" };
 
+CommandLineInterface::CommandLineInterface(int argc, char* args[])
+{
+	if (argc < 2)
+	{
+		std::cerr << Data::Errors::PARAMETER_COUNT;
+	}
+	else
+		//daca aem destule argumente
+	{
+		auto command = COMMANDS.find(std::string(args[1]));
+		if (command != COMMANDS.end())
+			//daca primul argument este o comanda
+		{
+			bool hasParams = true;
+			std::unordered_map<std::string, std::string> flagsParams;
+
+			for (int index = 2; index < argc; ++index) 
+				//parcurgem restul argumentelor
+			{
+
+				std::string argument(args[index]);
+
+				if (command->second.find(argument) != command->second.end())
+					//daca argumnetul este un flag ce corespunde comenzii
+				{
+					if (FLAGS.at(argument) == Parameter::HELP)
+						//daca e -h || --help
+					{
+						commandController(argument);
+						return;
+					}
+					else
+					{
+						if (hasParams)
+							//daca falg-ul curent necesita un parametru
+						{
+							if (index + 1 < argc)
+								//daca avem destule argumente in continuare
+								if (inCheck(argument, args[++index]))
+									//daca parametrul este valid
+									flagsParams.insert({ argument, args[index] });
+								else
+								{
+									std::cerr << Data::Errors::WRONG_PARAMETER;
+								}
+						}
+						else
+						{
+							std::cerr << Data::Errors::WRONG_ARGUMENT_ORDER;
+						}
+					}
+				}
+				else
+				{
+					//flag gresit
+					return;
+				}
+			}
+			if (flagsParams.size() > 0)
+				commandController(*command, commandParams, flagsParams);
+			else
+				commandController(*command, commandParams);
+		}
+		else
+		{
+			if (FLAGS.find(std::string(args[1])) != FLAGS.end())
+				//daca in loc de o comanda, gasim o cerere de 'help' sau 'version'
+			{
+				if (FLAGS.at(std::string(args[1])) == Parameter::HELP)
+				{
+					std::cout << Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP);
+				}
+				else if (FLAGS.at(std::string(args[1])) == Parameter::VERSION)
+				{
+					std::cout << Data::Info::VERSION;
+				}
+			}
+			else
+				//altfel comanda nu exista
+			{
+				std::cerr << Data::Errors::UNKNOWN_COMMAND;
+			}
+		}
+	}
+}
+
+
+/*
 CommandLineInterface::CommandLineInterface(int argc, char* args[])
 {
 	if (argc < 2)
@@ -90,7 +199,7 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 					}
 
 				}
-				else/* if (COMMANDS.find(std::string(args[i])) != COMMANDS.end())*/
+				else// if (COMMANDS.find(std::string(args[i])) != COMMANDS.end())
 				{
 					//else, if we find a command parameter
 					if (isPath(argument) && isFile(argument))//TODO: optimise for set_img_pool_dir
@@ -134,6 +243,7 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 	}
 
 }
+*/
 
 void CommandLineInterface::make(const std::vector<std::string>& params)
 {
@@ -435,7 +545,9 @@ inline bool CommandLineInterface::inCheck(const std::string& flag, const std::st
 		break;
 
 	case Parameter::HELP:
+
 	case Parameter::VERSION:
+
 	default:
 		std::cerr << "No idea how you got here";
 		break;

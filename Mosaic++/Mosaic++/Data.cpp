@@ -44,7 +44,8 @@ const std::string Data::Info::SET_POOL_HELP = "WIP";
 
 
 // ERRORS:
-const std::string Data::Errors::PARAMETER_COUNT = "Wrong number of parameters";
+const std::string Data::Errors::PARAMETER_COUNT = "Wrong number of parameters"; 
+const std::string Data::Errors::WRONG_PARAMETER = "Wrong type of parameter";
 const std::string Data::Errors::UNKNOWN_COMMAND = "Unknown command used";
 const std::string Data::Errors::WRONG_ARGUMENT_ORDER = "Wrong agrument order";
 const std::string Data::Errors::WRONG_INPUT = "The argument may be an unsupported file extension or an invalid path(check for file existence!)";

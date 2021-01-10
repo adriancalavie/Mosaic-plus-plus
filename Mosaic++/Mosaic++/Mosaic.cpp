@@ -262,7 +262,7 @@ cv::Mat Mosaic::findPictureWithColorMed(const std::unordered_map<cv::Scalar, std
 	int closestDistance = INT_MAX;
 	for (auto itr : dataPictures)
 	{
-		int currDistance = euclideanDistance(mediumColor, itr.first);
+		int currDistance = RiemersmaDistance(mediumColor, itr.first);
 
 		if (currDistance < closestDistance && itr.second != pictureDifferent)
 		{
