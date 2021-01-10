@@ -2,12 +2,12 @@
 
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 class Data
 {
-
 public:
-	static const enum class HelpTypes { 
+	static enum class HelpTypes { 
 		MAKE_HELP, 
 		GENERAL_HELP, 
 		SET_POOL_HELP
@@ -25,6 +25,8 @@ public:
 		static const std::string MAKE_HELP;
 		static const std::string GENERAL_HELP;
 		static const std::string SET_POOL_HELP;
+
+		static const std::unordered_set<std::string> KNOWN_EXTENSIONS;
 	};
 	static class Errors
 	{

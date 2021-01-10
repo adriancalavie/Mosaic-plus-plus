@@ -33,10 +33,10 @@
     <ClCompile Include="Data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Flag.cpp">
+    <ClCompile Include="FlagExpect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FlagNoExpect.cpp">
+    <ClCompile Include="Flag.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,10 +56,10 @@
     <ClInclude Include="Data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Flag.h">
+    <ClInclude Include="FlagExpect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FlagNoExpect.h">
+    <ClInclude Include="Flag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

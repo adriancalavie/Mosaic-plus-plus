@@ -26,7 +26,6 @@ private:
 		NUMBER_PHOTOS
 	};
 
-	static const std::unordered_set<std::string> KNOWN_EXTENSIONS;
 	static const std::unordered_map<std::string, std::unordered_set<std::string>> COMMANDS;
 	static const std::unordered_map<std::string, Flag::Parameter> FLAGS;
 	static std::unordered_map<PathType, std::string> PATHS;

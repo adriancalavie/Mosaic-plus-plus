@@ -40,6 +40,8 @@ const std::unordered_map< Data::HelpTypes, std::string> Data::Info::HELP_LEVEL =
 const std::string Data::Info::MAKE_HELP = "make <image1, ...> [flags] [flag_parameters]\n";
 
 const std::string Data::Info::SET_POOL_HELP = "WIP";
+
+static const std::unordered_set<std::string> KNOWN_EXTENSIONS = { "jpg", "png" };
 //INFOS END
 
 
