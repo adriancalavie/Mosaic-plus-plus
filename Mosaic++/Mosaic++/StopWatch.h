@@ -6,7 +6,7 @@
 template <typename T>
 class basic_stopwatch
 {
-	typedef T clock;
+	using clock = T;
 	typename clock::time_point p;
 	typename clock::duration   d;
 
@@ -15,13 +15,13 @@ public:
 	void tock() { d += clock::now() - p; }
 	void reset() { d = clock::duration::zero(); }
 
-	template <typename S> 
-	unsigned long long int report() const
+	template <typename S>
+	auto report() const
 	{
 		return std::chrono::duration_cast<S>(d).count();
 	}
 
-	unsigned long long int report_ms() const
+	auto  report_ms() const
 	{
 		return report<std::chrono::milliseconds>();
 	}
@@ -31,8 +31,9 @@ public:
 
 struct c_clock
 {
-	typedef std::clock_t time_point;
-	typedef std::clock_t duration;
+	using time_point = std::clock_t;
+
+	using duration = std::clock_t;
 	static time_point now()
 	{
 		return std::clock();
@@ -40,10 +41,10 @@ struct c_clock
 };
 
 template <>
-unsigned long long int basic_stopwatch<c_clock>::report_ms() const
+auto basic_stopwatch<c_clock>::report_ms() const
 {
 	return 1000. * double(d) / double(CLOCKS_PER_SEC);
 }
 
-typedef basic_stopwatch<std::chrono::high_resolution_clock> stopwatch;
-typedef basic_stopwatch<c_clock> cstopwatch;
+using stopwatch = basic_stopwatch<std::chrono::high_resolution_clock>;
+using  cstopwatch = basic_stopwatch<c_clock>;
