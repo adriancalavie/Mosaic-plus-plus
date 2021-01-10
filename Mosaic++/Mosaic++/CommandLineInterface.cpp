@@ -53,12 +53,6 @@ const std::unordered_map<std::string, std::unordered_set<std::string>> CommandLi
 	}
 };
 
-////const std::unordered_map<CommandLineInterface::Parameter, Data::Errors, > CommandLineInterface::PARAMS_TYPE_ERROR = {
-//
-//	{Parameter::TYPE			Data::Errors::}
-//
-//};
-
 CommandLineInterface::CommandLineInterface(int argc, char* args[])
 {
 	if (argc < 2)
@@ -74,6 +68,7 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 		{
 			bool hasParams = true;
 			std::unordered_map<std::string, std::string> flagsParams;
+			std::vector<std::string> imagePaths;
 
 			for (int index = 2; index < argc; ++index) 
 				//parcurgem restul argumentelor
@@ -92,35 +87,40 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 					}
 					else
 					{
-						if (hasParams)
-							//daca falg-ul curent necesita un parametru
-						{
-							if (index + 1 < argc)
-								//daca avem destule argumente in continuare
-								if (inCheck(argument, args[++index]))
-									//daca parametrul este valid
-									flagsParams.insert({ argument, args[index] });
-								else
-								{
-									std::cerr << Data::Errors::WRONG_PARAMETER;
-								}
-						}
-						else
-						{
-							std::cerr << Data::Errors::WRONG_ARGUMENT_ORDER;
-						}
+						if (index + 1 < argc)
+							//daca avem destule argumente in continuare
+							if (inCheck(argument, args[++index]))
+								//daca parametrul este valid
+								flagsParams.insert({ argument, args[index] });
+							else
+							{
+								std::cerr << Data::Errors::WRONG_PARAMETER;
+							}
+
 					}
 				}
 				else
+				//if we find a path;
 				{
-					//flag gresit
-					return;
+
+					if (isPath(argument) && isFile(argument))
+						//if we have an image as an input
+					{
+						imagePaths.push_back(argument);
+						hasParams = true;
+					}
+					else
+					{
+						std::cerr << Data::Errors::WRONG_INPUT;
+						return;
+					}
 				}
 			}
-		/*	if (flagsParams.size() > 0)
-				commandController(*command, commandParams, flagsParams);
+
+			if (flagsParams.size() > 0)
+				commandController(command->first, imagePaths, flagsParams);
 			else
-				commandController(*command, commandParams);*/
+				commandController(command->first, imagePaths);
 		}
 		else
 		{
@@ -143,13 +143,10 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 			}
 		}
 	}
-
 	//FlagNoExpect help({ "-h", "--help" }, Flag::Parameter::HELP, "make");
 	//FlagNoExpect help({ "-v", "--version" }, Flag::Parameter::VERSION, std::nullopt);
 
-
 }
-
 
 /*
 CommandLineInterface::CommandLineInterface(int argc, char* args[])
@@ -248,6 +245,57 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 }
 */
 
+void CommandLineInterface::commandController(const std::string& command, const std::vector<std::string>& params)
+{
+	if (command == "make")
+	{
+		make(params);
+		return;
+	}
+
+	if (command == "set_img_pool_dir")
+	{
+		setImgPoolDir(params);
+		return;
+	}
+
+	std::cout << "\nHow did you end up in here?";
+}
+
+void CommandLineInterface::commandController(const std::string& command, const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags)
+{
+	if (command == "make")
+	{
+		make(params, flags);
+		return;
+	}
+
+	if (command == "set_img_pool_dir")
+	{
+		setImgPoolDir(params, flags);
+		return;
+	}
+
+	std::cout << "\nHow did you end up in here?";
+}
+
+void CommandLineInterface::commandController(const std::string& command)
+{
+	if (command == "make")
+	{
+		make();
+		return;
+	}
+
+	if (command == "set_img_pool_dir")
+	{
+		setImgPoolDir();
+		return;
+	}
+
+	std::cout << "\nHow did you end up in here?";
+}
+
 void CommandLineInterface::make(const std::vector<std::string>& params)
 {
 	const std::unordered_map<std::string, std::string>& emptyFlags = {};
@@ -264,7 +312,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 	Method methodMosaication = Method::RESIZING;
 	int inputSize;
 	uint8_t partitionSize = Mosaic::getDefaultSize();
-	std::string directory = "D:\\Mosaic++\\Mosaic++\\Resulting pictures\\";
+	std::string directory = Data::Defaults::PATH_RESULT_IMAGE;
 
 	for (auto& flag : flags)
 	{
@@ -325,19 +373,20 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 	}
 
 	BasePictures imagesPool;
+
+	/*
 	imagesPool.setPicturesNumber(std::move(std::stoi(CommandLineInterface::PATHS.at(CommandLineInterface::PathType::NUMBER_PHOTOS))));
 	imagesPool.setFileSource(CommandLineInterface::PATHS.at(CommandLineInterface::PathType::SOURCE));//D:\\Mosaic++\\Mosaic++\\Base pictures\\;
 	imagesPool.setDataBase(CommandLineInterface::PATHS.at(CommandLineInterface::PathType::DATABASE));//D:\\Mosaic++\\Mosaic++\\Mosaic++\\data_base.txt;
+	imagesPool.setFileDestination
+	*/
+
 	imagesPool.addPicturesMosaic(false);
 
 	for (const auto& image : params)
 	{
 		cv::Mat input = cv::imread(image, cv::IMREAD_COLOR);
 
-		/*cv::imshow("Original", input);*/
-		cv::waitKey(0);
-
-		input = PictureTools::resize(input, 1200, 700);
 		cv::Mat output = Mosaic::makeMosaic(input, imagesPool, methodMosaication, shape, partitionSize);
 
 		cv::imwrite(directory + "Output." + extension, output);
@@ -350,57 +399,6 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 void CommandLineInterface::make()
 {
 	std::cout << Data::Info::HELP_LEVEL.at(Data::HelpTypes::MAKE_HELP);
-}
-
-void CommandLineInterface::commandController(const std::string& command, const std::vector<std::string>& params)
-{
-	if (command == "make")
-	{
-		make(params);
-		return;
-	}
-
-	if (command == "set_img_pool_dir")
-	{
-		setImgPoolDir(params);
-		return;
-	}
-
-	std::cout << "\nHow did you end up in here?";
-}
-
-void CommandLineInterface::commandController(const std::string& command, const std::vector<std::string>& params, const std::unordered_map<std::string, std::string>& flags)
-{
-	if (command == "make")
-	{
-		make(params, flags);
-		return;
-	}
-
-	if (command == "set_img_pool_dir")
-	{
-		setImgPoolDir(params, flags);
-		return;
-	}
-
-	std::cout << "\nHow did you end up in here?";
-}
-
-void CommandLineInterface::commandController(const std::string& command)
-{
-	if (command == "make")
-	{
-		make();
-		return;
-	}
-
-	if (command == "set_img_pool_dir")
-	{
-		setImgPoolDir();
-		return;
-	}
-
-	std::cout << "\nHow did you end up in here?";
 }
 
 void CommandLineInterface::setImgPoolDir(const std::vector<std::string>& params)
@@ -523,6 +521,25 @@ inline bool CommandLineInterface::isMethod(const std::string& parameter)
 	return std::regex_match(parameter, poolMethod);
 }
 
+inline bool CommandLineInterface::isFile(const std::string& parameter)
+{
+	std::string matcher = ".*.(";
+
+	for (auto extension : Data::Info::KNOWN_EXTENSIONS)
+	{
+		matcher += extension + '|';
+	}
+
+	matcher[matcher.size() - 1] = ')';
+	return std::regex_match(parameter, std::regex(matcher));
+}
+
+inline bool CommandLineInterface::isPath(const std::string& parameter)
+{
+	struct stat buffer;
+	return (stat(parameter.c_str(), &buffer) == 0);
+}
+
 inline bool CommandLineInterface::inCheck(const std::string& flag, const std::string& parameter)
 {
 	switch (FLAGS.at(flag))
@@ -557,23 +574,4 @@ inline bool CommandLineInterface::inCheck(const std::string& flag, const std::st
 	}
 
 	return false;
-}
-
-inline bool CommandLineInterface::isFile(const std::string& parameter)
-{
-	std::string matcher = ".*.(";
-
-	for (auto extension : Data::Info::KNOWN_EXTENSIONS)
-	{
-		matcher += extension + '|';
-	}
-
-	matcher[matcher.size() - 1] = ')';
-	return std::regex_match(parameter, std::regex(matcher));
-}
-
-inline bool CommandLineInterface::isPath(const std::string& parameter)
-{
-	struct stat buffer;
-	return (stat(parameter.c_str(), &buffer) == 0);
 }

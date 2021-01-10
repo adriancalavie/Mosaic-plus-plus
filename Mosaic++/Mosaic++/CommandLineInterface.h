@@ -8,7 +8,7 @@
 #include "Mosaic.h"
 #include "Data.h"
 #include "FlagNoExpect.h"
-
+#include "FlagExpect.h"
 #include <unordered_set>
 #include <io.h>   // For access().
 #include <sys/types.h>  // For stat().

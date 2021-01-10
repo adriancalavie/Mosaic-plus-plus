@@ -8,6 +8,8 @@ std::string FlagNoExpect::getValue()
 			return Data::Info::HELP_LEVEL.at(Data::HelpTypes::MAKE_HELP);
 		else if (m_command == "set_img_pool_dir")
 			return Data::Info::HELP_LEVEL.at(Data::HelpTypes::SET_POOL_HELP);
+		else if(m_command == std::nullopt)
+			return Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP);
 	}
 	else if (m_type == Parameter::VERSION)
 	{

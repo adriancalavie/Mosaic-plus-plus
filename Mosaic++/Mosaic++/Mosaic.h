@@ -18,9 +18,6 @@ enum class Type {
 	DIAMOND
 };
 
-
-
-
 class Mosaic
 {
 private:
@@ -69,6 +66,10 @@ private:
 		const cv::Mat& image, bool blending,
 		const uint8_t& partitionSize = defaultSize);
 
+	static void MakeMargins(cv::Mat& result, std::unordered_map<cv::Scalar,
+		std::string>& dataPictures,
+		const cv::Mat& image, bool blending,
+		const uint8_t& partitionSize = defaultSize);
 private:
 	static cv::Mat findPictureWithColorMed(const std::unordered_map<cv::Scalar,std::string>& dataPictures,
 		const cv::Scalar& mediumColor,

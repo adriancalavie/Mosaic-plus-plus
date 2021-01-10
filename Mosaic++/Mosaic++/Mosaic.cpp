@@ -256,6 +256,50 @@ cv::Mat Mosaic::makeDiamond(const std::unordered_map<cv::Scalar, std::string>& d
 	return result;
 }
 
+void Mosaic::MakeMargins(cv::Mat& result, std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, bool blending, const uint8_t& partitionSize)
+{
+	for (int y = 0; y < image.rows - 1; y += partitionSize)
+	{
+		cv::Scalar medColor = PictureTools::averageColorRectangle(image, { y,0 }, { partitionSize,partitionSize });
+
+		std::string namePhoto = "";
+		cv::Mat cell = std::move(findPictureWithColorMed(dataPictures, medColor, namePhoto));
+		cell = std::move(PictureTools::resize(cell, partitionSize, partitionSize, PictureTools::Algorithm::BILINEAR_INTERPOLATION));
+
+		if (blending)
+		{
+			alphaBlending(cell, medColor);
+		}
+
+		unsigned int yDiamond = y + (partitionSize + 1) / 2;
+
+		replaceCellTriangle(result, std::move(cell), { y, 0 }, 1, { 0, 0 }, { partitionSize , partitionSize / 2 });
+		replaceCellTriangle(result, std::move(cell), { y, 0 }, 4, { 0, 0 }, { partitionSize , (partitionSize + 1) / 2 });
+	}
+	else
+		//RIGHT
+		if (x == image.cols - partitionSize)
+		{
+			replaceCellTriangle(result, std::move(cell), { y, xDiamond }, 3, { 0, 0 }, { partitionSize, partitionSize / 2 });
+			replaceCellTriangle(result, std::move(cell), { yDiamond , xDiamond }, 2, { 0, 0 }, { partitionSize / 2, partitionSize / 2 });
+		}
+
+	//TOP
+	if (y == 0)
+	{
+		replaceCellTriangle(result, std::move(cell), { y, xDiamond }, 3, { 0, 0 }, { partitionSize , partitionSize / 2 });
+		replaceCellTriangle(result, std::move(cell), { y, x }, 1, { 0, 0 }, { partitionSize , partitionSize / 2 });
+	}
+	else
+		//BOTTOM
+		if (y == image.rows - partitionSize)
+		{
+			replaceCellTriangle(result, std::move(cell), { yDiamond, x }, 4, { 0, 0 }, { partitionSize / 2  , (partitionSize + 1) / 2 });
+			replaceCellTriangle(result, std::move(cell), { yDiamond, xDiamond }, 2, { 0, 0 }, { partitionSize / 2 , partitionSize / 2 });
+		}
+}
+}
+
 cv::Mat Mosaic::findPictureWithColorMed(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Scalar& mediumColor, std::string& pictureDifferent)
 {
 	std::string pictureName;

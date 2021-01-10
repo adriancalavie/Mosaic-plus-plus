@@ -10,7 +10,7 @@ BasePictures::BasePictures(const uint16_t& number) :
 	// empty
 }
 
-const [[nodiscard]] std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const noexcept
+const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const noexcept
 {
 	return m_mediumColor;
 }
@@ -74,17 +74,17 @@ void BasePictures::setPicturesNumber(const std::uint16_t& number)
 	this->m_numberPictures = number;
 }
 
-const [[nodiscard]] uint16_t& BasePictures::getPictureCount() const
+const  uint16_t& BasePictures::getPictureCount() const
 {
 	return this->m_numberPictures;
 }
 
-const [[nodiscard]] std::string& BasePictures::getExtension() const
+const std::string& BasePictures::getExtension() const
 {
 	return m_extension;
 }
 
-const [[nodiscard]] std::string& BasePictures::getFileSource() const
+const std::string& BasePictures::getFileSource() const
 {
 	return m_source;
 }
@@ -94,7 +94,7 @@ void BasePictures::setFileSource(const std::string& source)
 	m_source = source;
 }
 
-const [[nodiscard]] std::string& BasePictures::getFileDestination() const
+const std::string& BasePictures::getFileDestination() const
 {
 	return m_processedPictures;
 }

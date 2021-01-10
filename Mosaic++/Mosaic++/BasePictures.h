@@ -41,7 +41,7 @@ private:
 public:
 	BasePictures(const uint16_t & = 0);
 
-	const [[nodiscard]] map& GetMediumColor() const noexcept;
+	const map& GetMediumColor() const noexcept;
 	const void CreatePictures();
 
 	void setFolder(const std::string&);
@@ -51,16 +51,16 @@ public:
 	static cv::Mat readPhoto(const std::string & = "\n", const std::string & = Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
 
 public:
-	const [[nodiscard]] std::string& getFileSource() const;
+	const std::string& getFileSource() const;
 	void setFileSource(const std::string&);
 
-	const [[nodiscard]] std::string& getFileDestination() const;
+	const std::string& getFileDestination() const;
 	void setFileDestination(const std::string&);
 
-	const [[nodiscard]] std::string& getExtension() const;
+	const std::string& getExtension() const;
 	void setExtension(const std::string&);
 
-	const [[nodiscard]] uint16_t& getNumberPictures() const;
+	const uint16_t& getNumberPictures() const;
 	void setNumberPictures(const uint16_t&);
 
 	void setDataBase(const std::string&);
