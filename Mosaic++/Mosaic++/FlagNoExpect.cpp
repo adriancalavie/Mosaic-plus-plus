@@ -15,4 +15,5 @@ std::string FlagNoExpect::getValue()
 	}
 }
 
-FlagNoExpect::FlagNoExpect(const std::vector<std::string>& synonyms, const Parameter& type, const std::optional<std::string>& command) :Flag(synonyms, type, command) {}
+FlagNoExpect::FlagNoExpect(const std::vector<std::string>& synonyms, const Parameter& type, const std::optional<std::string>& command) :
+	Flag(synonyms, type, command) {}

@@ -59,8 +59,6 @@ const std::unordered_map<std::string, std::unordered_set<std::string>> CommandLi
 //
 //};
 
-const std::unordered_set<std::string> CommandLineInterface::KNOWN_EXTENSIONS = { "jpg", "png" };
-
 CommandLineInterface::CommandLineInterface(int argc, char* args[])
 {
 	if (argc < 2)
@@ -301,7 +299,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 			break;
 
 		case Flag::Parameter::EXTENSION:
-			if (KNOWN_EXTENSIONS.find(flag.second) != KNOWN_EXTENSIONS.end())
+			if (Data::Info::KNOWN_EXTENSIONS.find(flag.second) != Data::Info::KNOWN_EXTENSIONS.end())
 			{
 				extension = flag.second;
 			}
@@ -472,7 +470,7 @@ void CommandLineInterface::setImgPoolDir()
 
 inline bool CommandLineInterface::isExtension(const std::string& parameter)
 {
-	return KNOWN_EXTENSIONS.find(parameter) != KNOWN_EXTENSIONS.end();
+	return Data::Info::KNOWN_EXTENSIONS.find(parameter) != Data::Info::KNOWN_EXTENSIONS.end();
 }
 
 inline bool CommandLineInterface::isDir(const std::string& parameter)
@@ -565,7 +563,7 @@ inline bool CommandLineInterface::isFile(const std::string& parameter)
 {
 	std::string matcher = ".*.(";
 
-	for (auto extension : KNOWN_EXTENSIONS)
+	for (auto extension : Data::Info::KNOWN_EXTENSIONS)
 	{
 		matcher += extension + '|';
 	}

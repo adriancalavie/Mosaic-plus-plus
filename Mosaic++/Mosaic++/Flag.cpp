@@ -15,3 +15,4 @@ Flag::Parameter Flag::getType()
 std::optional<std::string> Flag::getCommand()
 {
 	return m_command;
+}
