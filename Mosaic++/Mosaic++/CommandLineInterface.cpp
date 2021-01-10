@@ -1,27 +1,27 @@
 #include "CommandLineInterface.h"
 
 
-const std::unordered_map<std::string, CommandLineInterface::Parameter> CommandLineInterface::FLAGS = {
-	{"--shape",				Parameter::TYPE},
-	{"-s",					Parameter::TYPE},
+const std::unordered_map<std::string, Flag::Parameter> CommandLineInterface::FLAGS = {
+	{"--shape",				Flag::Parameter::TYPE},
+	{"-s",					Flag::Parameter::TYPE},
 
-	{"--partiton",			Parameter::SIZE},
-	{"-p",					Parameter::SIZE},
+	{"--partiton",			Flag::Parameter::SIZE},
+	{"-p",					Flag::Parameter::SIZE},
 
-	{"--method",			Parameter::METHOD},
-	{"-m",					Parameter::METHOD},
+	{"--method",			Flag::Parameter::METHOD},
+	{"-m",					Flag::Parameter::METHOD},
 
-	{"--extension",			Parameter::EXTENSION},
-	{"-e",					Parameter::EXTENSION},
+	{"--extension",			Flag::Parameter::EXTENSION},
+	{"-e",					Flag::Parameter::EXTENSION},
 
-	{"--directory",			Parameter::PATH},
-	{"-d",					Parameter::PATH},
+	{"--directory",			Flag::Parameter::PATH},
+	{"-d",					Flag::Parameter::PATH},
 
-	{"--help",				Parameter::HELP},
-	{"-h",					Parameter::HELP},
+	{"--help",				Flag::Parameter::HELP},
+	{"-h",					Flag::Parameter::HELP},
 
-	{"--version",			Parameter::VERSION},
-	{"-v",					Parameter::VERSION}
+	{"--version",			Flag::Parameter::VERSION},
+	{"-v",					Flag::Parameter::VERSION}
 };
 
 std::unordered_map<CommandLineInterface::PathType, std::string> CommandLineInterface::PATHS = {
@@ -86,7 +86,7 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 				if (command->second.find(argument) != command->second.end())
 					//daca argumnetul este un flag ce corespunde comenzii
 				{
-					if (FLAGS.at(argument) == Parameter::HELP)
+					if (FLAGS.at(argument) == Flag::Parameter::HELP)
 						//daca e -h || --help
 					{
 						commandController(argument);
@@ -119,21 +119,21 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 					return;
 				}
 			}
-			if (flagsParams.size() > 0)
+		/*	if (flagsParams.size() > 0)
 				commandController(*command, commandParams, flagsParams);
 			else
-				commandController(*command, commandParams);
+				commandController(*command, commandParams);*/
 		}
 		else
 		{
 			if (FLAGS.find(std::string(args[1])) != FLAGS.end())
 				//daca in loc de o comanda, gasim o cerere de 'help' sau 'version'
 			{
-				if (FLAGS.at(std::string(args[1])) == Parameter::HELP)
+				if (FLAGS.at(std::string(args[1])) == Flag::Parameter::HELP)
 				{
 					std::cout << Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP);
 				}
-				else if (FLAGS.at(std::string(args[1])) == Parameter::VERSION)
+				else if (FLAGS.at(std::string(args[1])) == Flag::Parameter::VERSION)
 				{
 					std::cout << Data::Info::VERSION;
 				}
@@ -145,6 +145,11 @@ CommandLineInterface::CommandLineInterface(int argc, char* args[])
 			}
 		}
 	}
+
+	//FlagNoExpect help({ "-h", "--help" }, Flag::Parameter::HELP, "make");
+	//FlagNoExpect help({ "-v", "--version" }, Flag::Parameter::VERSION, std::nullopt);
+
+
 }
 
 
@@ -267,7 +272,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 	{
 		switch (FLAGS.find(flag.first)->second)
 		{
-		case Parameter::TYPE:
+		case Flag::Parameter::TYPE:
 			if (flag.second == "rectangle")
 				shape = Type::RECTANGLE;
 			else if (flag.second == "diamond")
@@ -278,7 +283,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 				std::cerr << Data::Errors::WRONG_ARGUMENT;
 			break;
 
-		case Parameter::SIZE:
+		case Flag::Parameter::SIZE:
 			inputSize = std::move(std::stoi(flag.second));
 			if (inputSize <= UINT8_MAX)
 				partitionSize = inputSize;
@@ -286,7 +291,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 				std::cerr << Data::Errors::OUT_OF_BOUNDS;
 			break;
 
-		case Parameter::METHOD:
+		case Flag::Parameter::METHOD:
 			if (flag.second == "cropp")
 				methodMosaication = Method::CROPPING;
 			else if (flag.second == "resize")
@@ -295,7 +300,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 				std::cerr << Data::Errors::WRONG_ARGUMENT;
 			break;
 
-		case Parameter::EXTENSION:
+		case Flag::Parameter::EXTENSION:
 			if (KNOWN_EXTENSIONS.find(flag.second) != KNOWN_EXTENSIONS.end())
 			{
 				extension = flag.second;
@@ -304,7 +309,7 @@ void CommandLineInterface::make(const std::vector<std::string>& params, const st
 				std::cerr << Data::Errors::WRONG_ARGUMENT;
 			break;
 
-		case Parameter::PATH:
+		case Flag::Parameter::PATH:
 
 			if (isPath(flag.second))
 			{
@@ -524,29 +529,29 @@ inline bool CommandLineInterface::inCheck(const std::string& flag, const std::st
 {
 	switch (FLAGS.at(flag))
 	{
-	case Parameter::EXTENSION:
+	case Flag::Parameter::EXTENSION:
 		return isExtension(parameter);
 		break;
 
-	case Parameter::PATH:
+	case Flag::Parameter::PATH:
 		return isDir(parameter);
 		break;
 
-	case Parameter::TYPE:
+	case Flag::Parameter::TYPE:
 		return isType(parameter);
 		break;
 
-	case Parameter::SIZE:
+	case Flag::Parameter::SIZE:
 		return isSize(parameter);
 		break;
 
-	case Parameter::METHOD:
+	case Flag::Parameter::METHOD:
 		return isMethod(parameter);
 		break;
 
-	case Parameter::HELP:
+	case Flag::Parameter::HELP:
 
-	case Parameter::VERSION:
+	case Flag::Parameter::VERSION:
 
 	default:
 		std::cerr << "No idea how you got here";

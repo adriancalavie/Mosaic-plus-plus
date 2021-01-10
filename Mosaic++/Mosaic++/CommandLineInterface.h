@@ -7,34 +7,17 @@
 #include "StopWatch.h"
 #include "Mosaic.h"
 #include "Data.h"
+#include "FlagNoExpect.h"
+
 #include <unordered_set>
 #include <io.h>   // For access().
 #include <sys/types.h>  // For stat().
 #include <sys/stat.h>   // For stat().
 #include <regex>
 
-struct EnumClassHash
-{
-	template <typename T>
-	std::size_t operator()(T t) const
-	{
-		return static_cast<std::size_t>(t);
-	}
-};
-
-
 class CommandLineInterface
 {
 private:
-	static enum class Parameter { 
-		PATH, 
-		EXTENSION, 
-		TYPE, 
-		SIZE, 
-		METHOD, 
-		HELP, 
-		VERSION 
-	};
 
 	static enum class PathType {
 		SOURCE, 
@@ -45,9 +28,9 @@ private:
 
 	static const std::unordered_set<std::string> KNOWN_EXTENSIONS;
 	static const std::unordered_map<std::string, std::unordered_set<std::string>> COMMANDS;
-	static const std::unordered_map<std::string, Parameter> FLAGS;
+	static const std::unordered_map<std::string, Flag::Parameter> FLAGS;
 	static std::unordered_map<PathType, std::string> PATHS;
-	static const std::unordered_map<CommandLineInterface::Parameter, Data::Errors> PARAMS_TYPE_ERROR;
+	static const std::unordered_map<Flag::Parameter, Data::Errors> PARAMS_TYPE_ERROR;
 
 	//static std::string DEFAULT_PATH;
 
