@@ -116,31 +116,15 @@ cv::Mat Mosaic::makeRectangle(const std::unordered_map<cv::Scalar, std::string>&
 		{
 			cv::Scalar mediumColor = PictureTools::averageColorRectangle(image, { y,x }, { partitionSize,partitionSize });
 			std::string pictureName;
-			int closestDistance = INT_MAX;
-			cv::Scalar closestColor = mediumColor;
-			for (auto itr : dataPictures)
-			{
-				int currDistance = RiemersmaDistance(mediumColor, itr.first);
 
-				if (currDistance < closestDistance)
-				{
-					closestColor = itr.first;
-					closestDistance = currDistance;
-					pictureName = itr.second;
-				}
-			}
-
-
-			cv::Mat testPhoto = std::move(BasePictures::readPhoto(pictureName));
-			testPhoto = PictureTools::resize(testPhoto, partitionSize, partitionSize, PictureTools::Algorithm::BILINEAR_INTERPOLATION);
+			cv::Mat cell = std::move(findPictureWithColorMed(dataPictures, mediumColor, pictureName));
+			cell = PictureTools::resize(cell, partitionSize, partitionSize, PictureTools::Algorithm::BILINEAR_INTERPOLATION);
 			if (blending)
 			{
-				alphaBlending(testPhoto, closestColor);
+				alphaBlending(cell, mediumColor);
 			}
-
-			Mosaic::replaceCellRectangle(result, std::move(testPhoto), std::make_pair(y, x));
+			Mosaic::replaceCellRectangle(result, std::move(cell), std::make_pair(y, x));
 		}
-
 	return result;
 }
 
@@ -150,7 +134,6 @@ cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 	int v2 = image.rows % partitionSize;
 	bool v3 = v1 || v2;
 	assert(!v3);
-
 
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
@@ -163,8 +146,6 @@ cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 			std::uniform_int_distribution<> dis(0, 1);
 			uint8_t type = dis(gen);
 
-
-			int closestDistance = INT_MAX;
 			cv::Scalar medColor;
 
 			//first triangle
@@ -174,61 +155,38 @@ cv::Mat Mosaic::makeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 			else
 				medColor = PictureTools::averageColorTriangle(image, { y,x }, { partitionSize, partitionSize }, 3);
 
-			std::string pictureName1;
-			for (auto itr : dataPictures)
-			{
-				int currDistance = RiemersmaDistance(medColor, itr.first);
+			std::string pictureName = "";
 
-				if (currDistance < closestDistance)
-				{
-					closestDistance = currDistance;
-					pictureName1 = itr.second;
-				}
-			}
-
-			cv::Mat testPhoto = std::move(BasePictures::readPhoto(pictureName1));
-			testPhoto = PictureTools::resize(testPhoto, partitionSize, partitionSize, PictureTools::Algorithm::BILINEAR_INTERPOLATION);
+			cv::Mat cell = std::move(findPictureWithColorMed(dataPictures, medColor, pictureName));
+			cell = PictureTools::resize(cell, partitionSize, partitionSize, PictureTools::Algorithm::BILINEAR_INTERPOLATION);
 			if (blending)
 			{
-				alphaBlending(testPhoto, PictureTools::averageColorRectangle(testPhoto, { 0, 0 }, { testPhoto.rows, testPhoto.cols }));
+				alphaBlending(cell, medColor);
 			}
 			if (type)
-				Mosaic::replaceCellTriangle(result, std::move(testPhoto), std::make_pair(y, x), 1, { 0,0 }, { partitionSize, partitionSize });
+				Mosaic::replaceCellTriangle(result, std::move(cell), std::make_pair(y, x), 1, { 0,0 }, { partitionSize, partitionSize });
 			else
-				Mosaic::replaceCellTriangle(result, std::move(testPhoto), std::make_pair(y, x), 3, { 0,0 }, { partitionSize, partitionSize });
+				Mosaic::replaceCellTriangle(result, std::move(cell), std::make_pair(y, x), 3, { 0,0 }, { partitionSize, partitionSize });
 
 			//second triangle
-			closestDistance = INT_MAX;
-			std::string pictureName2;
 			if (type)
 				medColor = PictureTools::averageColorTriangle(image, { y,x }, { partitionSize, partitionSize }, 2);
 			else
 				medColor = PictureTools::averageColorTriangle(image, { y,x }, { partitionSize, partitionSize }, 4);
-			for (auto itr : dataPictures)
-			{
-				int currDistance = euclideanDistance(medColor, itr.first);
 
-				if (currDistance < closestDistance && itr.second != pictureName1)
-				{
-					closestDistance = currDistance;
-					pictureName2 = itr.second;
-
-				}
-			}
-			testPhoto = std::move(BasePictures::readPhoto(pictureName2));
-			testPhoto = std::move(PictureTools::resize(testPhoto, partitionSize, partitionSize));
+			cell = std::move(findPictureWithColorMed(dataPictures, medColor, pictureName));
+			cell = std::move(PictureTools::resize(cell, partitionSize, partitionSize));
 
 			if (blending)
 			{
-				alphaBlending(testPhoto, PictureTools::averageColorRectangle(testPhoto, { 0,0 }, { testPhoto.rows, testPhoto.cols }));
+				alphaBlending(cell, medColor);
 			}
 
 			if (type)
-				Mosaic::replaceCellTriangle(result, std::move(testPhoto), std::make_pair(y, x), 2, { 0,0 }, { partitionSize, partitionSize });
+				Mosaic::replaceCellTriangle(result, std::move(cell), std::make_pair(y, x), 2, { 0,0 }, { partitionSize, partitionSize });
 			else
-				Mosaic::replaceCellTriangle(result, std::move(testPhoto), std::make_pair(y, x), 4, { 0,0 }, { partitionSize, partitionSize });
+				Mosaic::replaceCellTriangle(result, std::move(cell), std::make_pair(y, x), 4, { 0,0 }, { partitionSize, partitionSize });
 		}
-
 	return result;
 }
 
@@ -240,7 +198,6 @@ cv::Mat Mosaic::makeDiamond(const std::unordered_map<cv::Scalar, std::string>& d
 	assert(!v3);
 	//if any pixels would remain after partitioning process, call abort;
 
-
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
 	for (int x = 0; x < image.cols - 1; x += partitionSize)
@@ -249,69 +206,72 @@ cv::Mat Mosaic::makeDiamond(const std::unordered_map<cv::Scalar, std::string>& d
 			// compare partitionAverage with mapped images's average;
 			cv::Scalar medColor = PictureTools::averageColorRectangle(image, { y,x }, { partitionSize,partitionSize });
 
-			std::string pictureName;
-			int closestDistance = INT_MAX;
-			cv::Scalar closestColor = medColor;
-			for (auto itr : dataPictures)
-			{
-				int currDistance = euclideanDistance(medColor, itr.first);
+			std::string namePhoto = "";
+			cv::Mat cell = std::move(findPictureWithColorMed(dataPictures, medColor, namePhoto));
+			cell = std::move(PictureTools::resize(cell, partitionSize, partitionSize, PictureTools::Algorithm::BILINEAR_INTERPOLATION));
 
-				if (currDistance < closestDistance)
-				{
-					closestColor = itr.first;
-					closestDistance = currDistance;
-					pictureName = itr.second;
-				}
-			}
-
-			cv::Mat testPhoto = std::move(BasePictures::readPhoto(pictureName));
-			testPhoto = std::move(PictureTools::resize(testPhoto, partitionSize, partitionSize, PictureTools::Algorithm::BILINEAR_INTERPOLATION));
 			if (blending)
 			{
-				alphaBlending(testPhoto, closestColor);
+				alphaBlending(cell, medColor);
 			}
 
 			unsigned int xDiamond = x + (partitionSize + 1) / 2;
 			unsigned int yDiamond = y + (partitionSize + 1) / 2;
 
 			//Main cell
-			Mosaic::replaceCellDiamond(result, std::move(testPhoto), std::make_pair(y, x + (partitionSize) / 2));
+			Mosaic::replaceCellDiamond(result, std::move(cell), std::make_pair(y, x + (partitionSize) / 2));
 
 			//Through diamonds
 			if (x < image.cols - partitionSize - 1 && y < image.rows - partitionSize - 1)
-				Mosaic::replaceCellDiamond(result, std::move(testPhoto), std::make_pair(yDiamond, x + partitionSize));
+				Mosaic::replaceCellDiamond(result, std::move(cell), std::make_pair(yDiamond, x + partitionSize));
 
 			//LEFT MARGIN
 			if (x == 0)
 			{
-				replaceCellTriangle(result, std::move(testPhoto), { y, x }, 1, { 0, 0 }, { partitionSize , partitionSize / 2 });
-				replaceCellTriangle(result, std::move(testPhoto), { y, x }, 4, { 0, 0 }, { partitionSize , (partitionSize + 1) / 2 });
+				replaceCellTriangle(result, std::move(cell), { y, x }, 1, { 0, 0 }, { partitionSize , partitionSize / 2 });
+				replaceCellTriangle(result, std::move(cell), { y, x }, 4, { 0, 0 }, { partitionSize , (partitionSize + 1) / 2 });
 			}
 			else
 				//RIGHT
 				if (x == image.cols - partitionSize)
 				{
-					replaceCellTriangle(result, std::move(testPhoto), { y, xDiamond }, 3, { 0, 0 }, { partitionSize, partitionSize / 2 });
-					replaceCellTriangle(result, std::move(testPhoto), { yDiamond , xDiamond }, 2, { 0, 0 }, { partitionSize / 2, partitionSize / 2 });
+					replaceCellTriangle(result, std::move(cell), { y, xDiamond }, 3, { 0, 0 }, { partitionSize, partitionSize / 2 });
+					replaceCellTriangle(result, std::move(cell), { yDiamond , xDiamond }, 2, { 0, 0 }, { partitionSize / 2, partitionSize / 2 });
 				}
 
 			//TOP
 			if (y == 0)
 			{
-				replaceCellTriangle(result, std::move(testPhoto), { y, xDiamond }, 3, { 0, 0 }, { partitionSize , partitionSize / 2 });
-				replaceCellTriangle(result, std::move(testPhoto), { y, x }, 1, { 0, 0 }, { partitionSize , partitionSize / 2 });
+				replaceCellTriangle(result, std::move(cell), { y, xDiamond }, 3, { 0, 0 }, { partitionSize , partitionSize / 2 });
+				replaceCellTriangle(result, std::move(cell), { y, x }, 1, { 0, 0 }, { partitionSize , partitionSize / 2 });
 			}
 			else
 				//BOTTOM
 				if (y == image.rows - partitionSize)
 				{
-					replaceCellTriangle(result, std::move(testPhoto), { yDiamond, x }, 4, { 0, 0 }, { partitionSize / 2  , (partitionSize + 1) / 2 });
-					replaceCellTriangle(result, std::move(testPhoto), { yDiamond, xDiamond }, 2, { 0, 0 }, { partitionSize / 2 , partitionSize / 2 });
+					replaceCellTriangle(result, std::move(cell), { yDiamond, x }, 4, { 0, 0 }, { partitionSize / 2  , (partitionSize + 1) / 2 });
+					replaceCellTriangle(result, std::move(cell), { yDiamond, xDiamond }, 2, { 0, 0 }, { partitionSize / 2 , partitionSize / 2 });
 				}
-
 		}
-
 	return result;
+}
+
+cv::Mat Mosaic::findPictureWithColorMed(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Scalar& mediumColor, std::string& pictureDifferent)
+{
+	std::string pictureName;
+	int closestDistance = INT_MAX;
+	for (auto itr : dataPictures)
+	{
+		int currDistance = euclideanDistance(mediumColor, itr.first);
+
+		if (currDistance < closestDistance && itr.second != pictureDifferent)
+		{
+			closestDistance = currDistance;
+			pictureName = itr.second;
+		}
+	}
+	pictureDifferent = pictureName;
+	return BasePictures::readPhoto(pictureName);
 }
 
 void Mosaic::replaceCellRectangle(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto, const Point& topL)

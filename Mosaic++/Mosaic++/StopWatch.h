@@ -21,7 +21,7 @@ public:
 		return std::chrono::duration_cast<S>(d).count();
 	}
 
-	auto  report_ms() const
+	auto report_ms() const
 	{
 		return report<std::chrono::milliseconds>();
 	}

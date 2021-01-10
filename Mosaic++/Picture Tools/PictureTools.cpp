@@ -149,7 +149,6 @@ cv::Mat PictureTools::bilinearInterpolation(const cv::Mat& image, const uint16_t
 			}
 			else
 			{
-
 				newImage.at<cv::Vec3b>(hIndex, wIndex) = image.at<cv::Vec3b>(neighbours[0].x, neighbours[0].y);
 			}
 

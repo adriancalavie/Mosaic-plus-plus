@@ -12,8 +12,8 @@ int main()
 
 	cv::Mat input = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
 
-	cv::Mat input3 = Mosaic::makeMosaic(input, test, Method::RESIZING, Type::TRIANGLE, 30, false);
-	cv::imwrite(Data::Defaults::PATH_RESULT_IMAGE + "Triangletest.jpg", input3);
+	cv::Mat input3 = Mosaic::makeMosaic(input, test, Method::RESIZING, Type::DIAMOND, 30, false);
+	cv::imwrite(Data::Defaults::PATH_RESULT_IMAGE + "Diamond.jpg", input3);
 	cv::imshow("Original", input3);
 	cv::waitKey(0);
 

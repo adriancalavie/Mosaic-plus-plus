@@ -23,12 +23,12 @@ const void BasePictures::CreatePictures()
 	{
 		cv::Mat img = cv::imread(entry.path().string(), cv::IMREAD_COLOR);
 
+		img = PictureTools::resize(img, 50, 50);
 		cv::Scalar aux = PictureTools::averageColorRectangle(img, { 0, 0 }, { img.rows, img.cols });
-		img = PictureTools::resize(img, 10, 10);
 		out << aux[0] << " "
 			<< aux[1] << " "
 			<< aux[2] << " "
-			<< entry.path().string().substr(m_source.size() + 1) << std::endl;
+			<< entry.path().string().substr(m_source.size()) << std::endl;
 		cv::imwrite(m_processedPictures + entry.path().string().substr(m_source.size()), img);
 		assert(!img.empty());
 	}
