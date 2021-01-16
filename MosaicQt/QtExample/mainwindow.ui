@@ -481,7 +481,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../../Diverse/qtMosaic/testqt/logo2.png</normaloff>../../Diverse/qtMosaic/testqt/logo2.png</iconset>
+    <normaloff>Pictures/logo.png</normaloff>Pictures/logo.png</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -1101,8 +1101,6 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="Pictures/front.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

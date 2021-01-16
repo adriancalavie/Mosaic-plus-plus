@@ -32,11 +32,34 @@ std::string MainWindow::selectFolderForResult()
 
 std::string MainWindow::selectPictureForMosaic()
 {
-	return "";
+	QString aux = QFileDialog::getOpenFileName(
+		this, tr("Open Directory"), "D:", "*.jpg; *.png");
+
+	ui->textEditPictureForMosaic->setText(aux);
+	QPixmap pixmap(aux);
+	ui->labelOriginalPicture->setPixmap(pixmap.scaled(ui->labelOriginalPicture->width(),
+		ui->labelOriginalPicture->height(), Qt::IgnoreAspectRatio));
+	return aux.toStdString();
 }
 
 bool MainWindow::startMosaic()
 {
+	std::string basePicturePathString = ui->textEditBasePictureFolder->toPlainText().toStdString();
+
+	std::string pictureForMosaicPathString = ui->textEditPictureForMosaic->toPlainText().toStdString();
+	if (pictureForMosaicPathString.size() == 0)
+	{
+		error->setWindowTitle("Error");
+		error->setWindowIcon(QIcon("Pictures\\error.png"));
+		error->setText("Incorect path for picture!");
+		error->show();
+		return false;
+	}
+
+	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
+
+	static int value = 0;
+	ui->progressBarMosaic->setValue(++value);
 	return true;
 }
 
