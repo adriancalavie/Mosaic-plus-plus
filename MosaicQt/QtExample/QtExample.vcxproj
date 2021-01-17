@@ -44,6 +44,8 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <IncludePath>C:\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
@@ -51,6 +53,9 @@
     <ClCompile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>opencv_world450d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>msvc2017_64</QtInstall>
@@ -108,6 +113,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HelpDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Mosaic++\Picture Tools\Picture Tools.vcxproj">
+      <Project>{11830f8b-52b4-467e-9a3d-151a282d6d54}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosaic\Mosaic.vcxproj">
+      <Project>{f8d862a3-f18d-4dba-9f0f-cb63ea99f70d}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
