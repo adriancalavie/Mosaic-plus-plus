@@ -7,6 +7,17 @@
 class Data
 {
 public:
+struct HelpTypesHash
+{
+	template <typename T>
+	std::size_t operator()(T t) const
+	{
+		return static_cast<std::size_t>(t);
+	}
+};
+
+
+public:
 	static enum class HelpTypes { 
 		MAKE_HELP, 
 		GENERAL_HELP, 

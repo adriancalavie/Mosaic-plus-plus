@@ -1,12 +1,14 @@
 #include "mainwindow.h"
 
 #include "ui_mainwindow.h"
-//#include <iostream>
+#include <iostream>
 #include <QFileDialog>
 #include <fstream>
 #include <QMessageBox>
 #include <QPicture>
 #include <QAction>
+#include <qboxlayout.h>
+#include <qlabel.h>
 #include <windows.h>
 #include <QStringListModel>
 #include <fstream>
@@ -68,10 +70,39 @@ void MainWindow::actionExit()
 {
 	exit(1);
 }
+
 void MainWindow::actionHelp()
 {
-	help->show();
-	help->setWindowTitle("Help mosaic++");
+	std::unique_ptr<QLabel> labelHelp = std::make_unique<QLabel>();
+	std::unique_ptr<QHBoxLayout> layoutLabelHelp = std::make_unique<QHBoxLayout>();
+	
+	labelHelp->setWindowTitle("Help");
+	labelHelp->setText("	[..[..                                                           \n"
+		"	[. [..   [...                            [.             [..        [..   \n"
+		"	[.. [.. [ [..   [..     [....    [..          [...     [..        [..   \n"
+		"	[..  [..  [.. [..  [.. [..     [..  [.. [.. [..   [... [.....[... [.....\n"
+		"	[..   [.  [..[..    [..  [... [..   [.. [..[..         [..        [..   \n"
+		"	[..       [.. [..  [..     [..[..   [.. [.. [..        [..        [..   \n"
+		"	[..       [..   [..    [.. [..  [.. [...[..   [...                      \n"
+
+		"\nFor more information on a specific command, type HELP command-name \n"
+		"HELP			Provides Help information for Mosaic++ commands.\n"
+		"MAKE			Generates mosaic photo out of a given shape from an input image using a set of images.\n"
+		"SET_IMG_POOL		Sets important absolute paths for MAKE command.\n\n\n");
+
+	layoutLabelHelp->addWidget(labelHelp.get());
+
+	Qt::Alignment alignment;
+	alignment.setFlag(Qt::AlignmentFlag::AlignCenter);
+	layoutLabelHelp->setAlignment(alignment);
+
+	help->setMinimumWidth(300);
+	help->setMinimumHeight(300);
+
+	help->setLayout(layoutLabelHelp.get());
+	help->setWindowTitle("ReadMe");
+	help->exec();
+	//help->setT
 }
 
 MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :

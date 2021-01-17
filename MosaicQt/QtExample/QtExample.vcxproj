@@ -96,6 +96,7 @@
     <QtUic Include="DialogButtonBottom.ui" />
     <QtUic Include="mainwindow.ui" />
     <QtMoc Include="mainwindow.h" />
+    <ClCompile Include="HelpDialog.cpp" />
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -104,6 +105,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HelpDialog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
