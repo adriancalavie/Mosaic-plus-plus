@@ -59,12 +59,12 @@ const std::string Data::Errors::OUT_OF_BOUNDS = "Partitioning size is too large\
 
 //DEFAULTS
 #ifdef _DEBUG
-const std::string Data::Defaults::PARENT_PATH = "..//";
-const std::string Data::Defaults::PATH_BASE_PICTURES = "..//Base pictures\\";
-const std::string Data::Defaults::PATH_PICTURES_FOR_MOSAIC = "..//Pictures for mosaics\\";
-const std::string Data::Defaults::PATH_DATA_BASE_FILE = "data_base.txt";
+const std::string Data::Defaults::PARENT_PATH = "..//..//Mosaic++\\";
+const std::string Data::Defaults::PATH_BASE_PICTURES = "..//..//Mosaic++\\Base pictures\\";
+const std::string Data::Defaults::PATH_PICTURES_FOR_MOSAIC = "..//..//Mosaic++\\Pictures for mosaics\\";
+const std::string Data::Defaults::PATH_DATA_BASE_FILE = "..//..//Mosaic++\\Mosaic++\\data_base.txt";
 const std::string Data::Defaults::PATH_TEST_IMAGE = "..//test.jpg";
-const std::string Data::Defaults::PATH_RESULT_IMAGE = "..//Resulting pictures\\";
+const std::string Data::Defaults::PATH_RESULT_IMAGE = "..//..//Mosaic++\\Resulting pictures\\";
 #else
 const std::string Data::Defaults::PARENT_PATH = "..//..//";
 const std::string Data::Defaults::PATH_BASE_PICTURES = "..//..//Base pictures\\";

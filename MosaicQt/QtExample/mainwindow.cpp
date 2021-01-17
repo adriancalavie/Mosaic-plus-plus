@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-
+#include <QProcess>
 #include "ui_mainwindow.h"
 #include <iostream>
 #include <QFileDialog>
@@ -11,7 +11,14 @@
 #include <qlabel.h>
 #include <windows.h>
 #include <QStringListModel>
+#include "..\Mosaic\Data.h"
+#include "..\Mosaic\Data.cpp"
+#include "..\Mosaic\BasePictures.h"
+#include "..\Mosaic\BasePictures.cpp"
+#include "..\Mosaic\Mosaic.h"
+#include "..\Mosaic\Mosaic.cpp"
 #include <fstream>
+#include <thread>
 
 std::string MainWindow::selectBasePicturesFolder()
 {
@@ -60,6 +67,20 @@ bool MainWindow::startMosaic()
 
 	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
 
+	BasePictures test(5997);
+
+	test.AddPicturesMosaic(false);
+
+	cv::Mat input = cv::imread(pictureForMosaicPathString, cv::IMREAD_COLOR);
+
+	cv::Mat input3 = Mosaic::MakeMosaic(input, test, Method::RESIZING, Type::SQUARE, 30, false);
+
+	std::string str = Data::Defaults::PATH_RESULT_IMAGE + "Diamond.jpg";
+	cv::imwrite(str, input3);
+	QPixmap mosaic(std::move(QString::fromStdString(str)));
+	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),
+		ui->labelMosaicPicture->height(), Qt::IgnoreAspectRatio));
+	
 	static int value = 0;
 	ui->progressBarMosaic->setValue(++value);
 	return true;
@@ -77,18 +98,9 @@ void MainWindow::actionHelp()
 	std::unique_ptr<QHBoxLayout> layoutLabelHelp = std::make_unique<QHBoxLayout>();
 	
 	labelHelp->setWindowTitle("Help");
-	labelHelp->setText("	[..[..                                                           \n"
-		"	[. [..   [...                            [.             [..        [..   \n"
-		"	[.. [.. [ [..   [..     [....    [..          [...     [..        [..   \n"
-		"	[..  [..  [.. [..  [.. [..     [..  [.. [.. [..   [... [.....[... [.....\n"
-		"	[..   [.  [..[..    [..  [... [..   [.. [..[..         [..        [..   \n"
-		"	[..       [.. [..  [..     [..[..   [.. [.. [..        [..        [..   \n"
-		"	[..       [..   [..    [.. [..  [.. [...[..   [...                      \n"
 
-		"\nFor more information on a specific command, type HELP command-name \n"
-		"HELP			Provides Help information for Mosaic++ commands.\n"
-		"MAKE			Generates mosaic photo out of a given shape from an input image using a set of images.\n"
-		"SET_IMG_POOL		Sets important absolute paths for MAKE command.\n\n\n");
+	QString textLayout(QString::fromStdString(Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP)));
+	labelHelp->setText(textLayout);
 
 	layoutLabelHelp->addWidget(labelHelp.get());
 
