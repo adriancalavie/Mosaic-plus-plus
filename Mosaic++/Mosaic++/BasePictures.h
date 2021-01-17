@@ -26,6 +26,7 @@ struct std::hash<cv::Scalar>
 
 class BasePictures
 {
+public:
 	using map = std::unordered_map<cv::Scalar, std::string>;
 
 private:

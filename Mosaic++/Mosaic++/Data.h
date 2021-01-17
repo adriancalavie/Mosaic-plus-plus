@@ -26,7 +26,7 @@ public:
 		static const std::string GENERAL_HELP;
 		static const std::string SET_POOL_HELP;
 
-		static const std::unordered_set<std::string> KNOWN_EXTENSIONS;
+		//static const std::unordered_set<std::string> KNOWN_EXTENSIONS;
 	};
 	static class Errors
 	{

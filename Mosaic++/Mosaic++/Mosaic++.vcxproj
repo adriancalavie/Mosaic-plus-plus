@@ -157,9 +157,6 @@
     <ClCompile Include="BasePictures.cpp" />
     <ClCompile Include="CommandLineInterface.cpp" />
     <ClCompile Include="Data.cpp" />
-    <ClCompile Include="Flag.cpp" />
-    <ClCompile Include="FlagExpect.cpp" />
-    <ClCompile Include="FlagNoExpect.cpp" />
     <ClCompile Include="Mosaic.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TestCommand.cpp" />
@@ -168,9 +165,6 @@
     <ClInclude Include="BasePictures.h" />
     <ClInclude Include="CommandLineInterface.h" />
     <ClInclude Include="Data.h" />
-    <ClInclude Include="Flag.h" />
-    <ClInclude Include="FlagExpect.h" />
-    <ClInclude Include="FlagNoExpect.h" />
     <ClInclude Include="Mosaic.h" />
     <ClInclude Include="StopWatch.h" />
   </ItemGroup>

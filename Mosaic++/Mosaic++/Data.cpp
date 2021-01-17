@@ -41,7 +41,7 @@ const std::string Data::Info::MAKE_HELP = "make <image1, ...> [flags] [flag_para
 
 const std::string Data::Info::SET_POOL_HELP = "WIP";
 
-static const std::unordered_set<std::string> KNOWN_EXTENSIONS = { "jpg", "png" };
+//static const std::unordered_set<std::string> KNOWN_EXTENSIONS = { "jpg", "png" };
 //INFOS END
 
 

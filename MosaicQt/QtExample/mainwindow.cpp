@@ -74,8 +74,8 @@ void MainWindow::actionHelp()
 	help->setWindowTitle("Help mosaic++");
 }
 
-MainWindow::MainWindow(QWidget* parent) :
-	QMainWindow(parent),
+MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
+	QMainWindow(parent.get()),
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);

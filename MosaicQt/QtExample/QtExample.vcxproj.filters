@@ -50,4 +50,9 @@
   <ItemGroup>
     <None Include="cpp.hint" />
   </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="DialogButtonBottom.ui">
+      <Filter>Resource Files</Filter>
+    </QtUic>
+  </ItemGroup>
 </Project>
