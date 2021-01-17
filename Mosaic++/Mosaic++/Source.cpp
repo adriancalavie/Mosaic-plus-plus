@@ -8,14 +8,15 @@ int main()
 {
 	BasePictures test(5997);
 
-	test.addPicturesMosaic(false);
+	test.AddPicturesMosaic(false);
 
 	cv::Mat input = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
 
 	std::cout << input.rows << " " << input.cols << std::endl;
-	cv::Mat input3 = Mosaic::makeMosaic(input, test, Method::RESIZING, Type::DIAMOND, 30, false);
-	cv::imwrite(Data::Defaults::PATH_RESULT_IMAGE + "Diamond.jpg", input3);
-	cv::imshow("Original", input3);
+	cv::Mat input3 = Mosaic::MakeMosaic(input, test, Method::RESIZING, Type::SQUARE, 30, false);
+	std::string str = Data::Defaults::PATH_RESULT_IMAGE + "Diamond.jpg";
+	cv::imwrite(str, input3);
+	cv::imshow("Processed Image", input3);
 	cv::waitKey(0);
 
 	return 0;

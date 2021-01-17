@@ -7,7 +7,7 @@ BasePictures::BasePictures(const uint16_t& number) :
 	m_processedPictures(Data::Defaults::PATH_PICTURES_FOR_MOSAIC),
 	m_dataBase(Data::Defaults::PATH_DATA_BASE_FILE)
 {
-	// empty
+	// EMPTY
 }
 
 const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const noexcept
@@ -36,7 +36,7 @@ const void BasePictures::CreatePictures()
 }
 
 
-cv::Mat BasePictures::readPhoto(const std::string& pictureName, const std::string& fileName)
+cv::Mat BasePictures::ReadPhoto(const std::string& pictureName, const std::string& fileName)
 {
 	cv::Mat img = std::move(cv::imread(fileName + pictureName, cv::IMREAD_COLOR));
 	assert(!img.empty());
@@ -44,67 +44,67 @@ cv::Mat BasePictures::readPhoto(const std::string& pictureName, const std::strin
 
 }
 
-void BasePictures::setExtension(const std::string& extensionName)
+void BasePictures::SetExtension(const std::string& extensionName)
 {
 	m_extension = extensionName;
 }
 
-const uint16_t& BasePictures::getNumberPictures() const
+const uint16_t& BasePictures::GetNumberPictures() const
 {
 	return m_numberPictures;
 }
 
-void BasePictures::setNumberPictures(const uint16_t& number)
+void BasePictures::SetNumberPictures(const uint16_t& number)
 {
 	m_numberPictures = number;
 }
 
-void BasePictures::setDataBase(const std::string& dataBase)
+void BasePictures::SetDataBase(const std::string& dataBase)
 {
 	m_dataBase = dataBase;
 }
 
-void BasePictures::setFolder(const std::string& filename)
+void BasePictures::SetFolder(const std::string& filename)
 {
 	this->m_source = filename;
 }
 
-void BasePictures::setPicturesNumber(const std::uint16_t& number)
+void BasePictures::SetPicturesNumber(const std::uint16_t& number)
 {
 	this->m_numberPictures = number;
 }
 
-const  uint16_t& BasePictures::getPictureCount() const
+const  uint16_t& BasePictures::GetPictureCount() const
 {
 	return this->m_numberPictures;
 }
 
-const std::string& BasePictures::getExtension() const
+const std::string& BasePictures::GetExtension() const
 {
 	return m_extension;
 }
 
-const std::string& BasePictures::getFileSource() const
+const std::string& BasePictures::GetFileSource() const
 {
 	return m_source;
 }
 
-void BasePictures::setFileSource(const std::string& source)
+void BasePictures::SetFileSource(const std::string& source)
 {
 	m_source = source;
 }
 
-const std::string& BasePictures::getFileDestination() const
+const std::string& BasePictures::GetFileDestination() const
 {
 	return m_processedPictures;
 }
 
-void BasePictures::setFileDestination(const std::string& source)
+void BasePictures::SetFileDestination(const std::string& source)
 {
 	m_processedPictures = source;
 }
 
-void BasePictures::addPicturesMosaic(const bool& modify)
+void BasePictures::AddPicturesMosaic(const bool& modify)
 {
 	if (modify) { CreatePictures(); }
 

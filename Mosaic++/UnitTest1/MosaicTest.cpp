@@ -23,7 +23,7 @@ namespace MosaicTest
 			greenD = color1[1] - color2[1];
 			redD = color1[2] - color2[2];
 			uint16_t euclid = blueD * blueD + greenD * greenD + redD + redD;
-			Assert::IsTrue(euclideanDistance(color1, color2) == euclid);
+			Assert::IsTrue(EuclideanDistance(color1, color2) == euclid);
 
 		}
 
@@ -32,7 +32,7 @@ namespace MosaicTest
 			cv::Scalar color2(255, 255, 255);
 			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 			cv::Mat copyTestImage = testImage;
-			Mosaic::alphaBlending(testImage, color2);
+			Mosaic::AlphaBlending(testImage, color2);
 
 			Assert::IsTrue(testImage.empty());
 
@@ -50,8 +50,8 @@ namespace MosaicTest
 
 			cv::Scalar color3(128, 128, 128);
 
-			first = euclideanDistance(color1, color3);
-			second = euclideanDistance(color2, color3);
+			first = EuclideanDistance(color1, color3);
+			second = EuclideanDistance(color2, color3);
 
 			indexEuclid = first < second ? true : false;
 

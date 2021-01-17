@@ -17,13 +17,13 @@ namespace BasePicturesTest
 		TEST_METHOD(TestConstructor)
 		{
 			BasePictures pictures(1000);
-			Assert::IsTrue(pictures.getPictureCount() == 1000);
+			Assert::IsTrue(pictures.GetPictureCount() == 1000);
 			//Assert::IsTrue(pictures.getExtension() == ".jpg");
 		}
 
 		TEST_METHOD(TestReadPhoto)
 		{
-			cv::Mat image=BasePictures::readPhoto("0.jpg");
+			cv::Mat image=BasePictures::ReadPhoto("0.jpg");
 			Assert::IsTrue(!image.empty());
 		}
 

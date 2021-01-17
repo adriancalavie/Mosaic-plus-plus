@@ -73,7 +73,7 @@ namespace PictureToolsTest
 		{
 			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 
-			testImage = PictureTools::resize(testImage, 600, 600,PictureTools::Algorithm::nearestNeighbour);
+			testImage = PictureTools::resize(testImage, 600, 600,PictureTools::Algorithm::NEAREST_NEIGHBOUR);
 
 			bool testingSize = testImage.rows == 600 && testImage.cols == 600;
 
@@ -85,7 +85,7 @@ namespace PictureToolsTest
 		{
 			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
 
-			testImage = PictureTools::resize(testImage, 1200, 780,PictureTools::Algorithm::bilinearInterpolation);
+			testImage = PictureTools::resize(testImage, 1200, 780,PictureTools::Algorithm::BILINEAR_INTERPOLATION);
 
 			bool testingSize = testImage.rows == 1200 && testImage.cols == 780;
 

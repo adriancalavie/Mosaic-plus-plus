@@ -45,28 +45,28 @@ public:
 	const map& GetMediumColor() const noexcept;
 	const void CreatePictures();
 
-	void setFolder(const std::string&);
-	void setPicturesNumber(const std::uint16_t&);
+	void SetFolder(const std::string&);
+	void SetPicturesNumber(const std::uint16_t&);
 
-	const uint16_t& getPictureCount() const;
-	static cv::Mat readPhoto(const std::string & = "\n", const std::string & = Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
+	const uint16_t& GetPictureCount() const;
+	static cv::Mat ReadPhoto(const std::string & = "\n", const std::string & = Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
 
 public:
-	const std::string& getFileSource() const;
-	void setFileSource(const std::string&);
+	const std::string& GetFileSource() const;
+	void SetFileSource(const std::string&);
 
-	const std::string& getFileDestination() const;
-	void setFileDestination(const std::string&);
+	const std::string& GetFileDestination() const;
+	void SetFileDestination(const std::string&);
 
-	const std::string& getExtension() const;
-	void setExtension(const std::string&);
+	const std::string& GetExtension() const;
+	void SetExtension(const std::string&);
 
-	const uint16_t& getNumberPictures() const;
-	void setNumberPictures(const uint16_t&);
+	const uint16_t& GetNumberPictures() const;
+	void SetNumberPictures(const uint16_t&);
 
-	void setDataBase(const std::string&);
+	void SetDataBase(const std::string&);
 
-	void addPicturesMosaic(const bool&);
+	void AddPicturesMosaic(const bool&);
 
 };
 
