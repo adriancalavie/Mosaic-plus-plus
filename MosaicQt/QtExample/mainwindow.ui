@@ -899,10 +899,10 @@
    <widget class="QGroupBox" name="groupBoxSizeResultPicture">
     <property name="geometry">
      <rect>
-      <x>730</x>
-      <y>100</y>
+      <x>620</x>
+      <y>70</y>
       <width>120</width>
-      <height>121</height>
+      <height>151</height>
      </rect>
     </property>
     <property name="title">
@@ -915,7 +915,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>40</y>
+       <y>70</y>
        <width>61</width>
        <height>22</height>
       </rect>
@@ -932,6 +932,9 @@
      <property name="prefix">
       <string/>
      </property>
+     <property name="minimum">
+      <number>100</number>
+     </property>
      <property name="maximum">
       <number>100000</number>
      </property>
@@ -940,7 +943,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>20</y>
+       <y>50</y>
        <width>47</width>
        <height>13</height>
       </rect>
@@ -959,7 +962,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>70</y>
+       <y>100</y>
        <width>47</width>
        <height>13</height>
       </rect>
@@ -981,7 +984,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>90</y>
+       <y>120</y>
        <width>61</width>
        <height>22</height>
       </rect>
@@ -998,16 +1001,35 @@
      <property name="prefix">
       <string/>
      </property>
+     <property name="minimum">
+      <number>100</number>
+     </property>
      <property name="maximum">
       <number>100000</number>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBoxOriginalSize">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>101</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Original size</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBoxAlgorithm">
     <property name="geometry">
      <rect>
-      <x>429</x>
-      <y>470</y>
+      <x>430</x>
+      <y>460</y>
       <width>131</width>
       <height>91</height>
      </rect>
@@ -1066,6 +1088,100 @@
      </property>
     </widget>
    </widget>
+   <widget class="QCheckBox" name="checkBoxBlendingPicture">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>570</y>
+      <width>131</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Blending Picture</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBoxMethod">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>80</y>
+      <width>131</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Method</string>
+    </property>
+    <widget class="QRadioButton" name="radioButtonMethodResizing">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>82</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Resizing</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButtonMethodCropping">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>82</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Cropping</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="labelNameResultPicture">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>180</y>
+      <width>141</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Name result picture:</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="textEditNameResultPicture">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>180</y>
+      <width>231</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="sizeAdjustPolicy">
+     <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+    </property>
+    <property name="html">
+     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Times New Roman'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MosaicQt&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -1073,7 +1189,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

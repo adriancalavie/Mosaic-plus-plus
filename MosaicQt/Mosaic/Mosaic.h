@@ -17,6 +17,11 @@ enum class Type {
 	DIAMOND
 };
 
+enum class Algorithm {
+	EUCLIDEAN,
+	RIEMERSMA
+};
+
 
 #ifdef MOSAIC_EXPORTS
 #define MOSAIC_API __declspec(dllexport)
@@ -41,9 +46,10 @@ public:
 		const Method& method,
 		const Type& type = Type::SQUARE,
 		const uint8_t& partitionSize = defaultSize,
-		bool blending = false);
+		const Algorithm& algorithm=Algorithm::RIEMERSMA,
+		const bool& blending = false);
 
-public:
+private:
 	static void ReplaceCellRectangle(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto, const Point& topL); // for square and rectangle
 
 	static void ReplaceCellTriangle(cv::Mat& originalPicture,
@@ -61,24 +67,33 @@ public:
 private:
 	static cv::Mat MakeRectangle(const std::unordered_map<cv::Scalar,
 		std::string>& dataPictures,
-		const cv::Mat& image, bool blending,
+		const cv::Mat& image,
+		const Algorithm& algorithm,
+		const bool& blending,
 		const uint8_t& partitionSize = defaultSize);
 
 	static cv::Mat MakeTriangle(const std::unordered_map<cv::Scalar,
 		std::string>& dataPictures,
-		const cv::Mat& image, bool blending,
+		const cv::Mat& image,
+		const Algorithm& algorithm,
+		const bool& blending,
 		const uint8_t& partitionSize = defaultSize);
 
 	static cv::Mat MakeDiamond(const BasePictures::map& dataPictures,
-		const cv::Mat& image, bool blending,
+		const cv::Mat& image,
+		const Algorithm& algorithm,
+		const bool& blending,
 		const uint8_t& partitionSize = defaultSize);
 
 	static void MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
-		const cv::Mat& image, bool blending,
+		const cv::Mat& image,
+		const Algorithm& algorithm,
+		const bool& blending,
 		const uint8_t& partitionSize = defaultSize);
 private:
 	static cv::Mat FindPictureWithColorMed(const BasePictures::map& dataPictures,
 		const cv::Scalar& mediumColor,
-		std::string& pictureDifferent);
+		std::string& pictureDifferent,
+		const Algorithm& algorithm);
 };
 
