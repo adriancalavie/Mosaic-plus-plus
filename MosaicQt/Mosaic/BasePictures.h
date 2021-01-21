@@ -10,14 +10,13 @@
 #include <filesystem>
 #include "Data.h"
 #include "../../Mosaic++/Picture Tools/PictureTools.h"
+#include <regex>
 
 #ifndef BASEPICTURES_EXPORTS
 #define BASEPICTURES_API __declspec(dllexport)
 #else
 #define BASEPICTURES_API __declspec(dllimport)
 #endif // !BASEPICTURES_EXPORTS
-
-
 
 template <>
 struct std::hash<cv::Scalar>
@@ -38,12 +37,7 @@ public:
 	using map = std::unordered_map<cv::Scalar, std::string>;
 
 private:
-	std::uint16_t m_numberPictures;
 	map m_mediumColor;
-
-
-	std::string m_source;
-	std::string m_extension;
 	std::string m_processedPictures;
 	std::string m_dataBase;
 
@@ -51,30 +45,14 @@ public:
 	BasePictures(const uint16_t & = 0);
 
 	const map& GetMediumColor() const noexcept;
-	const void CreatePictures();
+	const void CreatePictures(const std::string& ="");
 
-	void SetFolder(const std::string&);
-	void SetPicturesNumber(const std::uint16_t&);
-
-	const uint16_t& GetPictureCount() const;
 	static cv::Mat ReadPhoto(const std::string & = "\n", const std::string & = Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
-
-public:
-	const std::string& GetFileSource() const;
-	void SetFileSource(const std::string&);
 
 	const std::string& GetFileDestination() const;
 	void SetFileDestination(const std::string&);
-
-	const std::string& GetExtension() const;
-	void SetExtension(const std::string&);
-
 	const uint16_t& GetNumberPictures() const;
-	void SetNumberPictures(const uint16_t&);
-
-	void SetDataBase(const std::string&);
-
-	void AddPicturesMosaic(const bool&);
-
+	
+	void AddBasePicturesMosaic();
 };
 

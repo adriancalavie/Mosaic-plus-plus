@@ -66,21 +66,36 @@ bool MainWindow::startMosaic()
 	}
 
 	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
+	BasePictures basePictures;
 
-	BasePictures test(5997);
+	if (!ui->checkBoxBasePictures->isChecked())
+	{
+		basePictures.AddBasePicturesMosaic();
+	}
+	if (basePicturePathString.size() > 0)
+	{
+		basePictures.CreatePictures(basePicturePathString);
+	}
 
-	test.AddPicturesMosaic(false);
+	if (basePictures.GetNumberPictures() == 0)
+	{
+		error->setWindowTitle("Error");
+		error->setWindowIcon(QIcon("Pictures\\error.png"));
+		error->setText("No base pictures for mosaic!");
+		error->show();
+		return false;
+	}
 
 	cv::Mat input = cv::imread(pictureForMosaicPathString, cv::IMREAD_COLOR);
 
-	cv::Mat input3 = Mosaic::MakeMosaic(input, test, Method::RESIZING, Type::SQUARE, 30, false);
+	cv::Mat input3 = Mosaic::MakeMosaic(input, basePictures, Method::RESIZING, Type::SQUARE, 30, false);
 
-	std::string str = Data::Defaults::PATH_RESULT_IMAGE + "Diamond.jpg";
+	std::string str = Data::Defaults::PATH_RESULT_IMAGE + "MosaicQt" + ".jpg";
 	cv::imwrite(str, input3);
 	QPixmap mosaic(std::move(QString::fromStdString(str)));
 	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),
 		ui->labelMosaicPicture->height(), Qt::IgnoreAspectRatio));
-	
+
 	static int value = 0;
 	ui->progressBarMosaic->setValue(++value);
 	return true;
@@ -96,7 +111,7 @@ void MainWindow::actionHelp()
 {
 	std::unique_ptr<QLabel> labelHelp = std::make_unique<QLabel>();
 	std::unique_ptr<QHBoxLayout> layoutLabelHelp = std::make_unique<QHBoxLayout>();
-	
+
 	labelHelp->setWindowTitle("Help");
 
 	QString textLayout(QString::fromStdString(Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP)));
