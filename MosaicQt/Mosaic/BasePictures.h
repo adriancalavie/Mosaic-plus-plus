@@ -44,14 +44,14 @@ private:
 public:
 	BasePictures(const uint16_t & = 0);
 
-	const map& GetMediumColor() const noexcept;
+	[[nodiscard]] const map& GetMediumColor() const noexcept;
 	const void CreatePictures(const std::string& ="");
 
 	static cv::Mat ReadPhoto(const std::string & = "\n", const std::string & = Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
 
-	const std::string& GetFileDestination() const;
+	[[nodiscard]] const std::string& GetFileDestination() const;
 	void SetFileDestination(const std::string&);
-	const uint16_t& GetNumberPictures() const;
+	[[nodiscard]] const uint16_t& GetNumberPictures() const;
 	
 	void AddBasePicturesMosaic();
 };

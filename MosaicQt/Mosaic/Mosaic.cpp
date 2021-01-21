@@ -6,12 +6,6 @@
 #include <random>
 #include <time.h> 
 
-//GETTER
-uint8_t Mosaic::GetDefaultSize()
-{
-	return defaultSize;
-}
-//END
 
 uint32_t EuclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor)
 {
@@ -50,8 +44,6 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const BasePictures& basePicture
 	//TODO : change partitionSize to width and height pair
 	assert(!image.empty());
 
-	//std::cout << "entered make mosaic\n";
-
 	cv::Mat copyOriginalImage = image;
 
 	std::cout << "Rows,Cols(before): " << image.rows << " " << image.cols << std::endl;
@@ -72,15 +64,12 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const BasePictures& basePicture
 			break;
 		}
 	}
-
 	std::cout << "Rows,Cols(after): " << image.rows << " " << image.cols << std::endl;
 
 	auto midX = image.cols / 2;
 	auto midY = image.rows / 2;
 
 	std::cout << "X,Y(mid): " << midX << " " << midY << std::endl;
-
-
 
 	switch (type)
 	{
@@ -95,29 +84,8 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const BasePictures& basePicture
 	}
 }
 
-int cmmdc(int firstNumber, int secondNumber)
-{
-	int res;
-	while (firstNumber % secondNumber)
-	{
-		res = firstNumber % secondNumber;
-		firstNumber = secondNumber;
-		secondNumber = res;
-	}
-
-	return secondNumber;
-}
-
-
-
 cv::Mat Mosaic::MakeRectangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
 {
-	//can be used to create squares as well
-	//removed redundant makeSquare function
-
-	int v1 = image.cols % partitionSize;
-	int v2 = image.rows % partitionSize;
-
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
 	for (int x = 0; x < image.cols - 1; x += partitionSize)
@@ -140,11 +108,6 @@ cv::Mat Mosaic::MakeRectangle(const std::unordered_map<cv::Scalar, std::string>&
 
 cv::Mat Mosaic::MakeTriangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
 {
-	int v1 = image.cols % partitionSize;
-	int v2 = image.rows % partitionSize;
-	bool v3 = v1 || v2;
-	assert(!v3);
-
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
 	for (auto x = 0; x < image.cols - 1; x += partitionSize)

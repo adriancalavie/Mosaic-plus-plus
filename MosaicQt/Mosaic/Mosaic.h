@@ -35,8 +35,6 @@ private:
 	using Point = std::pair <uint16_t, uint16_t>;
 	using pt = PictureTools;
 
-	static const uint8_t defaultSize = 10;
-
 public:
 	static void AlphaBlending(cv::Mat&, const cv::Scalar&);
 	friend uint32_t EuclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
@@ -44,9 +42,9 @@ public:
 	static cv::Mat MakeMosaic(const cv::Mat& image,
 		const BasePictures& basePictures,
 		const Method& method,
-		const Type& type = Type::SQUARE,
-		const uint8_t& partitionSize = defaultSize,
-		const Algorithm& algorithm=Algorithm::RIEMERSMA,
+		const Type& type,
+		const uint8_t& partitionSize,
+		const Algorithm& algorithm = Algorithm::RIEMERSMA,
 		const bool& blending = false);
 
 private:
@@ -57,12 +55,9 @@ private:
 		const Point& topL,
 		const uint8_t& type,
 		const Point & = { (uint16_t)0, (uint16_t)0 },
-		const Point & = { defaultSize, defaultSize });
+		const Point & = { (uint16_t)0, (uint16_t)0 });
 
 	static void ReplaceCellDiamond(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto, const Point& top);
-
-public:
-	static uint8_t GetDefaultSize();
 
 private:
 	static cv::Mat MakeRectangle(const std::unordered_map<cv::Scalar,
@@ -70,26 +65,26 @@ private:
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
-		const uint8_t& partitionSize = defaultSize);
+		const uint8_t& partitionSize);
 
 	static cv::Mat MakeTriangle(const std::unordered_map<cv::Scalar,
 		std::string>& dataPictures,
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
-		const uint8_t& partitionSize = defaultSize);
+		const uint8_t& partitionSize);
 
 	static cv::Mat MakeDiamond(const BasePictures::map& dataPictures,
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
-		const uint8_t& partitionSize = defaultSize);
+		const uint8_t& partitionSize);
 
 	static void MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
-		const uint8_t& partitionSize = defaultSize);
+		const uint8_t& partitionSize);
 private:
 	static cv::Mat FindPictureWithColorMed(const BasePictures::map& dataPictures,
 		const cv::Scalar& mediumColor,

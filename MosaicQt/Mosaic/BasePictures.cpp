@@ -7,7 +7,7 @@ BasePictures::BasePictures(const uint16_t& number) :
 	// EMPTY
 }
 
-const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const noexcept
+[[nodiscard]] const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const noexcept
 {
 	return m_mediumColor;
 }
@@ -25,10 +25,10 @@ const void BasePictures::CreatePictures(const std::string& dirName)
 			out << aux[0] << " "
 				<< aux[1] << " "
 				<< aux[2] << " "
-				<< entry.path().string().substr(dirName.size()) << std::endl;
+				<< entry.path().string().substr(dirName.size()+1) << std::endl;
 			cv::imwrite(m_processedPictures + entry.path().string().substr(dirName.size()), img);
 
-			m_mediumColor.insert(std::make_pair(std::move(aux), std::move(entry.path().string().substr(dirName.size()))));
+			m_mediumColor.insert(std::make_pair(std::move(aux), std::move(entry.path().string().substr(dirName.size()+1))));
 		}
 	}
 	out.close();
@@ -42,12 +42,12 @@ cv::Mat BasePictures::ReadPhoto(const std::string& pictureName, const std::strin
 
 }
 
-const uint16_t& BasePictures::GetNumberPictures() const
+[[nodiscard]] const uint16_t& BasePictures::GetNumberPictures() const
 {
 	return m_mediumColor.size();
 }
 
-const std::string& BasePictures::GetFileDestination() const
+[[nodiscard]] const std::string& BasePictures::GetFileDestination() const
 {
 	return m_processedPictures;
 }

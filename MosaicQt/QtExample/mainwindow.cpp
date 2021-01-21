@@ -23,9 +23,10 @@
 std::string MainWindow::selectBasePicturesFolder()
 {
 	QFileDialog dialog(this);
-	QString aux = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "D:",
+	QString aux = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "D:/",
 		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	ui->textEditBasePictureFolder->setText(aux);
+	
 	return aux.toStdString();
 }
 
@@ -74,7 +75,7 @@ bool MainWindow::startMosaic()
 	{
 		basePictures.CreatePictures(basePicturePathString);
 	}
-	if (basePictures.GetNumberPictures() == 0)
+	if (basePictures.GetNumberPictures() < 10)
 	{
 		error->setWindowTitle("Error");
 		error->setWindowIcon(QIcon("Pictures\\error.png"));
@@ -84,20 +85,21 @@ bool MainWindow::startMosaic()
 	}
 
 	cv::Mat input = cv::imread(pictureForMosaicPathString, cv::IMREAD_COLOR);
-	auto typeCell = [&] {
-		if (ui->diamondRadioButton->isChecked())
+
+	auto typeCell = [u = *ui]{
+		if (u.diamondRadioButton->isChecked())
 			return Type::DIAMOND;
-		if (ui->squareRadioButton->isChecked())
+		if (u.squareRadioButton->isChecked())
 			return Type::SQUARE;
 		return Type::TRIANGLE;
 	};
-	auto method = [&] {
-		if (ui->radioButtonMethodCropping->isChecked())
+	auto method = [u = *ui]{
+		if (u.radioButtonMethodCropping->isChecked())
 			return Method::CROPPING;
 		return Method::RESIZING;
 	};
-	auto algorithm = [&] {
-		if (ui->radioButtonEuclidianAlgorithm->isChecked())
+	auto algorithm = [u = *ui]{
+		if (u.radioButtonEuclidianAlgorithm->isChecked())
 			return Algorithm::EUCLIDEAN;
 		return Algorithm::RIEMERSMA;
 	};
@@ -106,18 +108,18 @@ bool MainWindow::startMosaic()
 
 	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
 
-	auto extension = [&] {
-		if (ui->extensionJPG->isChecked())
+	auto extension = [u = *ui]{
+		if (u.extensionJPG->isChecked())
 			return ".jpg";
 		return ".png";
 	};
 
-	auto outputPath = [&] {
-		if (ui->textEditFolderResultForPicture->toPlainText().toStdString().size() == 0)
+	auto outputPath = [u = *ui, &extension]{
+		if (u.textEditFolderResultForPicture->toPlainText().toStdString().size() == 0)
 		{
-			return Data::Defaults::PATH_RESULT_IMAGE + ui->textEditNameResultPicture->toPlainText().toStdString() + extension();
+			return Data::Defaults::PATH_RESULT_IMAGE + u.textEditNameResultPicture->toPlainText().toStdString() + extension();
 		}
-		return ui->textEditFolderResultForPicture->toPlainText().toStdString() + "/" + ui->textEditNameResultPicture->toPlainText().toStdString() + extension();
+		return u.textEditFolderResultForPicture->toPlainText().toStdString() + "/" + u.textEditNameResultPicture->toPlainText().toStdString() + extension();
 	};
 
 	if (!ui->checkBoxOriginalSize->isChecked())
@@ -162,7 +164,6 @@ void MainWindow::actionHelp()
 	help->setLayout(layoutLabelHelp.get());
 	help->setWindowTitle("ReadMe");
 	help->exec();
-	//help->setT
 }
 
 MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
