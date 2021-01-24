@@ -45,3 +45,29 @@ void QMosaicThread::workChunk()
         active = false;
     }
 }
+
+void QMosaicThread::toggle()
+{
+    QMutexLocker locker(&lock);
+    active = !active;
+
+    if (workDone == workAmount)
+    {
+        workDone = 0;
+        emit sendProgress(workDone, workSpeed);
+    }
+}
+
+void QMosaicThread::receiveWorkAmount(int _workAmount)
+{
+    workAmount = _workAmount;
+    workDone = 0;
+    active = false;
+    emit sendFinished();
+}
+
+void QMosaicThread::receiveWorkSpeed(int _workSpeed)
+{
+    QMutexLocker locker(&lock);
+    workSpeed = _workSpeed;
+}
