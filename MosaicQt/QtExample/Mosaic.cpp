@@ -34,6 +34,7 @@ void Mosaic::AlphaBlending(cv::Mat& image, const cv::Scalar& color)
 
 cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const BasePictures& basePictures, const Method& method, const Type& type, const uint8_t& partitionSize, const Algorithm& algorithm, const bool& blending)
 {
+	//progress = 0;
 	//TODO : change partitionSize to width and height pair
 	assert(!image.empty());
 
@@ -82,6 +83,7 @@ cv::Mat Mosaic::MakeRectangle(const std::unordered_map<cv::Scalar, std::string>&
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
 	for (int x = 0; x < image.cols - 1; x += partitionSize)
+	{
 		for (int y = 0; y < image.rows - 1; y += partitionSize)
 		{
 			cv::Scalar mediumColor = pt::averageColorRectangle(image, { y,x }, { partitionSize,partitionSize });
@@ -94,8 +96,12 @@ cv::Mat Mosaic::MakeRectangle(const std::unordered_map<cv::Scalar, std::string>&
 			{
 				AlphaBlending(cell, mediumColor);
 			}
-			Mosaic::ReplaceCellRectangle(result, std::move(cell), std::make_pair(y, x));
+			Mosaic::ReplaceCellRectangle(result, std::move(cell), { y,x });
 		}
+
+	/*	progress += 10;*/
+	}
+		
 	return result;
 }
 

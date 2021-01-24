@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <random>
 #include <time.h> 
+#include <atomic>
 
 #include "BasePictures.h"
 #include "Data.h"
@@ -28,8 +29,12 @@ enum class Algorithm {
 	RIEMERSMA
 };
 
+static int count = 0;
+//std::atomic_uint8_t progress = 0;
+
 class Mosaic
 {
+public:
 
 private:
 	using Point = std::pair <uint16_t, uint16_t>;

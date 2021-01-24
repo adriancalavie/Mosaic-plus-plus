@@ -1,12 +1,64 @@
 #include "mainwindow.h"
 
+//void MainWindow::setupConnections()
+//{
+//	
+//
+//	//// Slots and signals
+//	//// Connect buttons to slots
+//	///*connect(ui->buttonToggleWorker, SIGNAL(clicked()), this, SLOT(setThreadState()));*/
+//
+//	///*connect(ui->spinBoxWorkAmount, SIGNAL(valueChanged(int)), this, SLOT(setWorkAmount(int)));
+//	//connect(ui->sliderWorkSpeed, SIGNAL(valueChanged(int)), this, SLOT(setWorkSpeed(int)));*/
+//
+//	//// Create thread, worker and timer
+//	//thread = std::make_unique<QThread>();
+//	//// Important that both the worker and timer are NOT members of this widget class otherwise thread affinity will not change at all!
+//	//QMosaicThread* worker = new QMosaicThread();
+//	//QTimer* timer = new QTimer();
+//	//timer->setInterval(0);  // Timer's inteveral set to 0 means that timer will trigger an event as soon as there are no other events to be processed
+//
+//	//// Connect worker to widget and vice verser (buttons, progressBarWork)
+//	//// Connect timer to worker
+//	//connect(worker, SIGNAL(sendThreadStatus(QString)), this, SLOT(receiveThreadStatus(QString)));
+//	//connect(worker, SIGNAL(sendFinished()), this, SLOT(receiveFinished()));
+//	//connect(worker, SIGNAL(sendProgress(int, int)), this, SLOT(receiveProgress(int, int)));
+//
+//	//connect(this, SIGNAL(sendWorkAmount(int)), worker, SLOT(receiveWorkAmount(int)));
+//	//connect(this, SIGNAL(sendWorkSpeed(int)), worker, SLOT(receiveWorkSpeed(int)));
+//	//connect(this, SIGNAL(toggleThread()), worker, SLOT(toggle()));
+//
+//	//connect(timer, SIGNAL(timeout()), worker, SLOT(doWork()));
+//	//connect(thread.get(), SIGNAL(started()), timer, SLOT(start()));
+//
+//	//// Mark timer and worker for deletion ones the thread is stopped
+//	//connect(thread.get(), SIGNAL(finished()), worker, SLOT(deleteLater()));
+//	//connect(thread.get(), SIGNAL(finished()), timer, SLOT(deleteLater()));
+//	//connect(thread.get(), SIGNAL(finished()), thread.get(), SLOT(deleteLater()));
+//
+//
+//	//// Start timer and move to thread
+//	//timer->moveToThread(thread.get());
+//
+//	//// Move worker to thread
+//	//worker->moveToThread(thread.get());
+//
+//	//// Send initial work amount and speed to worker
+//	///*emit sendWorkAmount(ui->spinBoxWorkAmount->value());
+//	//emit sendWorkSpeed(ui->sliderWorkSpeed->value() * 10);*/
+//
+//	//// Start main event loop of thread
+//	//thread->start();
+//
+//}
+
 std::string MainWindow::selectBasePicturesFolder()
 {
 	QFileDialog dialog(this);
 	QString aux = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "D:/",
 		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	ui->textEditBasePictureFolder->setText(aux);
-	
+
 	return aux.toStdString();
 }
 
@@ -89,9 +141,15 @@ bool MainWindow::startMosaic()
 	auto test = [u = *ui, &output, &input, &basePictures, &method, &typeCell, &algorithm]{
 		output = Mosaic::MakeMosaic(input, basePictures, method(), typeCell(), u.spinBoxCellSize->value(), algorithm(), u.checkBoxBlendingPicture->isChecked());
 	};
+	static int value = 0;
+	auto test1 = [u = *ui, &value = value]{
+		u.progressBarMosaic->setValue(value);
+		value++;
+	};
 	std::thread t1{ test };
-
+	std::thread t2{ test1 };
 	t1.join();
+	t2.join();
 
 	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
 
@@ -120,7 +178,7 @@ bool MainWindow::startMosaic()
 		ui->labelMosaicPicture->height(), Qt::IgnoreAspectRatio));
 
 	//Mosaic::progress = 10;
-	ui->progressBarMosaic->setValue(100);
+	/*ui->progressBarMosaic->setValue(100);*/
 	return true;
 }
 
@@ -154,6 +212,46 @@ void MainWindow::actionHelp()
 	help->exec();
 }
 
+void MainWindow::incrementProgressBar()
+{
+	//static int value = 0;
+	///*ui->progressBarMosaic->setValue(value);
+	//value++;*/
+
+	//auto increment = [this] {
+	//	while (ui->progressBarMosaic->value() <=100)
+	//	{
+	//		ui->progressBarMosaic->setValue(value++);
+	//		std::cout << "Increased progress bar\n";
+	//	}
+	//	return;
+	//};
+
+	///*auto increaseValue = [] {
+	//	value++;
+	//	std::cout << "Increased value\n";
+	//	if (value > 100)
+	//		return;
+	//};*/
+
+	///*std::thread t1{ increment };*/
+	//QThread* thread = new QThread();
+
+	//thread->create(increment);
+	//thread->start();
+
+	//thread->quit();
+	///*t1.join();*/
+	
+
+	while (count <= 100)
+	{
+		ui->progressBarMosaic->setValue(count++);
+		std::cout << "added\n";
+	}
+	count = 0;
+}
+
 MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 	QMainWindow(parent.get()),
 	ui(new Ui::MainWindow)
@@ -162,12 +260,17 @@ MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 	connect(ui->buttonBasePicturesFolder, &QPushButton::released, this, &MainWindow::selectBasePicturesFolder);
 	connect(ui->buttonPictureForMosaic, &QPushButton::released, this, &MainWindow::selectPictureForMosaic);
 	connect(ui->buttonFolderForTheResult, &QPushButton::released, this, &MainWindow::selectFolderForResult);
-	connect(ui->buttonMakeMosaic, &QPushButton::released, this, &MainWindow::startMosaic);
+	/*connect(ui->buttonMakeMosaic, &QPushButton::released, this, &MainWindow::startMosaic);*/
+	connect(ui->buttonMakeMosaic, &QPushButton::released, this, &MainWindow::incrementProgressBar);
 	connect(ui->actionExit, &QAction::triggered, this, &MainWindow::actionExit);
 	connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::actionHelp);
+	//connect(/*SENDER*/, /*SIGNAL*/, this, /*INCREMENT PROGRESSBAR*/);
+
+	/*setupConnections();*/
 }
 
 MainWindow::~MainWindow()
 {
+	//EMPTY
 }
 
