@@ -1,10 +1,16 @@
 #pragma once
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <cstdlib>
+#include <algorithm>
+#include <random>
+#include <time.h> 
+
 #include "BasePictures.h"
 #include "Data.h"
+#include "../../Mosaic++/Picture Tools/PictureTools.h"
 
 enum class Method {
 	CROPPING,
@@ -22,17 +28,9 @@ enum class Algorithm {
 	RIEMERSMA
 };
 
-
-#ifdef MOSAIC_EXPORTS
-#define MOSAIC_API __declspec(dllexport)
-#else
-#define MOSAIC_API __declspec(dllimport)
-#endif
-
-class MOSAIC_API Mosaic
+class Mosaic
 {
-//public:
-//	static uint8_t progress;
+
 private:
 	using Point = std::pair <uint16_t, uint16_t>;
 	using pt = PictureTools;
@@ -93,4 +91,6 @@ private:
 		std::string& pictureDifferent,
 		const Algorithm& algorithm);
 };
+
+
 

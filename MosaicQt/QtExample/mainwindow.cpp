@@ -1,24 +1,4 @@
 #include "mainwindow.h"
-#include <QProcess>
-#include "ui_mainwindow.h"
-#include <iostream>
-#include <QFileDialog>
-#include <fstream>
-#include <QMessageBox>
-#include <QPicture>
-#include <QAction>
-#include <qboxlayout.h>
-#include <qlabel.h>
-#include <windows.h>
-#include <QStringListModel>
-#include "..\Mosaic\Data.h"
-#include "..\Mosaic\Data.cpp"
-#include "..\Mosaic\BasePictures.h"
-#include "..\Mosaic\BasePictures.cpp"
-#include "..\Mosaic\Mosaic.h"
-#include "..\Mosaic\Mosaic.cpp"
-#include <fstream>
-#include <thread>
 
 std::string MainWindow::selectBasePicturesFolder()
 {
@@ -104,7 +84,14 @@ bool MainWindow::startMosaic()
 		return Algorithm::RIEMERSMA;
 	};
 
-	cv::Mat output = Mosaic::MakeMosaic(input, basePictures, method(), typeCell(), ui->spinBoxCellSize->value(), algorithm(), ui->checkBoxBlendingPicture->isChecked());
+	cv::Mat output;
+
+	auto test = [u = *ui, &output, &input, &basePictures, &method, &typeCell, &algorithm]{
+		output = Mosaic::MakeMosaic(input, basePictures, method(), typeCell(), u.spinBoxCellSize->value(), algorithm(), u.checkBoxBlendingPicture->isChecked());
+	};
+	std::thread t1{ test };
+
+	t1.join();
 
 	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
 
@@ -132,6 +119,7 @@ bool MainWindow::startMosaic()
 	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),
 		ui->labelMosaicPicture->height(), Qt::IgnoreAspectRatio));
 
+	//Mosaic::progress = 10;
 	ui->progressBarMosaic->setValue(100);
 	return true;
 }

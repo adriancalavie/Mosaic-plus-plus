@@ -44,8 +44,8 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>C:\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Mosaic++\MosaicQt\Mosaic;C:\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Mosaic++\MosaicQt\x64\Debug;C:\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
@@ -97,10 +97,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Mosaic.cpp" />
+    <ClCompile Include="StopWatch.cpp" />
     <QtRcc Include="mainwindow.qrc" />
     <QtUic Include="DialogButtonBottom.ui" />
     <QtUic Include="mainwindow.ui" />
     <QtMoc Include="mainwindow.h" />
+    <ClCompile Include="BasePictures.cpp" />
+    <ClCompile Include="Data.cpp" />
     <ClCompile Include="HelpDialog.cpp" />
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="main.cpp" />
@@ -112,14 +116,15 @@
     <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BasePictures.h" />
+    <ClInclude Include="Data.h" />
     <ClInclude Include="HelpDialog.h" />
+    <ClInclude Include="Mosaic.h" />
+    <ClInclude Include="StopWatch.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Mosaic++\Picture Tools\Picture Tools.vcxproj">
       <Project>{11830f8b-52b4-467e-9a3d-151a282d6d54}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosaic\Mosaic.vcxproj">
-      <Project>{f8d862a3-f18d-4dba-9f0f-cb63ea99f70d}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
