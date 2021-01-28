@@ -32,7 +32,7 @@ void Mosaic::AlphaBlending(cv::Mat& image, const cv::Scalar& color)
 	}
 }
 
-cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const BasePictures& basePictures, const Method& method, const Type& type, const uint8_t& partitionSize, const Algorithm& algorithm, const bool& blending)
+cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const BasePictures& basePictures, const Method& method, const Type& type, const uint8_t& partitionSize, const Algorithm& algorithm, const bool& blending, QProgressBar* progressBar)
 {
 	//progress = 0;
 	//TODO : change partitionSize to width and height pair
@@ -68,18 +68,21 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const BasePictures& basePicture
 	switch (type)
 	{
 	case Type::SQUARE:
-		return MakeRectangle(basePictures.GetMediumColor(), copyOriginalImage, algorithm, blending, partitionSize);
+		return MakeRectangle(basePictures.GetMediumColor(), copyOriginalImage, algorithm, blending, partitionSize, progressBar);
 	case Type::TRIANGLE:
-		return MakeTriangle(basePictures.GetMediumColor(), copyOriginalImage, algorithm, blending, partitionSize);
+		return MakeTriangle(basePictures.GetMediumColor(), copyOriginalImage, algorithm, blending, partitionSize, progressBar);
 	case Type::DIAMOND:
-		return MakeDiamond(basePictures.GetMediumColor(), copyOriginalImage, algorithm, blending, partitionSize);
+		return MakeDiamond(basePictures.GetMediumColor(), copyOriginalImage, algorithm, blending, partitionSize, progressBar);
 	default:
 		break;
 	}
 }
 
-cv::Mat Mosaic::MakeRectangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
+cv::Mat Mosaic::MakeRectangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize, QProgressBar* progressBar)
 {
+	double progresBarValue = 0;
+	double  partitions = 100.0 / (image.cols / partitionSize);
+
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
 	for (int x = 0; x < image.cols - 1; x += partitionSize)
@@ -92,24 +95,28 @@ cv::Mat Mosaic::MakeRectangle(const std::unordered_map<cv::Scalar, std::string>&
 			cv::Mat cell = std::move(FindPictureWithColorMed(dataPictures, mediumColor, pictureName, algorithm));
 			cell = pt::resize(cell, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION);
 
-			if (blending)
-			{
-				AlphaBlending(cell, mediumColor);
-			}
+			if (blending) AlphaBlending(cell, mediumColor);
+
 			Mosaic::ReplaceCellRectangle(result, std::move(cell), { y,x });
 		}
-
-	/*	progress += 10;*/
+		if (progressBar != nullptr) {
+			progresBarValue += partitions;
+			progressBar->setValue((int)progresBarValue);
+		}
 	}
-		
+	if (progressBar != nullptr)
+		progressBar->setValue(100);
 	return result;
 }
 
-cv::Mat Mosaic::MakeTriangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
+cv::Mat Mosaic::MakeTriangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize, QProgressBar* progressBar)
 {
+	double progresBarValue = 0;
+	double  partitions = 100.0 / (image.cols / partitionSize);
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
-
-	for (auto x = 0; x < image.cols - 1; x += partitionSize)
+	
+	for (auto x = 0; x < image.cols - 1; x += partitionSize) 
+	{
 		for (auto y = 0; y < image.rows - 1; y += partitionSize)
 		{
 			//random type triangle 1|2 or 3|4
@@ -159,15 +166,23 @@ cv::Mat Mosaic::MakeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 			else
 				Mosaic::ReplaceCellTriangle(result, std::move(cell), std::make_pair(y, x), 4, { 0,0 }, { partitionSize, partitionSize });
 		}
+		if (progressBar != nullptr) {
+			progresBarValue += partitions;
+			progressBar->setValue((int)progresBarValue);
+		}
+	}
+	if (progressBar != nullptr)
+		progressBar->setValue(100);
 	return result;
 }
 
-cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
+cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize, QProgressBar* progressBar)
 {
-
+	double progresBarValue = 0;
+	double  partitions = 100.0 / (image.cols / partitionSize);
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
-	for (auto x = 0; x < image.cols - 1; x += partitionSize)
+	for (auto x = 0; x < image.cols - 1; x += partitionSize) {
 		for (auto y = 0; y < image.rows - 1; y += partitionSize)
 		{
 			// compare partitionAverage with mapped images's average;
@@ -193,14 +208,19 @@ cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat
 				Mosaic::ReplaceCellDiamond(result, std::move(cell), std::make_pair(yDiamond, x + partitionSize));
 
 		}
+		if (progressBar != nullptr)
+		{
+			progresBarValue += partitions;
+			progressBar->setValue((int)progresBarValue);
+		}
+	}
 
-
-	Mosaic::MakeMargins(result, dataPictures, image, algorithm, blending, partitionSize);
+	Mosaic::MakeMargins(result, dataPictures, image, algorithm, blending, partitionSize, progressBar);
 
 	return result;
 }
 
-void Mosaic::MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
+void Mosaic::MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize, QProgressBar* progressBar)
 {
 
 	unsigned int x_left = 0;
@@ -269,7 +289,8 @@ void Mosaic::MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
 		ReplaceCellTriangle(result, std::move(cellBottom), { yDiamond, xDiamond }, 2, { y_top, y_top }, { partitionSize / 2 , partitionSize / 2 });
 
 	}
-
+	if (progressBar != nullptr)
+		progressBar->setValue(100);
 }
 
 

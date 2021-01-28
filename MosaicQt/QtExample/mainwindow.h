@@ -9,6 +9,7 @@
 #include <QStringListModel>
 #include <QProcess>
 #include <QFileDialog>
+#include <qprogressbar.h>
 #include <qtimer.h>
 #include <qthread.h>
 
@@ -17,17 +18,7 @@
 #include <fstream>
 #include <iostream>
 #include <qlabel.h>
-#include <windows.h>
 #include <fstream>
-#include <thread>
-#include <atomic>
-
-//#include "..\Mosaic\Data.h"
-//#include "..\Mosaic\Data.cpp"
-//#include "..\Mosaic\BasePictures.h"
-//#include "..\Mosaic\BasePictures.cpp"
-//#include "..\Mosaic\Mosaic.h"
-//#include "..\Mosaic\Mosaic.cpp"
 
 #include "Mosaic.h"
 #include "StopWatch.h"
@@ -40,14 +31,12 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(std::unique_ptr<QWidget> parent = Q_NULLPTR);
     ~MainWindow();
+
 private:
-    
     std::unique_ptr<Ui::MainWindow> ui = std::make_unique<Ui::MainWindow>();
     std::unique_ptr<QDialog> help = std::make_unique<QDialog>();
     std::unique_ptr<QMessageBox> error = std::make_unique<QMessageBox>();
-   /* std::unique_ptr<QThread> thread;*/
-
-    /*void setupConnections();*/
+    
 private slots:
     std::string selectBasePicturesFolder();
     std::string selectPictureForMosaic();
@@ -55,5 +44,4 @@ private slots:
     bool startMosaic();
     void actionExit();
     void actionHelp();
-    void incrementProgressBar();
 };
