@@ -235,10 +235,3 @@ cv::Scalar PictureTools::averageColorTriangle(const cv::Mat& image, const Point&
 	return cv::Scalar(blue, green, red);
 }
 
-cv::Scalar PictureTools::averageColorDiamond(const cv::Mat& image, const Point& top)
-{
-	return cv::Scalar();
-}
-
-
-

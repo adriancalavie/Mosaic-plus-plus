@@ -21,9 +21,9 @@ uint32_t RiemersmaDistance(const cv::Scalar& firstColor, const cv::Scalar& secon
 
 void Mosaic::AlphaBlending(cv::Mat& image, const cv::Scalar& color)
 {
-	for (auto x = 0; x < image.rows; ++x)
+	for (int x = 0; x < image.rows; ++x)
 	{
-		for (auto y = 0; y < image.cols; ++y)
+		for (int y = 0; y < image.cols; ++y)
 		{
 			image.at<cv::Vec3b>(x, y)[0] = (image.at<cv::Vec3b>(x, y)[0] + color[0]) / 2;
 			image.at<cv::Vec3b>(x, y)[1] = (image.at<cv::Vec3b>(x, y)[1] + color[1]) / 2;
@@ -235,7 +235,7 @@ cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat
 			for (int y = start.second; y < end.second - 1; y += partitionSize)
 			{
 				// compare partitionAverage with mapped images's average;
-				cv::Scalar medColor = pt::averageColorRectangle(image, { x,y }, { partitionSize,partitionSize });
+				cv::Scalar medColor = pt::averageColorRectangle(image, { x,y }, { partitionSize, partitionSize });
 
 				std::string namePhoto = "";
 				cv::Mat cell = std::move(FindPictureWithColorMed(dataPictures, medColor, namePhoto, algorithm));
@@ -248,12 +248,12 @@ cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat
 				Mosaic::ReplaceCellDiamond(result, std::move(cell), std::make_pair(x, y + (partitionSize) / 2));
 			}
 		}
-		for (int x = start.first+ (partitionSize + 1) / 2; x < end.first - 1; x += partitionSize)
+		for (int x = start.first+ (partitionSize + 1) / 2; x < end.first  -partitionSize - 1; x += partitionSize)
 		{
-			for (int y = start.second+ partitionSize; y < end.second - 1; y += partitionSize)
+			for (int y = start.second+partitionSize/2; y < end.second - partitionSize - 1; y += partitionSize)
 			{
 				// compare partitionAverage with mapped images's average;
-				cv::Scalar medColor = pt::averageColorRectangle(image, { x- partitionSize  ,y - partitionSize  }, { partitionSize,partitionSize });
+				cv::Scalar medColor = pt::averageColorRectangle(image, { x,y }, { partitionSize, partitionSize });
 
 				std::string namePhoto = "";
 				cv::Mat cell = std::move(FindPictureWithColorMed(dataPictures, medColor, namePhoto, algorithm));
@@ -277,7 +277,7 @@ cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat
 	int coloane = partitii_coloane / 2 * partitionSize;
 
 	start1 = { 0,0 };
-	end1 = { randuri, coloane };
+	end1 = { randuri+partitionSize, coloane+partitionSize };
 
 	start2 = { 0,coloane };
 	end2 = { randuri, image.cols };
@@ -285,7 +285,7 @@ cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat
 	start3 = { randuri,0 };
 	end3 = { image.rows, coloane };
 
-	start4 = { randuri,coloane };
+	start4 = { randuri-partitionSize,coloane-partitionSize };
 	end4 = { image.rows, image.cols };
 
 	std::thread t1{ test, std::ref(start1), std::ref(end1) };
@@ -310,7 +310,7 @@ void Mosaic::MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
 	unsigned int x_right = image.cols - partitionSize;
 
 
-	for (auto y = 0; y < image.rows - 1; y += partitionSize)
+	for (int y = 0; y < image.rows - 1; y += partitionSize)
 	{
 		cv::Scalar medColorLeft = pt::averageColorRectangle(image, { y,x_left }, { partitionSize,partitionSize });
 		cv::Scalar medColorRight = pt::averageColorRectangle(image, { y,x_right }, { partitionSize,partitionSize });
@@ -343,7 +343,7 @@ void Mosaic::MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
 	unsigned int y_top = 0;
 	unsigned int y_bottom = image.rows - partitionSize;
 
-	for (auto x = 0; x < image.cols - 1; x += partitionSize)
+	for (int x = 0; x < image.cols - 1; x += partitionSize)
 	{
 		cv::Scalar medColorTop = pt::averageColorRectangle(image, { y_top,x }, { partitionSize,partitionSize });
 		cv::Scalar medColorBottom = pt::averageColorRectangle(image, { y_bottom,x }, { partitionSize,partitionSize });
@@ -403,8 +403,8 @@ void Mosaic::ReplaceCellRectangle(cv::Mat& originalPicture, cv::Mat&& mosaicPhot
 {
 	assert(!originalPicture.empty());
 
-	for (auto index_rows = 0; index_rows < mosaicPhoto.rows; index_rows++)
-		for (auto index_cols = 0; index_cols < mosaicPhoto.cols; index_cols++)
+	for (int index_rows = 0; index_rows < mosaicPhoto.rows; index_rows++)
+		for (int index_cols = 0; index_cols < mosaicPhoto.cols; index_cols++)
 		{
 			originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[0] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[0]);
 			originalPicture.at<cv::Vec3b>(index_rows + topL.first, index_cols + topL.second)[1] = std::move(mosaicPhoto.at<cv::Vec3b>(index_rows, index_cols)[1]);

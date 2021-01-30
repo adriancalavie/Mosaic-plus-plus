@@ -67,10 +67,10 @@ const std::string Data::Defaults::PATH_TEST_IMAGE = "..//test.jpg";
 const std::string Data::Defaults::PATH_RESULT_IMAGE = "..//..//Mosaic++\\Resulting pictures\\";
 #else
 const std::string Data::Defaults::PARENT_PATH = "..//..//Mosaic++\\";
-const std::string Data::Defaults::PATH_BASE_PICTURES = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\Mosaic++\\Base pictures\\";
-const std::string Data::Defaults::PATH_PICTURES_FOR_MOSAIC = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\Mosaic++\\Pictures for mosaics\\";
-const std::string Data::Defaults::PATH_DATA_BASE_FILE = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\Mosaic++\\Mosaic++\\data_base.txt";
+const std::string Data::Defaults::PATH_BASE_PICTURES = "..//..//Mosaic++\\Base pictures\\";
+const std::string Data::Defaults::PATH_PICTURES_FOR_MOSAIC = "..//..//Mosaic++\\Pictures for mosaics\\";
+const std::string Data::Defaults::PATH_DATA_BASE_FILE = "..//..//Mosaic++\\Mosaic++\\data_base.txt";
 const std::string Data::Defaults::PATH_TEST_IMAGE = "..//test.jpg";
-const std::string Data::Defaults::PATH_RESULT_IMAGE = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\Mosaic++\\Resulting pictures\\";
+const std::string Data::Defaults::PATH_RESULT_IMAGE = "..//..//Mosaic++\\Resulting pictures\\";
 #endif
 //DEFAULTS END
