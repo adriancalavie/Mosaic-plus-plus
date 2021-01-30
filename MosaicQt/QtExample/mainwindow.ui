@@ -539,7 +539,7 @@ background:#148dfa;
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="toolTip">
-     <string/>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body style=&quot;background-color:#19232D&quot;&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select folder to your picture &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;database.&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; The pictures are added in our&lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt; database&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; font-style:italic;&quot;&gt;This path is not mandatory.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;WARNING: &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; font-style:italic;&quot;&gt;All the photos will be resized to 100px X 100px using Bilinear Interpeloation.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius: 10px;;
@@ -564,7 +564,7 @@ background:#148dfa;</string>
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="toolTip">
-     <string/>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body style=&quot;background-color:#19232D&quot;&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select a picture to be &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;Mosaiced.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;The picture will not be modified.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius: 10px;;
@@ -589,7 +589,7 @@ background:#148dfa;</string>
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="toolTip">
-     <string/>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body style=&quot;background-color:#19232D&quot;&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select the folder in which the&lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt; Mosaiced&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; picture will be saved.&lt;/span&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; font-style:italic;&quot;&gt;This path is not mandatory.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius: 10px;;
@@ -888,8 +888,8 @@ border-color: rgb(181, 204, 214);</string>
     <property name="geometry">
      <rect>
       <x>250</x>
-      <y>170</y>
-      <width>181</width>
+      <y>160</y>
+      <width>201</width>
       <height>31</height>
      </rect>
     </property>
@@ -2058,7 +2058,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
