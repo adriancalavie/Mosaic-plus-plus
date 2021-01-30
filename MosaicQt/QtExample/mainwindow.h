@@ -42,7 +42,6 @@ private slots:
     std::string SelectPictureForMosaic();
     std::string SelectFolderForResult();
     bool StartMosaic();
-    bool StartPressed();
     void ActionExit();
     void ActionHelp();
 };

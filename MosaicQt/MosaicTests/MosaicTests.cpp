@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-
+#define private public
 #include "../QtExample/Mosaic.h"
 #include "../QtExample/Mosaic.cpp"
 #include "../QtExample/BasePictures.h"
@@ -9,7 +9,7 @@
 #include "../QtExample/Data.cpp"
 #include "../QtExample/StopWatch.h"
 #include "../QtExample/StopWatch.cpp"
-
+#undef private
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace MosaicTests
@@ -17,11 +17,6 @@ namespace MosaicTests
 	TEST_CLASS(MosaicTests)
 	{
 	public:
-
-		TEST_METHOD(TestMethod1)
-		{
-			//EMPTY
-		}
 
 		TEST_METHOD(TestEuclideanDistance)
 		{
@@ -60,7 +55,6 @@ namespace MosaicTests
 			Assert::IsTrue(test.GetMediumColor().size() > 0);
 		}
 
-
 		TEST_METHOD(TestAddPicturesMosaicTest)
 		{
 			std::ifstream in("data_base.txt");
@@ -70,12 +64,11 @@ namespace MosaicTests
 		TEST_METHOD(TestBlending)
 		{
 			cv::Scalar color2(255, 255, 255);
-			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
 			cv::Mat copyTestImage = testImage;
 			PictureTools::AlphaBlending(testImage, color2);
 
-			Assert::IsTrue(testImage.empty());
-
+			Assert::IsTrue(!testImage.empty());
 		}
 
 		TEST_METHOD(TestRiemersma)
@@ -158,26 +151,25 @@ namespace MosaicTests
 
 		TEST_METHOD(TestResizeNeighbour)
 		{
-			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
 
 			testImage = PictureTools::Resize(testImage, 600, 600, PictureTools::Algorithm::NEAREST_NEIGHBOUR);
 
 			bool testingSize = testImage.rows == 600 && testImage.cols == 600;
 
-			//Assert::IsTrue(testingSize);
-			Assert::IsTrue(!testImage.empty());
+			Assert::IsTrue(!(testImage.empty() && testingSize));
 		}
 
 		TEST_METHOD(TestResizeBilinearInterpolation)
 		{
-			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
 
 			testImage = PictureTools::Resize(testImage, 1200, 780, PictureTools::Algorithm::BILINEAR_INTERPOLATION);
 
 			bool testingSize = testImage.rows == 1200 && testImage.cols == 780;
 
-			//Assert::IsTrue(testingSize);
-			Assert::IsTrue(!testImage.empty());
+			Assert::IsTrue(!(testImage.empty() && testingSize));
+
 		}
 
 		TEST_METHOD(TestCrop)
@@ -198,5 +190,117 @@ namespace MosaicTests
 
 			Assert::IsTrue(isEqual);
 		}
+
+		TEST_METHOD(TestMakeMosaicSquare)
+		{
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
+			BasePictures pictures;
+			pictures.AddBasePicturesMosaic();
+			cv::Mat output = Mosaic::MakeMosaic(testImage, pictures, Method::RESIZING, Type::SQUARE, testImage.rows / 10, Algorithm::RIEMERSMA, false);
+			Assert::IsTrue(testImage.empty() && output.empty());
+		}
+
+		TEST_METHOD(TestMakeMosaicTriangle)
+		{
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
+			BasePictures pictures;
+			pictures.AddBasePicturesMosaic();
+			cv::Mat output = Mosaic::MakeMosaic(testImage, pictures, Method::RESIZING, Type::TRIANGLE, testImage.rows / 10, Algorithm::RIEMERSMA, false);
+			Assert::IsTrue(testImage.empty() && output.empty());
+		}
+
+		TEST_METHOD(TestMakeMosaicDiamond)
+		{
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
+			BasePictures pictures;
+			pictures.AddBasePicturesMosaic();
+			cv::Mat output = Mosaic::MakeMosaic(testImage, pictures, Method::RESIZING, Type::DIAMOND, testImage.rows / 10, Algorithm::RIEMERSMA, false);
+			Assert::IsTrue(testImage.empty() && output.empty());
+		}
+
+		TEST_METHOD(TestMediumColorSquare)
+		{
+			cv::Scalar color(-1, -1, -1);
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
+			color = PictureTools::AverageColorRectangle(testImage, { 0,0 }, { testImage.rows, testImage.cols });
+			if (color[0] == -1 || color[1] == -1 || color[2] == -1)
+				Assert::IsTrue(true);
+		}
+
+		TEST_METHOD(TestMediumColorTriangle)
+		{
+			cv::Scalar color(-1, -1, -1);
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
+
+			auto test = [&](uint8_t type)
+			{
+				color = PictureTools::AverageColorTriangle(testImage, { 0,0 }, { testImage.rows, testImage.cols }, 1);
+				if (color[0] == -1 || color[1] == -1 || color[2] == -1)
+					Assert::IsTrue(true);
+				color[0] == -1;
+				color[1] == -1;
+				color[2] == -1;
+			};
+			test(1);
+			test(2);
+			test(3);
+			test(4);
+		}
+
+		TEST_METHOD(TestReplaceCellSquare)
+		{
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
+			cv::Mat output(testImage.rows, testImage.cols, CV_8UC3);
+			output = cv::Scalar(0, 0, 0);
+
+			Mosaic::ReplaceCellRectangle(output, std::move(testImage), { 0,0 });
+			cv::Scalar medColor = PictureTools::AverageColorRectangle(output, { 0,0 }, { output.rows, output.cols });
+			if (medColor[0] == 0 && medColor[1] == 0 && medColor[2] == 0)
+				Assert::IsTrue(true);
+		}
+
+		TEST_METHOD(TestReplaceCellDiamond)
+		{
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
+			cv::Mat output(testImage.rows, testImage.cols, CV_8UC3);
+			output = cv::Scalar(0, 0, 0);
+			Mosaic::ReplaceCellDiamond(output, std::move(testImage), { 0,testImage.cols / 2 });
+
+			cv::Scalar medColor = PictureTools::AverageColorRectangle(output, { 0,0 }, { output.rows, output.cols });
+			if (medColor[0] == 0 && medColor[1] == 0 && medColor[2] == 0)
+				Assert::IsTrue(true);
+		}
+
+		TEST_METHOD(TestReplaceCellTriangle)
+		{
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
+			cv::Mat output(testImage.rows, testImage.cols, CV_8UC3);
+			output = cv::Scalar(0, 0, 0);
+
+			auto test = [&](uint8_t type)
+			{
+				Mosaic::ReplaceCellTriangle(output, std::move(testImage), { 0,0 }, type, { 0,0 }, { testImage.rows, testImage.cols });
+				cv::Scalar medColor = PictureTools::AverageColorRectangle(output, { 0,0 }, { output.rows, output.cols });
+				if (medColor[0] == 0 && medColor[1] == 0 && medColor[2] == 0)
+					Assert::IsTrue(true);
+				output = cv::Scalar(0, 0, 0);
+			};
+			test(1);
+			test(2);
+			test(3);
+			test(4);
+		}
+
+		TEST_METHOD(TestFindMediumColorPicture)
+		{
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
+			BasePictures basePicture;
+			basePicture.AddBasePicturesMosaic();
+			cv::Scalar medColor = PictureTools::AverageColorRectangle(testImage, { 0,0 }, { testImage.rows, testImage.cols });
+			std::string namePicture;
+			testImage = Mosaic::FindPictureWithColorMed(basePicture.GetMediumColor(), medColor, namePicture, Algorithm::RIEMERSMA);
+			Assert::IsTrue(!testImage.empty());
+		}
+
 	};
 }

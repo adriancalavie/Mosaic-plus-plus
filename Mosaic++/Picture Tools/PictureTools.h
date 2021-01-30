@@ -28,9 +28,6 @@ private:
 	using Point = std::pair <uint16_t, uint16_t>;
 
 private:
-	static const uint8_t defaultSize = 10;
-
-private:
 	static uint8_t ValueCheck(int number);
 
 private:

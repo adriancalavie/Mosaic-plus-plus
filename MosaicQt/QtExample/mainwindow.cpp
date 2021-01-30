@@ -16,7 +16,7 @@ std::string MainWindow::SelectFolderForResult()
 	QString aux = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "D:",
 		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	ui->textEditFolderResultForPicture->setText(aux);
-
+	
 	return aux.toStdString();
 }
 
@@ -32,19 +32,8 @@ std::string MainWindow::SelectPictureForMosaic()
 	return aux.toStdString();
 }
 
-bool MainWindow::StartPressed()
-{
-	//ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:rgb(255, 80, 83);}");
-	bool returned = StartMosaic();
-	//ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
-
-	return returned;
-}
-
 bool MainWindow::StartMosaic()
 {
-	//ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:rgb(255, 80, 83);}");
-	
 	auto errors = [&](QString message) {
 		ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
 
@@ -133,8 +122,6 @@ bool MainWindow::StartMosaic()
 	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),
 		ui->labelMosaicPicture->height(), Qt::IgnoreAspectRatio));
 
-	//ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
-
 	return true;
 }
 
@@ -215,7 +202,7 @@ MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 	connect(ui->buttonBasePicturesFolder, &QPushButton::released, this, &MainWindow::SelectBasePicturesFolder);
 	connect(ui->buttonPictureForMosaic, &QPushButton::released, this, &MainWindow::SelectPictureForMosaic);
 	connect(ui->buttonFolderForTheResult, &QPushButton::released, this, &MainWindow::SelectFolderForResult);
-	connect(ui->buttonMakeMosaic, &QPushButton::released, this, &MainWindow::StartPressed);
+	connect(ui->buttonMakeMosaic, &QPushButton::released, this, &MainWindow::StartMosaic);
 	connect(ui->actionExit, &QAction::triggered, this, &MainWindow::ActionExit);
 	connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::ActionHelp);
 
