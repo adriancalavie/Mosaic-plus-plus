@@ -19,19 +19,6 @@ uint32_t RiemersmaDistance(const cv::Scalar& firstColor, const cv::Scalar& secon
 	return (((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8);
 }
 
-void Mosaic::AlphaBlending(cv::Mat& image, const cv::Scalar& color)
-{
-	for (int x = 0; x < image.rows; ++x)
-	{
-		for (int y = 0; y < image.cols; ++y)
-		{
-			image.at<cv::Vec3b>(x, y)[0] = (image.at<cv::Vec3b>(x, y)[0] + color[0]) / 2;
-			image.at<cv::Vec3b>(x, y)[1] = (image.at<cv::Vec3b>(x, y)[1] + color[1]) / 2;
-			image.at<cv::Vec3b>(x, y)[2] = (image.at<cv::Vec3b>(x, y)[2] + color[2]) / 2;
-		}
-	}
-}
-
 cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const BasePictures& basePictures, const Method& method, const Type& type, const uint8_t& partitionSize, const Algorithm& algorithm, const bool& blending)
 {
 	assert(!image.empty());
@@ -86,7 +73,7 @@ cv::Mat Mosaic::MakeRectangle(const std::unordered_map<cv::Scalar, std::string>&
 
 				if (blending)
 				{
-					AlphaBlending(cell, mediumColor);
+					pt::AlphaBlending(cell, mediumColor);
 				}
 				Mosaic::ReplaceCellRectangle(result, std::move(cell), std::make_pair(x, y));
 
@@ -161,7 +148,7 @@ cv::Mat Mosaic::MakeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 				cell = pt::resize(cell, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION);
 				if (blending)
 				{
-					AlphaBlending(cell, medColor);
+					pt::AlphaBlending(cell, medColor);
 				}
 				if (type)
 					Mosaic::ReplaceCellTriangle(result, std::move(cell), std::make_pair(x, y), 1, { 0,0 }, { partitionSize, partitionSize });
@@ -179,7 +166,7 @@ cv::Mat Mosaic::MakeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 
 				if (blending)
 				{
-					AlphaBlending(cell, medColor);
+					pt::AlphaBlending(cell, medColor);
 				}
 
 				if (type)
@@ -243,7 +230,7 @@ cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat
 
 				if (blending)
 				{
-					AlphaBlending(cell, medColor);
+					pt::AlphaBlending(cell, medColor);
 				}
 				Mosaic::ReplaceCellDiamond(result, std::move(cell), std::make_pair(x, y + (partitionSize) / 2));
 			}
@@ -261,7 +248,7 @@ cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat
 
 				if (blending)
 				{
-					AlphaBlending(cell, medColor);
+					pt::AlphaBlending(cell, medColor);
 				}
 				Mosaic::ReplaceCellDiamond(result, std::move(cell), std::make_pair(x, y + (partitionSize) / 2));
 			}
@@ -325,8 +312,8 @@ void Mosaic::MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
 
 		if (blending)
 		{
-			AlphaBlending(cellLeft, medColorLeft);
-			AlphaBlending(cellRight, medColorRight);
+			pt::AlphaBlending(cellLeft, medColorLeft);
+			pt::AlphaBlending(cellRight, medColorRight);
 		}
 
 		unsigned int yDiamond = y + (partitionSize + 1) / 2;
@@ -358,8 +345,8 @@ void Mosaic::MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
 
 		if (blending)
 		{
-			AlphaBlending(cellTop, medColorTop);
-			AlphaBlending(cellBottom, medColorBottom);
+			pt::AlphaBlending(cellTop, medColorTop);
+			pt::AlphaBlending(cellBottom, medColorBottom);
 		}
 
 		unsigned int yDiamond = y_bottom + (partitionSize + 1) / 2;

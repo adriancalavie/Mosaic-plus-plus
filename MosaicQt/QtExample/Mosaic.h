@@ -41,7 +41,6 @@ private:
 	using pt = PictureTools;
 
 public:
-	static void AlphaBlending(cv::Mat&, const cv::Scalar&);
 	friend uint32_t EuclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
 	friend uint32_t RiemersmaDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
 	static cv::Mat MakeMosaic(const cv::Mat& image,

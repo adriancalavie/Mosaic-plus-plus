@@ -41,10 +41,14 @@ private:
 
 
 public:
+	
 	static cv::Mat cropSquare(const cv::Mat& image, const Point& topL, const Point& botR);
+
 	static cv::Mat resize(const cv::Mat& image, const uint16_t& width = 0, const uint16_t& height = 0, const Algorithm& type = Algorithm::NEAREST_NEIGHBOUR);
 
 	static cv::Scalar averageColorRectangle(const cv::Mat& image, const Point& startLocation = { 0, 0 }, const Point& size = { 0, 0 });
 	static cv::Scalar averageColorTriangle(const cv::Mat& image, const Point& startLocation, const Point& size, const uint8_t& type);
+
+	static void AlphaBlending(cv::Mat&, const cv::Scalar&);
 };
 

@@ -235,3 +235,15 @@ cv::Scalar PictureTools::averageColorTriangle(const cv::Mat& image, const Point&
 	return cv::Scalar(blue, green, red);
 }
 
+void PictureTools::AlphaBlending(cv::Mat& image, const cv::Scalar& color)
+{
+	for (auto x = 0; x < image.rows; ++x)
+	{
+		for (auto y = 0; y < image.cols; ++y)
+		{
+			image.at<cv::Vec3b>(x, y)[0] = (image.at<cv::Vec3b>(x, y)[0] + color[0]) / 2;
+			image.at<cv::Vec3b>(x, y)[1] = (image.at<cv::Vec3b>(x, y)[1] + color[1]) / 2;
+			image.at<cv::Vec3b>(x, y)[2] = (image.at<cv::Vec3b>(x, y)[2] + color[2]) / 2;
+		}
+	}
+}
