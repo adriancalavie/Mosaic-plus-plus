@@ -1,14 +1,16 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #define private public
-#include "../QtExample/Mosaic.h"
-#include "../QtExample/Mosaic.cpp"
-#include "../QtExample/BasePictures.h"
-#include "../QtExample/BasePictures.cpp"
-#include "../QtExample/Data.h"
-#include "../QtExample/Data.cpp"
-#include "../QtExample/StopWatch.h"
-#include "../QtExample/StopWatch.cpp"
+
+#include "../MosaicQt/Mosaic.h"
+#include "../MosaicQt/Mosaic.cpp"
+#include "../MosaicQt/BasePictures.h"
+#include "../MosaicQt/BasePictures.cpp"
+#include "../MosaicQt/Data.h"
+#include "../MosaicQt/Data.cpp"
+#include "../MosaicQt/StopWatch.h"
+#include "../MosaicQt/StopWatch.cpp"
+
 #undef private
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
