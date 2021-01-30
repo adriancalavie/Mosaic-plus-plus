@@ -32,10 +32,21 @@ std::string MainWindow::selectPictureForMosaic()
 	return aux.toStdString();
 }
 
+bool MainWindow::StartPressed()
+{
+	//ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:rgb(255, 80, 83);}");
+	bool returned = startMosaic();
+	//ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
+
+	return returned;
+}
+
 bool MainWindow::startMosaic()
 {
-	ui->progressBarMosaic->setValue(0);
+	//ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:rgb(255, 80, 83);}");
+	
 	auto errors = [&](QString message) {
+		ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
 
 		error->setWindowTitle("Error");
 		error->setWindowIcon(QIcon("Pictures\\error.png"));
@@ -92,7 +103,7 @@ bool MainWindow::startMosaic()
 	};
 
 	cv::Mat output = Mosaic::MakeMosaic(input, basePictures, method(), typeCell(), ui->spinBoxCellSize->value(),
-		algorithm(), ui->checkBoxBlendingPicture->isChecked(), ui->progressBarMosaic);
+		algorithm(), ui->checkBoxBlendingPicture->isChecked());
 
 
 	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
@@ -122,6 +133,8 @@ bool MainWindow::startMosaic()
 	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),
 		ui->labelMosaicPicture->height(), Qt::IgnoreAspectRatio));
 
+	//ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
+
 	return true;
 }
 
@@ -133,26 +146,65 @@ void MainWindow::actionExit()
 
 void MainWindow::actionHelp()
 {
-	std::unique_ptr<QLabel> labelHelp = std::make_unique<QLabel>();
+	//std::unique_ptr<QLabel> labelHelp = std::make_unique<QLabel>();
+	//std::unique_ptr<QHBoxLayout> layoutLabelHelp = std::make_unique<QHBoxLayout>();
+
+	//labelHelp->setWindowTitle("Help");
+
+	//QString textLayout(QString::fromStdString(Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP)));
+	//labelHelp->setText(textLayout);
+
+	//layoutLabelHelp->addWidget(labelHelp.get());
+
+	//Qt::Alignment alignment;
+	//alignment.setFlag(Qt::AlignmentFlag::AlignCenter);
+	//layoutLabelHelp->setAlignment(alignment);
+
+	//help->setMinimumWidth(300);
+	//help->setMinimumHeight(300);
+
+	//help->setLayout(layoutLabelHelp.get());
+	//help->setWindowTitle("ReadMe");
+	//help->show();
+	//hide();
+
+	/*std::unique_ptr<QLabel> labelHelp = std::make_unique<QLabel>();
 	std::unique_ptr<QHBoxLayout> layoutLabelHelp = std::make_unique<QHBoxLayout>();
 
-	labelHelp->setWindowTitle("Help");
+	setStyleSheet("QWidget{ background-color : rgba( 160, 160, 160, 255); border-radius : 7px;  }");
 
 	QString textLayout(QString::fromStdString(Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP)));
 	labelHelp->setText(textLayout);
 
 	layoutLabelHelp->addWidget(labelHelp.get());
 
-	Qt::Alignment alignment;
-	alignment.setFlag(Qt::AlignmentFlag::AlignCenter);
-	layoutLabelHelp->setAlignment(alignment);
-
 	help->setMinimumWidth(300);
 	help->setMinimumHeight(300);
 
 	help->setLayout(layoutLabelHelp.get());
 	help->setWindowTitle("ReadMe");
-	help->exec();
+	help->show();
+	hide();*/
+
+	QLabel* label = new QLabel(tr("Name:"));
+	//QLineEdit* lineEdit = new QLineEdit();
+
+	QHBoxLayout* layout = new QHBoxLayout();
+
+	QString textLayout(QString::fromStdString(Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP)));
+	label->setText(textLayout);
+
+	Qt::Alignment alignment;
+	alignment.setFlag(Qt::AlignmentFlag::AlignCenter);
+	layout->setAlignment(alignment);
+
+	help->setMinimumWidth(300);
+	help->setMinimumHeight(300);
+
+	layout->addWidget(label);
+	help->setLayout(layout);
+
+	help->show();
 }
 
 MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
@@ -163,9 +215,13 @@ MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 	connect(ui->buttonBasePicturesFolder, &QPushButton::released, this, &MainWindow::selectBasePicturesFolder);
 	connect(ui->buttonPictureForMosaic, &QPushButton::released, this, &MainWindow::selectPictureForMosaic);
 	connect(ui->buttonFolderForTheResult, &QPushButton::released, this, &MainWindow::selectFolderForResult);
-	connect(ui->buttonMakeMosaic, &QPushButton::released, this, &MainWindow::startMosaic);
+	connect(ui->buttonMakeMosaic, &QPushButton::released, this, &MainWindow::StartPressed);
 	connect(ui->actionExit, &QAction::triggered, this, &MainWindow::actionExit);
 	connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::actionHelp);
+
+	//this->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
+	help->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
+
 }
 
 MainWindow::~MainWindow()

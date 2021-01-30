@@ -12,7 +12,8 @@
 #include <qprogressbar.h>
 #include <qtimer.h>
 #include <qthread.h>
-
+#include <qwidget.h>
+#include <qlineedit.h>
 #include "ui_mainwindow.h"
 
 #include <fstream>
@@ -34,7 +35,7 @@ public:
 
 private:
     std::unique_ptr<Ui::MainWindow> ui = std::make_unique<Ui::MainWindow>();
-    std::unique_ptr<QDialog> help = std::make_unique<QDialog>();
+    std::unique_ptr<QWidget> help = std::make_unique<QWidget>();
     std::unique_ptr<QMessageBox> error = std::make_unique<QMessageBox>();
     
 private slots:
@@ -42,6 +43,7 @@ private slots:
     std::string selectPictureForMosaic();
     std::string selectFolderForResult();
     bool startMosaic();
+    bool StartPressed();
     void actionExit();
     void actionHelp();
 };
