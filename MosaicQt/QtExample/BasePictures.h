@@ -38,10 +38,10 @@ private:
 	std::string m_dataBase;
 
 public:
-	BasePictures(const uint16_t & = 0);
+	BasePictures();
 
 	[[nodiscard]] const map& GetMediumColor() const noexcept;
-	const void CreatePictures(const std::string & = "");
+	const void CreatePictures(const std::string & dirName = "");
 
 	static cv::Mat ReadPhoto(const std::string & = "\n", const std::string & = Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
 

@@ -8,7 +8,6 @@
 #include <random>
 #include <time.h> 
 #include <atomic>
-#include <qprogressbar.h>
 #include "BasePictures.h"
 #include "Data.h"
 #include "../../Mosaic++/Picture Tools/PictureTools.h"
@@ -36,15 +35,16 @@ class Mosaic
 {
 public:
 
-private:
+public:
 	using Point = std::pair <uint16_t, uint16_t>;
 	using pt = PictureTools;
+	using bp = BasePictures;
 
 public:
 	friend uint32_t EuclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
 	friend uint32_t RiemersmaDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
 	static cv::Mat MakeMosaic(const cv::Mat& image,
-		const BasePictures& basePictures,
+		const bp& basePictures,
 		const Method& method,
 		const Type& type,
 		const uint8_t& partitionSize,
@@ -64,33 +64,31 @@ private:
 	static void ReplaceCellDiamond(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto, const Point& top);
 
 private:
-	static cv::Mat MakeRectangle(const std::unordered_map<cv::Scalar,
-		std::string>& dataPictures,
+	static cv::Mat MakeRectangle(const bp::map& dataPictures,
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
 		const uint8_t& partitionSize);
 
-	static cv::Mat MakeTriangle(const std::unordered_map<cv::Scalar,
-		std::string>& dataPictures,
+	static cv::Mat MakeTriangle(const bp::map& dataPictures,
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
 		const uint8_t& partitionSize);
 
-	static cv::Mat MakeDiamond(const BasePictures::map& dataPictures,
+	static cv::Mat MakeDiamond(const bp::map& dataPictures,
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
 		const uint8_t& partitionSize);
 
-	static void MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
+	static void MakeMargins(cv::Mat& result, const bp::map& dataPictures,
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
 		const uint8_t& partitionSize);
 private:
-	static cv::Mat FindPictureWithColorMed(const BasePictures::map& dataPictures,
+	static cv::Mat FindPictureWithColorMed(const bp::map& dataPictures,
 		const cv::Scalar& mediumColor,
 		std::string& pictureDifferent,
 		const Algorithm& algorithm);

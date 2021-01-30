@@ -1,13 +1,13 @@
 #include "BasePictures.h"
 
-BasePictures::BasePictures(const uint16_t& number) :
+BasePictures::BasePictures() :
 	m_processedPictures(Data::Defaults::PATH_PICTURES_FOR_MOSAIC),
 	m_dataBase(Data::Defaults::PATH_DATA_BASE_FILE)
 {
 	// EMPTY
 }
 
-[[nodiscard]] const std::unordered_map<cv::Scalar, std::string>& BasePictures::GetMediumColor() const noexcept
+[[nodiscard]] const BasePictures::map& BasePictures::GetMediumColor() const noexcept
 {
 	return m_mediumColor;
 }
@@ -20,8 +20,8 @@ const void BasePictures::CreatePictures(const std::string& dirName)
 	{
 		cv::Mat img = cv::imread(entry.path().string(), cv::IMREAD_COLOR);
 		if (!img.empty()) {
-			img = PictureTools::resize(img, 100, 100);
-			cv::Scalar aux = PictureTools::averageColorRectangle(img, { 0, 0 }, { img.rows, img.cols });
+			img = PictureTools::Resize(img, 100, 100);
+			cv::Scalar aux = PictureTools::AverageColorRectangle(img, { 0, 0 }, { img.rows, img.cols });
 			out << aux[0] << " "
 				<< aux[1] << " "
 				<< aux[2] << " "

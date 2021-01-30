@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 
-std::string MainWindow::selectBasePicturesFolder()
+std::string MainWindow::SelectBasePicturesFolder()
 {
 	QFileDialog dialog(this);
 	QString aux = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "D:/",
@@ -10,7 +10,7 @@ std::string MainWindow::selectBasePicturesFolder()
 	return aux.toStdString();
 }
 
-std::string MainWindow::selectFolderForResult()
+std::string MainWindow::SelectFolderForResult()
 {
 	QFileDialog dialog(this);
 	QString aux = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "D:",
@@ -20,7 +20,7 @@ std::string MainWindow::selectFolderForResult()
 	return aux.toStdString();
 }
 
-std::string MainWindow::selectPictureForMosaic()
+std::string MainWindow::SelectPictureForMosaic()
 {
 	QString aux = QFileDialog::getOpenFileName(
 		this, tr("Open Directory"), "D:", "*.jpg; *.png");
@@ -35,13 +35,13 @@ std::string MainWindow::selectPictureForMosaic()
 bool MainWindow::StartPressed()
 {
 	//ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:rgb(255, 80, 83);}");
-	bool returned = startMosaic();
+	bool returned = StartMosaic();
 	//ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
 
 	return returned;
 }
 
-bool MainWindow::startMosaic()
+bool MainWindow::StartMosaic()
 {
 	//ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:rgb(255, 80, 83);}");
 	
@@ -124,7 +124,7 @@ bool MainWindow::startMosaic()
 
 	if (!ui->checkBoxOriginalSize->isChecked())
 	{
-		output = PictureTools::resize(output, ui->spinBoxWidthResultPicture->value(), ui->spinBoxHeightResultPicture->value());
+		output = Mosaic::pt::Resize(output, ui->spinBoxWidthResultPicture->value(), ui->spinBoxHeightResultPicture->value());
 	}
 
 	cv::imwrite(outputPath(), output);
@@ -139,12 +139,12 @@ bool MainWindow::startMosaic()
 }
 
 
-void MainWindow::actionExit()
+void MainWindow::ActionExit()
 {
 	exit(1);
 }
 
-void MainWindow::actionHelp()
+void MainWindow::ActionHelp()
 {
 	//std::unique_ptr<QLabel> labelHelp = std::make_unique<QLabel>();
 	//std::unique_ptr<QHBoxLayout> layoutLabelHelp = std::make_unique<QHBoxLayout>();
@@ -212,12 +212,12 @@ MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-	connect(ui->buttonBasePicturesFolder, &QPushButton::released, this, &MainWindow::selectBasePicturesFolder);
-	connect(ui->buttonPictureForMosaic, &QPushButton::released, this, &MainWindow::selectPictureForMosaic);
-	connect(ui->buttonFolderForTheResult, &QPushButton::released, this, &MainWindow::selectFolderForResult);
+	connect(ui->buttonBasePicturesFolder, &QPushButton::released, this, &MainWindow::SelectBasePicturesFolder);
+	connect(ui->buttonPictureForMosaic, &QPushButton::released, this, &MainWindow::SelectPictureForMosaic);
+	connect(ui->buttonFolderForTheResult, &QPushButton::released, this, &MainWindow::SelectFolderForResult);
 	connect(ui->buttonMakeMosaic, &QPushButton::released, this, &MainWindow::StartPressed);
-	connect(ui->actionExit, &QAction::triggered, this, &MainWindow::actionExit);
-	connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::actionHelp);
+	connect(ui->actionExit, &QAction::triggered, this, &MainWindow::ActionExit);
+	connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::ActionHelp);
 
 	//this->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
 	help->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");

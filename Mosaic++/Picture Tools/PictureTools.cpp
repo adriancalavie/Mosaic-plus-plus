@@ -2,7 +2,7 @@
 #include <iostream>
 #include <unordered_map>
 
-uint8_t PictureTools::valueCheck(int number)
+uint8_t PictureTools::ValueCheck(int number)
 {
 	if (number < 0)
 		return 0;
@@ -11,7 +11,7 @@ uint8_t PictureTools::valueCheck(int number)
 	return number;
 }
 
-cv::Mat PictureTools::cropSquare(const cv::Mat& image, const Point& topL, const Point& botR)
+cv::Mat PictureTools::CropSquare(const cv::Mat& image, const Point& topL, const Point& botR)
 {
 	uint16_t height = botR.first - topL.first;
 	uint16_t width = botR.second - topL.second;
@@ -26,15 +26,15 @@ cv::Mat PictureTools::cropSquare(const cv::Mat& image, const Point& topL, const 
 	return result;
 }
 
-cv::Mat PictureTools::resize(const cv::Mat& image, const uint16_t& width, const uint16_t& height, const PictureTools::Algorithm& type)
+cv::Mat PictureTools::Resize(const cv::Mat& image, const uint16_t& width, const uint16_t& height, const PictureTools::Algorithm& type)
 {
 	switch (type)
 	{
 	case PictureTools::Algorithm::NEAREST_NEIGHBOUR:
-		return PictureTools::nearestNeighbour(image, width, height);
+		return PictureTools::NearestNeighbour(image, width, height);
 
 	case PictureTools::Algorithm::BILINEAR_INTERPOLATION:
-		return PictureTools::bilinearInterpolation(image, width, height);
+		return PictureTools::BilinearInterpolation(image, width, height);
 
 	default:
 		return cv::Mat();
@@ -43,7 +43,7 @@ cv::Mat PictureTools::resize(const cv::Mat& image, const uint16_t& width, const 
 
 
 
-cv::Mat PictureTools::nearestNeighbour(const cv::Mat& image, const uint16_t& width, const uint16_t& height)
+cv::Mat PictureTools::NearestNeighbour(const cv::Mat& image, const uint16_t& width, const uint16_t& height)
 {
 	assert(!image.empty());
 	cv::Mat newimage(height, width, CV_8UC3);
@@ -64,21 +64,21 @@ cv::Mat PictureTools::nearestNeighbour(const cv::Mat& image, const uint16_t& wid
 	return newimage;
 }
 
-double PictureTools::interpolation(double firstNeighbour, double secondNeighbour, double proportion)
+double PictureTools::Interpolation(double firstNeighbour, double secondNeighbour, double proportion)
 {
 	return (secondNeighbour - firstNeighbour) * proportion + firstNeighbour;
 }
 
-cv::Vec3b PictureTools::interpolation(const cv::Vec3b& firstNeighbour, const cv::Vec3b& secondNeighbour, double proportion)
+cv::Vec3b PictureTools::Interpolation(const cv::Vec3b& firstNeighbour, const cv::Vec3b& secondNeighbour, double proportion)
 {
 	return cv::Vec3b(
-		static_cast<uchar>(interpolation(firstNeighbour[0], secondNeighbour[0], proportion)),
-		static_cast<uchar>(interpolation(firstNeighbour[1], secondNeighbour[1], proportion)),
-		static_cast<uchar>(interpolation(firstNeighbour[2], secondNeighbour[2], proportion))
+		static_cast<uchar>(Interpolation(firstNeighbour[0], secondNeighbour[0], proportion)),
+		static_cast<uchar>(Interpolation(firstNeighbour[1], secondNeighbour[1], proportion)),
+		static_cast<uchar>(Interpolation(firstNeighbour[2], secondNeighbour[2], proportion))
 	);
 }
 
-cv::Mat PictureTools::bilinearInterpolation(const cv::Mat& image, const uint16_t& width, const uint16_t& height)
+cv::Mat PictureTools::BilinearInterpolation(const cv::Mat& image, const uint16_t& width, const uint16_t& height)
 {
 
 	cv::Mat newImage(height, width, CV_8UC3);
@@ -104,19 +104,19 @@ cv::Mat PictureTools::bilinearInterpolation(const cv::Mat& image, const uint16_t
 
 			if (neighbours[1].x < image.rows && neighbours[1].y < image.cols)
 			{
-				valueW1 = interpolation(
+				valueW1 = Interpolation(
 					image.at<cv::Vec3b>(neighbours[0].x, neighbours[0].y),
 					image.at<cv::Vec3b>(neighbours[0].x, neighbours[1].y),
 					h_t - neighbours[0].x
 				);
 
-				valueW2 = interpolation(
+				valueW2 = Interpolation(
 					image.at<cv::Vec3b>(neighbours[0].x, neighbours[0].y),
 					image.at<cv::Vec3b>(neighbours[0].x, neighbours[1].y),
 					h_t - neighbours[0].x
 				);
 
-				valueH = interpolation(
+				valueH = Interpolation(
 					valueW1,
 					valueW2,
 					w_t - neighbours[0].y
@@ -135,7 +135,7 @@ cv::Mat PictureTools::bilinearInterpolation(const cv::Mat& image, const uint16_t
 }
 
 
-cv::Scalar PictureTools::averageColorRectangle(const cv::Mat& image, const Point& startLocation, const Point& size)
+cv::Scalar PictureTools::AverageColorRectangle(const cv::Mat& image, const Point& startLocation, const Point& size)
 {
 	assert(!image.empty());
 	double blue, green, red;
@@ -163,7 +163,7 @@ cv::Scalar PictureTools::averageColorRectangle(const cv::Mat& image, const Point
 	return cv::Scalar(blue, green, red);
 }
 
-cv::Scalar PictureTools::averageColorTriangle(const cv::Mat& image, const Point& startLocation, const Point& size, const uint8_t& type)
+cv::Scalar PictureTools::AverageColorTriangle(const cv::Mat& image, const Point& startLocation, const Point& size, const uint8_t& type)
 {
 	assert(!image.empty());
 	double blue, green, red;

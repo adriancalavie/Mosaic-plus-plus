@@ -23,7 +23,6 @@
 
 #include "Mosaic.h"
 #include "StopWatch.h"
-#include "QMosaicThread.h"
 
 class MainWindow : public QMainWindow
 {
@@ -39,11 +38,11 @@ private:
     std::unique_ptr<QMessageBox> error = std::make_unique<QMessageBox>();
     
 private slots:
-    std::string selectBasePicturesFolder();
-    std::string selectPictureForMosaic();
-    std::string selectFolderForResult();
-    bool startMosaic();
+    std::string SelectBasePicturesFolder();
+    std::string SelectPictureForMosaic();
+    std::string SelectFolderForResult();
+    bool StartMosaic();
     bool StartPressed();
-    void actionExit();
-    void actionHelp();
+    void ActionExit();
+    void ActionHelp();
 };

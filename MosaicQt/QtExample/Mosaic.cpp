@@ -19,7 +19,7 @@ uint32_t RiemersmaDistance(const cv::Scalar& firstColor, const cv::Scalar& secon
 	return (((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8);
 }
 
-cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const BasePictures& basePictures, const Method& method, const Type& type, const uint8_t& partitionSize, const Algorithm& algorithm, const bool& blending)
+cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const bp& basePictures, const Method& method, const Type& type, const uint8_t& partitionSize, const Algorithm& algorithm, const bool& blending)
 {
 	assert(!image.empty());
 
@@ -32,10 +32,10 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const BasePictures& basePicture
 		switch (method)
 		{
 		case Method::CROPPING:
-			copyOriginalImage = std::move(pt::cropSquare(image, { 0,0 }, { v2,v1 }));
+			copyOriginalImage = std::move(pt::CropSquare(image, { 0,0 }, { v2,v1 }));
 			break;
 		case Method::RESIZING:
-			copyOriginalImage = std::move(pt::resize(image, v1, v2, pt::Algorithm::BILINEAR_INTERPOLATION));
+			copyOriginalImage = std::move(pt::Resize(image, v1, v2, pt::Algorithm::BILINEAR_INTERPOLATION));
 			break;
 		default:
 			break;
@@ -55,7 +55,7 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const BasePictures& basePicture
 	}
 }
 
-cv::Mat Mosaic::MakeRectangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
+cv::Mat Mosaic::MakeRectangle(const bp::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
 {
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
@@ -65,11 +65,11 @@ cv::Mat Mosaic::MakeRectangle(const std::unordered_map<cv::Scalar, std::string>&
 		{
 			for (int y = start.second; y < end.second - 1; y += partitionSize)
 			{
-				cv::Scalar mediumColor = pt::averageColorRectangle(image, { x,y }, { partitionSize,partitionSize });
+				cv::Scalar mediumColor = pt::AverageColorRectangle(image, { x,y }, { partitionSize,partitionSize });
 				std::string pictureName;
 
 				cv::Mat cell = std::move(FindPictureWithColorMed(dataPictures, mediumColor, pictureName, algorithm));
-				cell = pt::resize(cell, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION);
+				cell = pt::Resize(cell, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION);
 
 				if (blending)
 				{
@@ -118,7 +118,7 @@ cv::Mat Mosaic::MakeRectangle(const std::unordered_map<cv::Scalar, std::string>&
 	return result;
 }
 
-cv::Mat Mosaic::MakeTriangle(const std::unordered_map<cv::Scalar, std::string>& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
+cv::Mat Mosaic::MakeTriangle(const bp::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
 {
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 	auto test = [&](Point start, Point end) {
@@ -138,14 +138,14 @@ cv::Mat Mosaic::MakeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 				//first triangle
 
 				if (type)
-					medColor = pt::averageColorTriangle(image, { x,y }, { partitionSize, partitionSize }, 1);
+					medColor = pt::AverageColorTriangle(image, { x,y }, { partitionSize, partitionSize }, 1);
 				else
-					medColor = pt::averageColorTriangle(image, { x,y }, { partitionSize, partitionSize }, 3);
+					medColor = pt::AverageColorTriangle(image, { x,y }, { partitionSize, partitionSize }, 3);
 
 				std::string pictureName = "";
 
 				cv::Mat cell = std::move(FindPictureWithColorMed(dataPictures, medColor, pictureName, algorithm));
-				cell = pt::resize(cell, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION);
+				cell = pt::Resize(cell, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION);
 				if (blending)
 				{
 					pt::AlphaBlending(cell, medColor);
@@ -157,12 +157,12 @@ cv::Mat Mosaic::MakeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 
 				//second triangle
 				if (type)
-					medColor = pt::averageColorTriangle(image, { x,y }, { partitionSize, partitionSize }, 2);
+					medColor = pt::AverageColorTriangle(image, { x,y }, { partitionSize, partitionSize }, 2);
 				else
-					medColor = pt::averageColorTriangle(image, { x,y }, { partitionSize, partitionSize }, 4);
+					medColor = pt::AverageColorTriangle(image, { x,y }, { partitionSize, partitionSize }, 4);
 
 				cell = std::move(FindPictureWithColorMed(dataPictures, medColor, pictureName, algorithm));
-				cell = std::move(pt::resize(cell, partitionSize, partitionSize));
+				cell = std::move(pt::Resize(cell, partitionSize, partitionSize));
 
 				if (blending)
 				{
@@ -212,7 +212,7 @@ cv::Mat Mosaic::MakeTriangle(const std::unordered_map<cv::Scalar, std::string>& 
 	return result;
 }
 
-cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
+cv::Mat Mosaic::MakeDiamond(const bp::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
 {
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 	auto test = [&](Point start, Point end) {
@@ -222,11 +222,11 @@ cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat
 			for (int y = start.second; y < end.second - 1; y += partitionSize)
 			{
 				// compare partitionAverage with mapped images's average;
-				cv::Scalar medColor = pt::averageColorRectangle(image, { x,y }, { partitionSize, partitionSize });
+				cv::Scalar medColor = pt::AverageColorRectangle(image, { x,y }, { partitionSize, partitionSize });
 
 				std::string namePhoto = "";
 				cv::Mat cell = std::move(FindPictureWithColorMed(dataPictures, medColor, namePhoto, algorithm));
-				cell = std::move(pt::resize(cell, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
+				cell = std::move(pt::Resize(cell, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
 
 				if (blending)
 				{
@@ -240,11 +240,11 @@ cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat
 			for (int y = start.second+partitionSize/2; y < end.second - partitionSize - 1; y += partitionSize)
 			{
 				// compare partitionAverage with mapped images's average;
-				cv::Scalar medColor = pt::averageColorRectangle(image, { x,y }, { partitionSize, partitionSize });
+				cv::Scalar medColor = pt::AverageColorRectangle(image, { x,y }, { partitionSize, partitionSize });
 
 				std::string namePhoto = "";
 				cv::Mat cell = std::move(FindPictureWithColorMed(dataPictures, medColor, namePhoto, algorithm));
-				cell = std::move(pt::resize(cell, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
+				cell = std::move(pt::Resize(cell, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
 
 				if (blending)
 				{
@@ -290,7 +290,7 @@ cv::Mat Mosaic::MakeDiamond(const BasePictures::map& dataPictures, const cv::Mat
 	return result;
 }
 
-void Mosaic::MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
+void Mosaic::MakeMargins(cv::Mat& result, const bp::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
 {
 
 	unsigned int x_left = 0;
@@ -299,16 +299,16 @@ void Mosaic::MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
 
 	for (int y = 0; y < image.rows - 1; y += partitionSize)
 	{
-		cv::Scalar medColorLeft = pt::averageColorRectangle(image, { y,x_left }, { partitionSize,partitionSize });
-		cv::Scalar medColorRight = pt::averageColorRectangle(image, { y,x_right }, { partitionSize,partitionSize });
+		cv::Scalar medColorLeft = pt::AverageColorRectangle(image, { y,x_left }, { partitionSize,partitionSize });
+		cv::Scalar medColorRight = pt::AverageColorRectangle(image, { y,x_right }, { partitionSize,partitionSize });
 
 		std::string namePhotoLeft = "";
 		cv::Mat cellLeft = std::move(FindPictureWithColorMed(dataPictures, medColorLeft, namePhotoLeft, algorithm));
-		cellLeft = std::move(pt::resize(cellLeft, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
+		cellLeft = std::move(pt::Resize(cellLeft, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
 
 		std::string namePhotoRight = "";
 		cv::Mat cellRight = std::move(FindPictureWithColorMed(dataPictures, medColorRight, namePhotoRight, algorithm));
-		cellRight = std::move(pt::resize(cellRight, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
+		cellRight = std::move(pt::Resize(cellRight, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
 
 		if (blending)
 		{
@@ -332,16 +332,16 @@ void Mosaic::MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
 
 	for (int x = 0; x < image.cols - 1; x += partitionSize)
 	{
-		cv::Scalar medColorTop = pt::averageColorRectangle(image, { y_top,x }, { partitionSize,partitionSize });
-		cv::Scalar medColorBottom = pt::averageColorRectangle(image, { y_bottom,x }, { partitionSize,partitionSize });
+		cv::Scalar medColorTop = pt::AverageColorRectangle(image, { y_top,x }, { partitionSize,partitionSize });
+		cv::Scalar medColorBottom = pt::AverageColorRectangle(image, { y_bottom,x }, { partitionSize,partitionSize });
 
 		std::string namePhotoTop = "";
 		cv::Mat cellTop = std::move(FindPictureWithColorMed(dataPictures, medColorTop, namePhotoTop, algorithm));
-		cellTop = std::move(pt::resize(cellTop, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
+		cellTop = std::move(pt::Resize(cellTop, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
 
 		std::string namePhotoBottom = "";
 		cv::Mat cellBottom = std::move(FindPictureWithColorMed(dataPictures, medColorBottom, namePhotoBottom, algorithm));
-		cellBottom = std::move(pt::resize(cellBottom, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
+		cellBottom = std::move(pt::Resize(cellBottom, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION));
 
 		if (blending)
 		{
@@ -362,7 +362,7 @@ void Mosaic::MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
 }
 
 
-cv::Mat Mosaic::FindPictureWithColorMed(const BasePictures::map& dataPictures, const cv::Scalar& mediumColor, std::string& pictureDifferent, const Algorithm& algorithm)
+cv::Mat Mosaic::FindPictureWithColorMed(const bp::map& dataPictures, const cv::Scalar& mediumColor, std::string& pictureDifferent, const Algorithm& algorithm)
 {
 	std::string pictureName;
 	uint32_t closestDistance = INT_MAX;
@@ -383,7 +383,7 @@ cv::Mat Mosaic::FindPictureWithColorMed(const BasePictures::map& dataPictures, c
 	}
 
 	pictureDifferent = pictureName;
-	return BasePictures::ReadPhoto(pictureName);
+	return bp::ReadPhoto(pictureName);
 }
 
 void Mosaic::ReplaceCellRectangle(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto, const Point& topL)

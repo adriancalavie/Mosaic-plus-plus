@@ -1,6 +1,15 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
+#include "../QtExample/Mosaic.h"
+#include "../QtExample/Mosaic.cpp"
+#include "../QtExample/BasePictures.h"
+#include "../QtExample/BasePictures.cpp"
+#include "../QtExample/Data.h"
+#include "../QtExample/Data.cpp"
+#include "../QtExample/StopWatch.h"
+#include "../QtExample/StopWatch.cpp"
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace MosaicTests
@@ -8,12 +17,186 @@ namespace MosaicTests
 	TEST_CLASS(MosaicTests)
 	{
 	public:
-		
+
 		TEST_METHOD(TestMethod1)
 		{
 			//EMPTY
 		}
 
-		//TEST_METHOD()
+		TEST_METHOD(TestEuclideanDistance)
+		{
+			cv::Scalar color1(0, 0, 1);
+			cv::Scalar color2(255, 255, 255);
+
+			uint8_t blueD = color1[0] - color2[0];
+			uint8_t greenD = color1[1] - color2[1];
+			uint8_t redD = color1[2] - color2[2];
+
+			uint32_t euclid = blueD * blueD + greenD * greenD + redD * redD;
+			uint32_t euclid_function = EuclideanDistance(color1, color2);
+
+			std::cout << euclid << " " << euclid_function;
+			Assert::IsTrue(euclid_function == euclid);
+		}
+
+		TEST_METHOD(TestBasePicturesConstructor)
+		{
+			BasePictures pictures;
+
+			Assert::IsTrue(pictures.GetFileDestination() == Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
+
+		}
+
+		TEST_METHOD(TestReadPhoto)
+		{
+			cv::Mat image = BasePictures::ReadPhoto("0.jpg", "..//" + Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
+			Assert::IsTrue(!image.empty());
+		}
+
+		TEST_METHOD(TestAddPicturesInUnordered_Map)
+		{
+			BasePictures test;
+			test.CreatePictures();
+			Assert::IsTrue(test.GetMediumColor().size() > 0);
+		}
+
+
+		TEST_METHOD(TestAddPicturesMosaicTest)
+		{
+			std::ifstream in("data_base.txt");
+			Assert::IsTrue(!in.eof());
+		}
+
+		TEST_METHOD(TestBlending)
+		{
+			cv::Scalar color2(255, 255, 255);
+			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+			cv::Mat copyTestImage = testImage;
+			PictureTools::AlphaBlending(testImage, color2);
+
+			Assert::IsTrue(testImage.empty());
+
+		}
+
+		TEST_METHOD(TestRiemersma)
+		{
+			uint32_t first = INT_MAX;
+			uint32_t second = INT_MAX;
+			bool indexEuclid;
+			bool indexRiemersma;
+
+			cv::Scalar color1(0, 0, 1);
+			cv::Scalar color2(255, 255, 255);
+
+			cv::Scalar color3(128, 128, 128);
+
+			first = EuclideanDistance(color1, color3);
+			second = EuclideanDistance(color2, color3);
+
+			indexEuclid = first < second ? true : false;
+
+			first = RiemersmaDistance(color1, color3);
+			second = RiemersmaDistance(color2, color3);
+
+			indexRiemersma = first < second ? true : false;
+
+			Assert::AreNotEqual(indexEuclid, indexRiemersma);
+		}
+
+		TEST_METHOD(TestSpeed)
+		{
+			//PictureTools::resize vs cv::resize execution time
+
+			cv::Mat input = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+			cv::Mat input2 = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+
+			stopwatch swOriginal;
+			stopwatch swMine;
+
+			/*
+			swOriginal.tick();
+
+			//input = PictureTools::resize(input, 800, 800);
+			//cv::resize(input, input, { 800,800 });
+
+			swOriginal.tock();
+			*/
+
+			swMine.tick();
+
+			input2 = PictureTools::Resize(input2, 800, 800);
+			//cv::resize(input2, input2, { 800,800 });
+
+			swMine.tock();
+
+			//Assert::AreEqual(swOriginal, swMine);
+
+
+			//PictureTools::crop vs cv::Rect crop execution time
+
+			/*
+			cv::Mat input = cv::imread("..//test.jpg", IMREAD_COLOR);
+			cv::Mat input2 = cv::imread("..//test.jpg", IMREAD_COLOR);
+
+			stopwatch swPTCrop;
+			stopwatch swCVCrop;
+
+			swPTCrop.tick();
+			cv::Mat result = PictureTools::cropSquare(input, { 0,0 }, { 20,20 });
+			swPTCrop.tock();
+
+			swCVCrop.tick();
+			cv::Rect myROI(0, 0, 20, 20);
+			cv::Mat result2 = input2(myROI);
+			swCVCrop.tock();
+			*/
+
+			std::cout << swMine.report_ms();
+			//Assert::AreEqual(swPTCrop, swCVCrop);
+
+		}
+
+		TEST_METHOD(TestResizeNeighbour)
+		{
+			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+
+			testImage = PictureTools::Resize(testImage, 600, 600, PictureTools::Algorithm::NEAREST_NEIGHBOUR);
+
+			bool testingSize = testImage.rows == 600 && testImage.cols == 600;
+
+			//Assert::IsTrue(testingSize);
+			Assert::IsTrue(!testImage.empty());
+		}
+
+		TEST_METHOD(TestResizeBilinearInterpolation)
+		{
+			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+
+			testImage = PictureTools::Resize(testImage, 1200, 780, PictureTools::Algorithm::BILINEAR_INTERPOLATION);
+
+			bool testingSize = testImage.rows == 1200 && testImage.cols == 780;
+
+			//Assert::IsTrue(testingSize);
+			Assert::IsTrue(!testImage.empty());
+		}
+
+		TEST_METHOD(TestCrop)
+		{
+			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+
+			cv::Mat cropedImage = PictureTools::CropSquare(testImage, { 0,0 }, { 20,20 });
+
+			bool isEqual = true;
+
+			for (int index_x = 0; index_x < 20; ++index_x)
+				for (int index_y = 0; index_y < 20; ++index_y)
+					if (testImage.at<cv::Vec3b>(index_x, index_y) != cropedImage.at<cv::Vec3b>(index_x, index_y))
+					{
+						isEqual = false;
+						break;
+					}
+
+			Assert::IsTrue(isEqual);
+		}
 	};
 }

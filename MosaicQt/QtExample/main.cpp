@@ -2,6 +2,7 @@
 #include <QtWidgets/QApplication>
 #include <QTWidgets/qstylefactory.h>
 #include <qdebug.h>
+#include <windows.h>
 
 
 int main(int argc, char *argv[])
@@ -14,7 +15,7 @@ int main(int argc, char *argv[])
 //    }
 //#endif
 
-
+   
     QApplication a(argc, argv);
     a.setStyle(QStyleFactory::create("Fusion"));
 
