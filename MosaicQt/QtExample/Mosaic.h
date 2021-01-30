@@ -50,8 +50,7 @@ public:
 		const Type& type,
 		const uint8_t& partitionSize,
 		const Algorithm& algorithm ,
-		const bool& blending,
-		QProgressBar* progressBar = nullptr);
+		const bool& blending);
 
 private:
 	static void ReplaceCellRectangle(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto, const Point& topL); // for square and rectangle
@@ -71,30 +70,26 @@ private:
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
-		const uint8_t& partitionSize,
-		QProgressBar* progressBar = nullptr);
+		const uint8_t& partitionSize);
 
 	static cv::Mat MakeTriangle(const std::unordered_map<cv::Scalar,
 		std::string>& dataPictures,
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
-		const uint8_t& partitionSize, 
-		QProgressBar* progressBar = nullptr);
+		const uint8_t& partitionSize);
 
 	static cv::Mat MakeDiamond(const BasePictures::map& dataPictures,
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
-		const uint8_t& partitionSize, 
-		QProgressBar* progressBar = nullptr);
+		const uint8_t& partitionSize);
 
 	static void MakeMargins(cv::Mat& result, const BasePictures::map& dataPictures,
 		const cv::Mat& image,
 		const Algorithm& algorithm,
 		const bool& blending,
-		const uint8_t& partitionSize, 
-		QProgressBar* progressBar = nullptr);
+		const uint8_t& partitionSize);
 private:
 	static cv::Mat FindPictureWithColorMed(const BasePictures::map& dataPictures,
 		const cv::Scalar& mediumColor,
