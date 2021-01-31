@@ -250,7 +250,7 @@ cv::Mat Mosaic::MakeDiamond(const bp::map& dataPictures, const cv::Mat& image, c
 				{
 					pt::AlphaBlending(cell, medColor);
 				}
-				Mosaic::ReplaceCellDiamond(result, std::move(cell), std::make_pair(x, y + (partitionSize) / 2));
+				Mosaic::ReplaceCellDiamond(result, std::move(cell), std::make_pair(x, y + (partitionSize + 1) / 2));
 			}
 		}
 	};

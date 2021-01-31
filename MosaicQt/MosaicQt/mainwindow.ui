@@ -539,7 +539,7 @@ background:#148dfa;
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body style=&quot;background-color:#19232D&quot;&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select folder to your picture &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;database.&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt; The pictures are added in our&lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt; database&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; font-style:italic;&quot;&gt;This path is not mandatory.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;WARNING: &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; font-style:italic;&quot;&gt;All the photos will be resized to 100px X 100px using Bilinear Interpeloation.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Select the folder to your pictures' database. The pictures are added in our database.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; font-style:italic;&quot;&gt;This path is not mandatory.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;WARNING: All the photos will be resized to 100px X 100px using Bilinear Interpeloation.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius: 10px;;
@@ -1933,11 +1933,14 @@ QRadioButton::indicator:unchecked {
    <widget class="QLabel" name="labelNameResultPicture">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>650</x>
       <y>620</y>
-      <width>61</width>
+      <width>71</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Provides a name for the resulting Mosaic++.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">font: 12pt  &quot;Century Gothic&quot;;</string>
@@ -2007,8 +2010,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>660</y>
+      <x>10</x>
+      <y>650</y>
       <width>331</width>
       <height>21</height>
      </rect>
@@ -2038,17 +2041,23 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="waitLabel">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>400</x>
       <y>620</y>
-      <width>61</width>
-      <height>31</height>
+      <width>201</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="toolTip">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Elapsed time for &lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-style:italic;&quot;&gt;Mosaic++ &lt;/span&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;algorithm.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
+    <property name="styleSheet">
+     <string notr="true">font: 8pt  &quot;Century Gothic&quot;;</string>
+    </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

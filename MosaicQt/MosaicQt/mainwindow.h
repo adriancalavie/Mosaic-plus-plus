@@ -16,10 +16,12 @@
 #include <qlineedit.h>
 #include "ui_mainwindow.h"
 
+#include <iomanip>
 #include <fstream>
 #include <iostream>
 #include <qlabel.h>
 #include <fstream>
+#include <string>
 
 #include "Mosaic.h"
 #include "StopWatch.h"

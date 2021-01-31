@@ -127,7 +127,6 @@
     <QtMoc Include="mainwindow.h" />
     <ClCompile Include="BasePictures.cpp" />
     <ClCompile Include="Data.cpp" />
-    <ClCompile Include="HelpDialog.cpp" />
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -140,7 +139,6 @@
   <ItemGroup>
     <ClInclude Include="BasePictures.h" />
     <ClInclude Include="Data.h" />
-    <ClInclude Include="HelpDialog.h" />
     <ClInclude Include="Mosaic.h" />
     <ClInclude Include="StopWatch.h" />
   </ItemGroup>

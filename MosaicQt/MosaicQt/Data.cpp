@@ -1,4 +1,4 @@
-#include "Data.h"
+﻿#include "Data.h"
 
 //INFOS:
 
@@ -10,17 +10,33 @@ const std::string Data::Info::GENERAL_HELP =
 " [Version " + Data::Info::VERSION + "]\n\n"
 
 "	[..       [..                                                           \n"
-"	[. [..   [...                           [.             [..        [..   \n"
-"	[.. [.. [ [..   [..     [....    [..          [...     [..        [..   \n"
+"	[. [..   [...                            [.              [..        [..   \n"
+"	[.. [.. [ [..   [..     [....    [..          [...      [..        [..   \n"
 "	[..  [..  [.. [..  [.. [..     [..  [.. [.. [..   [... [.....[... [.....\n"
 "	[..   [.  [..[..    [..  [... [..   [.. [..[..         [..        [..   \n"
 "	[..       [.. [..  [..     [..[..   [.. [.. [..        [..        [..   \n"
-"	[..       [..   [..    [.. [..  [.. [...[..   [...                      \n"
+"	[..       [..   [..    [.. [..  [.. [...[..   [...                      \n\n"
 
-"\nFor more information on a specific command, type HELP command-name \n"
-"HELP			Provides Help information for Mosaic++ commands.\n"
-"MAKE			Generates mosaic photo out of a given shape from an input image using a set of images.\n"
-"SET_IMG_POOL	Sets important absolute paths for MAKE command.\n\n\n";
+"For more information on a specific element, put your mouse over him.\n"
+"SELECT PICTURE 			Select a picture to be Mosaiced.\n"
+"RESULT FOLDER				Select the folder in which the Mosaiced picture will be saved.\n"
+"BASE PICTURES FOLDER			Select the folder to your pictures' database. The pictures are added in our database.\n"
+"USE ONLY THIS PHOTO			Keep this off to append the photos from the above folder to the database.\n"
+"START					Start the Mosaic++ algorithm for the selected image.\n"
+"CELL SIZE				This is the size of the partition used to split the original image.\n"
+"RESOLUTION				Resolution for the resulting Mosaic++.\n"
+"ORIGINAL SIZE				Keep this on to retain the original width and height of the image(after Crop or Resize).\n"
+"EXTENSION				Extension for the resulting Mosaic++.\n"
+"METHOD				Method used for resolving uncommon resolutions for the original picture.\n"
+"ALGORITHM				Algorithm used to calculate the distance between mapped colors. \n"
+"CELL SHAPE				The shape of the cells used in the Mosaic++.\n"
+"NAME					Provides a name for the resulting Mosaic++.\n\n"
+"You can contact us here:\n"
+"Calavie Adrian		-->		adrian.calavie06@gmail.com\n"
+"Arhip Florin		-->		florin9925@gmail.com\n"
+"Dinu Alin		-->		dinui.alin@gmail.com\n";
+
+
 
 const std::unordered_map< Data::HelpTypes, std::string> Data::Info::HELP_LEVEL = {
 	{HelpTypes::MAKE_HELP, "make <image1, ...> [flags] [flag_parameters]\n"

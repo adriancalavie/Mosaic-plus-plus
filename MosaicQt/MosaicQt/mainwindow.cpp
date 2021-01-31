@@ -34,6 +34,10 @@ std::string MainWindow::SelectPictureForMosaic()
 
 bool MainWindow::StartMosaic()
 {
+	
+	stopwatch timeMosaic;
+	timeMosaic.tick();
+	
 	auto errors = [&](QString message) {
 		ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
 
@@ -122,6 +126,13 @@ bool MainWindow::StartMosaic()
 	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),
 		ui->labelMosaicPicture->height(), Qt::IgnoreAspectRatio));
 
+	timeMosaic.tock();
+
+	std::string convertor = std::to_string(timeMosaic.report_ms() / 1000.0);
+	convertor = std::move(convertor.substr(0, convertor.size() - 3));
+
+	ui->waitLabel->setText(std::move(QString::fromStdString("Time elapsed: "+ convertor +" seconds")));
+
 	return true;
 }
 
@@ -133,48 +144,8 @@ void MainWindow::ActionExit()
 
 void MainWindow::ActionHelp()
 {
-	//std::unique_ptr<QLabel> labelHelp = std::make_unique<QLabel>();
-	//std::unique_ptr<QHBoxLayout> layoutLabelHelp = std::make_unique<QHBoxLayout>();
-
-	//labelHelp->setWindowTitle("Help");
-
-	//QString textLayout(QString::fromStdString(Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP)));
-	//labelHelp->setText(textLayout);
-
-	//layoutLabelHelp->addWidget(labelHelp.get());
-
-	//Qt::Alignment alignment;
-	//alignment.setFlag(Qt::AlignmentFlag::AlignCenter);
-	//layoutLabelHelp->setAlignment(alignment);
-
-	//help->setMinimumWidth(300);
-	//help->setMinimumHeight(300);
-
-	//help->setLayout(layoutLabelHelp.get());
-	//help->setWindowTitle("ReadMe");
-	//help->show();
-	//hide();
-
-	/*std::unique_ptr<QLabel> labelHelp = std::make_unique<QLabel>();
-	std::unique_ptr<QHBoxLayout> layoutLabelHelp = std::make_unique<QHBoxLayout>();
-
-	setStyleSheet("QWidget{ background-color : rgba( 160, 160, 160, 255); border-radius : 7px;  }");
-
-	QString textLayout(QString::fromStdString(Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP)));
-	labelHelp->setText(textLayout);
-
-	layoutLabelHelp->addWidget(labelHelp.get());
-
-	help->setMinimumWidth(300);
-	help->setMinimumHeight(300);
-
-	help->setLayout(layoutLabelHelp.get());
-	help->setWindowTitle("ReadMe");
-	help->show();
-	hide();*/
 
 	QLabel* label = new QLabel(tr("Name:"));
-	//QLineEdit* lineEdit = new QLineEdit();
 
 	QHBoxLayout* layout = new QHBoxLayout();
 
@@ -185,8 +156,8 @@ void MainWindow::ActionHelp()
 	alignment.setFlag(Qt::AlignmentFlag::AlignCenter);
 	layout->setAlignment(alignment);
 
-	help->setMinimumWidth(300);
-	help->setMinimumHeight(300);
+	help->setMinimumWidth(800);
+	help->setMinimumHeight(600);
 
 	layout->addWidget(label);
 	help->setLayout(layout);
@@ -208,7 +179,7 @@ MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 
 	//this->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
 	help->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
-
+	ui->waitLabel->setWordWrap(true);
 }
 
 MainWindow::~MainWindow()

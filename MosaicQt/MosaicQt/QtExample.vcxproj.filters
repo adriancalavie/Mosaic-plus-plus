@@ -62,9 +62,6 @@
     <ClCompile Include="mainwindow.cpp">
       <Filter>Source Files\QT Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HelpDialog.cpp">
-      <Filter>Source Files\QT Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files\Main</Filter>
     </ClCompile>
@@ -83,9 +80,6 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HelpDialog.h">
-      <Filter>Header Files\QT Headers</Filter>
-    </ClInclude>
     <ClInclude Include="BasePictures.h">
       <Filter>Header Files\Mosaic Headers</Filter>
     </ClInclude>
