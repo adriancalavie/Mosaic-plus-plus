@@ -34,23 +34,22 @@ std::string MainWindow::SelectPictureForMosaic()
 
 bool MainWindow::StartMosaic()
 {
-	
 	stopwatch timeMosaic;
 	timeMosaic.tick();
 	
-	auto errors = [&](QString message) {
+	auto errors = [&](std::string message) {
 		ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
 
 		error->setWindowTitle("Error");
 		error->setWindowIcon(QIcon("Pictures\\error.png"));
-		error->setText(message);
+		error->setText(QString::fromStdString(message));
 		error->show();
 	};
 
 	std::string pictureForMosaicPathString = ui->textEditPictureForMosaic->toPlainText().toStdString();
 	if (pictureForMosaicPathString.size() == 0)
 	{
-		errors("Incorect path for picture!");
+		errors(Data::Errors::PICTURE_FOR_MOSAIC_EMPTY);
 		return false;
 	}
 
@@ -65,7 +64,7 @@ bool MainWindow::StartMosaic()
 
 	if (basePictures.GetNumberPictures() < 10)
 	{
-		errors("No base pictures for mosaic!");
+		errors(Data::Errors::BASE_PICTURES_EMPTY);
 		return false;
 	}
 
@@ -73,7 +72,7 @@ bool MainWindow::StartMosaic()
 
 	if (input.empty())
 	{
-		errors("Something is wrong with your photo!");
+		errors(Data::Errors::UNSUPPORTED_PICTURE);
 		return false;
 	}
 
@@ -97,7 +96,11 @@ bool MainWindow::StartMosaic()
 
 	cv::Mat output = Mosaic::MakeMosaic(input, basePictures, method(), typeCell(), ui->spinBoxCellSize->value(),
 		algorithm(), ui->checkBoxBlendingPicture->isChecked());
-
+	if (output.empty())
+	{
+		errors(Data::Errors::ANOTHER_ERROR);
+		return false;
+	}
 
 	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
 
@@ -149,7 +152,7 @@ void MainWindow::ActionHelp()
 
 	QHBoxLayout* layout = new QHBoxLayout();
 
-	QString textLayout(QString::fromStdString(Data::Info::HELP_LEVEL.at(Data::HelpTypes::GENERAL_HELP)));
+	QString textLayout(QString::fromStdString(Data::Info::GENERAL_HELP));
 	label->setText(textLayout);
 
 	Qt::Alignment alignment;

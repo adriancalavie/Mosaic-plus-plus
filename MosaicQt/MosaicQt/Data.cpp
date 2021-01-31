@@ -38,49 +38,28 @@ const std::string Data::Info::GENERAL_HELP =
 
 
 
-const std::unordered_map< Data::HelpTypes, std::string> Data::Info::HELP_LEVEL = {
-	{HelpTypes::MAKE_HELP, "make <image1, ...> [flags] [flag_parameters]\n"
-	 "\nflags list\n"
-	 "-p"},
-
-	{HelpTypes::GENERAL_HELP, GENERAL_HELP},
-
-	{HelpTypes::SET_POOL_HELP, "set_img_pool <sourcePath> <numberPhotosDatabase> <destinationPath> [processedImagePath], [databaseFile]> [flags] [flag_parameters]\n"}
-};
 
 
-
-
-
-
-const std::string Data::Info::MAKE_HELP = "make <image1, ...> [flags] [flag_parameters]\n";
-
-const std::string Data::Info::SET_POOL_HELP = "WIP";
-
-//static const std::unordered_set<std::string> KNOWN_EXTENSIONS = { "jpg", "png" };
 //INFOS END
 
 
 // ERRORS:
-const std::string Data::Errors::PARAMETER_COUNT = "Wrong number of parameters";
-const std::string Data::Errors::WRONG_PARAMETER = "Wrong type of parameter";
-const std::string Data::Errors::UNKNOWN_COMMAND = "Unknown command used";
-const std::string Data::Errors::WRONG_ARGUMENT_ORDER = "Wrong agrument order";
-const std::string Data::Errors::WRONG_INPUT = "The argument may be an unsupported file extension or an invalid path(check for file existence!)";
-const std::string Data::Errors::WRONG_ARGUMENT = "One or more arguments are invalid";
-
-const std::string Data::Errors::OUT_OF_BOUNDS = "Partitioning size is too large\Expected bounds ~~~ [0-512) ~~~";
+const std::string Data::Errors::BASE_PICTURES_EMPTY = "No base pictures for mosaic!";
+const std::string Data::Errors::PICTURE_FOR_MOSAIC_EMPTY = "Incorect path for picture!";
+const std::string Data::Errors::UNSUPPORTED_PICTURE ="Something is wrong with your photo! \n Please check your photo." ;
+const std::string Data::Errors::ANOTHER_ERROR = "Unknown error! Please contact the administrator.";
 //ERRORS END
 
 
 //DEFAULTS
 #ifdef _DEBUG
 //const std::string Data::Defaults::PARENT_PATH = "..//..//Mosaic++\\";
-const std::string Data::Defaults::PATH_BASE_PICTURES = "Resources\\Base pictures\\";
-const std::string Data::Defaults::PATH_PICTURES_FOR_MOSAIC = "Resources\\Pictures for mosaics\\";
-const std::string Data::Defaults::PATH_DATA_BASE_FILE = "Resources\\Database\\data_base.txt";
-const std::string Data::Defaults::PATH_TEST_IMAGE = "C:\\Users\\adita\Desktop\\jupiter.jpg";
-const std::string Data::Defaults::PATH_RESULT_IMAGE = "Resources\\Resulting pictures\\";
+const std::string Data::Defaults::PATH_BASE_PICTURES = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Base pictures\\";
+const std::string Data::Defaults::PATH_PICTURES_FOR_MOSAIC = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Pictures for mosaics\\";
+const std::string Data::Defaults::PATH_DATA_BASE_FILE = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Database\\data_base.txt";
+const std::string Data::Defaults::PATH_TEST_IMAGE = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicTests\\test.jpg";
+const std::string Data::Defaults::PATH_RESULT_IMAGE = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Resulting pictures\\";
+
 #else
 //const std::string Data::Defaults::PARENT_PATH = "..//..//Mosaic++\\";
 const std::string Data::Defaults::PATH_BASE_PICTURES = "Resources\\Base pictures\\";

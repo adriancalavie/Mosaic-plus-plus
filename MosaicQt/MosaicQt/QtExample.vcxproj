@@ -122,7 +122,6 @@
     <ClCompile Include="Mosaic.cpp" />
     <ClCompile Include="StopWatch.cpp" />
     <QtRcc Include="mainwindow.qrc" />
-    <QtUic Include="DialogButtonBottom.ui" />
     <QtUic Include="mainwindow.ui" />
     <QtMoc Include="mainwindow.h" />
     <ClCompile Include="BasePictures.cpp" />

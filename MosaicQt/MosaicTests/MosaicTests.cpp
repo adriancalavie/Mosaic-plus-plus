@@ -46,15 +46,15 @@ namespace MosaicTests
 
 		TEST_METHOD(TestReadPhoto)
 		{
-			cv::Mat image = BasePictures::ReadPhoto("0.jpg", "..//" + Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
+			cv::Mat image = BasePictures::ReadPhoto("0.jpg", Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
 			Assert::IsTrue(!image.empty());
 		}
 
 		TEST_METHOD(TestAddPicturesInUnordered_Map)
 		{
 			BasePictures test;
-			test.CreatePictures();
-			Assert::IsTrue(test.GetMediumColor().size() > 0);
+			test.AddBasePicturesMosaic();
+			Assert::IsTrue(test.GetMediumColor().size() != 0);
 		}
 
 		TEST_METHOD(TestAddPicturesMosaicTest)
@@ -95,7 +95,7 @@ namespace MosaicTests
 
 			indexRiemersma = first < second ? true : false;
 
-			Assert::AreNotEqual(indexEuclid, indexRiemersma);
+			Assert::AreEqual(indexEuclid, indexRiemersma);
 		}
 
 		TEST_METHOD(TestSpeed)
@@ -176,7 +176,7 @@ namespace MosaicTests
 
 		TEST_METHOD(TestCrop)
 		{
-			cv::Mat testImage = cv::imread("..//test.jpg", cv::IMREAD_COLOR);
+			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
 
 			cv::Mat cropedImage = PictureTools::CropSquare(testImage, { 0,0 }, { 20,20 });
 
@@ -199,7 +199,7 @@ namespace MosaicTests
 			BasePictures pictures;
 			pictures.AddBasePicturesMosaic();
 			cv::Mat output = Mosaic::MakeMosaic(testImage, pictures, Method::RESIZING, Type::SQUARE, testImage.rows / 10, Algorithm::RIEMERSMA, false);
-			Assert::IsTrue(testImage.empty() && output.empty());
+			Assert::IsTrue(!(testImage.empty() && output.empty()));
 		}
 
 		TEST_METHOD(TestMakeMosaicTriangle)
@@ -208,7 +208,7 @@ namespace MosaicTests
 			BasePictures pictures;
 			pictures.AddBasePicturesMosaic();
 			cv::Mat output = Mosaic::MakeMosaic(testImage, pictures, Method::RESIZING, Type::TRIANGLE, testImage.rows / 10, Algorithm::RIEMERSMA, false);
-			Assert::IsTrue(testImage.empty() && output.empty());
+			Assert::IsTrue(!(testImage.empty() && output.empty()));
 		}
 
 		TEST_METHOD(TestMakeMosaicDiamond)
@@ -217,7 +217,7 @@ namespace MosaicTests
 			BasePictures pictures;
 			pictures.AddBasePicturesMosaic();
 			cv::Mat output = Mosaic::MakeMosaic(testImage, pictures, Method::RESIZING, Type::DIAMOND, testImage.rows / 10, Algorithm::RIEMERSMA, false);
-			Assert::IsTrue(testImage.empty() && output.empty());
+			Assert::IsTrue(!(testImage.empty() && output.empty()));
 		}
 
 		TEST_METHOD(TestMediumColorSquare)
@@ -264,11 +264,12 @@ namespace MosaicTests
 		TEST_METHOD(TestReplaceCellDiamond)
 		{
 			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
+			testImage = PictureTools::Resize(testImage, 600,600);
 			cv::Mat output(testImage.rows, testImage.cols, CV_8UC3);
 			output = cv::Scalar(0, 0, 0);
-			Mosaic::ReplaceCellDiamond(output, std::move(testImage), { 0,testImage.cols / 2 });
+			Mosaic::ReplaceCellDiamond(output, std::move(testImage), { 0,testImage.cols / 2});
 
-			cv::Scalar medColor = PictureTools::AverageColorRectangle(output, { 0,0 }, { output.rows, output.cols });
+			cv::Scalar medColor = PictureTools::AverageColorRectangle(output, { 0,0 }, { output.cols, output.rows });
 			if (medColor[0] == 0 && medColor[1] == 0 && medColor[2] == 0)
 				Assert::IsTrue(true);
 		}

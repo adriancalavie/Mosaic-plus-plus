@@ -75,11 +75,6 @@
     <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="DialogButtonBottom.ui">
-      <Filter>Resource Files</Filter>
-    </QtUic>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="BasePictures.h">
       <Filter>Header Files\Mosaic Headers</Filter>
     </ClInclude>
