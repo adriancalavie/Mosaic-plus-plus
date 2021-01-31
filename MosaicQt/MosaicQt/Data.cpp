@@ -17,7 +17,7 @@ const std::string Data::Info::GENERAL_HELP =
 "	[..       [.. [..  [..     [..[..   [.. [.. [..        [..        [..   \n"
 "	[..       [..   [..    [.. [..  [.. [...[..   [...                      \n\n"
 
-"For more information on a specific element, put your mouse over him.\n"
+"For more information on a specific element, put your mouse over it.\n"
 "SELECT PICTURE 			Select a picture to be Mosaiced.\n"
 "RESULT FOLDER				Select the folder in which the Mosaiced picture will be saved.\n"
 "BASE PICTURES FOLDER			Select the folder to your pictures' database. The pictures are added in our database.\n"

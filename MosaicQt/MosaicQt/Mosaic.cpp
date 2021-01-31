@@ -2,7 +2,7 @@
 
 uint32_t EuclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor)
 {
-	int8_t blueDistance, greenDistance, redDistance;
+	int blueDistance, greenDistance, redDistance;
 	blueDistance = firstColor[0] - secondColor[0];
 	greenDistance = firstColor[1] - secondColor[1];
 	redDistance = firstColor[2] - secondColor[2];
