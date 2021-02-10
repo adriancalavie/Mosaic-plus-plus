@@ -241,9 +241,9 @@ void PictureTools::AlphaBlending(cv::Mat& image, const cv::Scalar& color)
 	{
 		for (auto y = 0; y < image.cols; ++y)
 		{
-			image.at<cv::Vec3b>(x, y)[0] = (image.at<cv::Vec3b>(x, y)[0] + color[0]) / 2;
-			image.at<cv::Vec3b>(x, y)[1] = (image.at<cv::Vec3b>(x, y)[1] + color[1]) / 2;
-			image.at<cv::Vec3b>(x, y)[2] = (image.at<cv::Vec3b>(x, y)[2] + color[2]) / 2;
+			image.at<cv::Vec3b>(x, y)[0] = (image.at<cv::Vec3b>(x, y)[0] + color[0] / 1.25) / 2;
+			image.at<cv::Vec3b>(x, y)[1] = (image.at<cv::Vec3b>(x, y)[1] + color[1] / 1.25) / 2;
+			image.at<cv::Vec3b>(x, y)[2] = (image.at<cv::Vec3b>(x, y)[2] + color[2] / 1.25) / 2;
 		}
 	}
 }

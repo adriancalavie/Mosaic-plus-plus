@@ -225,8 +225,7 @@ namespace MosaicTests
 			cv::Scalar color(-1, -1, -1);
 			cv::Mat testImage = cv::imread(Data::Defaults::PATH_TEST_IMAGE, cv::IMREAD_COLOR);
 			color = PictureTools::AverageColorRectangle(testImage, { 0,0 }, { testImage.rows, testImage.cols });
-			if (color[0] == -1 || color[1] == -1 || color[2] == -1)
-				Assert::IsTrue(true);
+			Assert::IsTrue(color[0] == -1 || color[1] == -1 || color[2] == -1);
 		}
 
 		TEST_METHOD(TestMediumColorTriangle)
@@ -237,8 +236,7 @@ namespace MosaicTests
 			auto test = [&](uint8_t type)
 			{
 				color = PictureTools::AverageColorTriangle(testImage, { 0,0 }, { testImage.rows, testImage.cols }, 1);
-				if (color[0] == -1 || color[1] == -1 || color[2] == -1)
-					Assert::IsTrue(true);
+				Assert::IsTrue(color[0] == -1 || color[1] == -1 || color[2] == -1);
 				color[0] == -1;
 				color[1] == -1;
 				color[2] == -1;
@@ -257,8 +255,7 @@ namespace MosaicTests
 
 			Mosaic::ReplaceCellRectangle(output, std::move(testImage), { 0,0 });
 			cv::Scalar medColor = PictureTools::AverageColorRectangle(output, { 0,0 }, { output.rows, output.cols });
-			if (medColor[0] == 0 && medColor[1] == 0 && medColor[2] == 0)
-				Assert::IsTrue(true);
+			Assert::IsTrue(medColor[0] == 0 && medColor[1] == 0 && medColor[2] == 0);
 		}
 
 		TEST_METHOD(TestReplaceCellDiamond)
@@ -270,8 +267,7 @@ namespace MosaicTests
 			Mosaic::ReplaceCellDiamond(output, std::move(testImage), { 0,testImage.cols / 2});
 
 			cv::Scalar medColor = PictureTools::AverageColorRectangle(output, { 0,0 }, { output.cols, output.rows });
-			if (medColor[0] == 0 && medColor[1] == 0 && medColor[2] == 0)
-				Assert::IsTrue(true);
+			Assert::IsTrue(medColor[0] == 0 && medColor[1] == 0 && medColor[2] == 0);
 		}
 
 		TEST_METHOD(TestReplaceCellTriangle)
@@ -284,8 +280,7 @@ namespace MosaicTests
 			{
 				Mosaic::ReplaceCellTriangle(output, std::move(testImage), { 0,0 }, type, { 0,0 }, { testImage.rows, testImage.cols });
 				cv::Scalar medColor = PictureTools::AverageColorRectangle(output, { 0,0 }, { output.rows, output.cols });
-				if (medColor[0] == 0 && medColor[1] == 0 && medColor[2] == 0)
-					Assert::IsTrue(true);
+				Assert::IsTrue(medColor[0] == 0 && medColor[1] == 0 && medColor[2] == 0);
 				output = cv::Scalar(0, 0, 0);
 			};
 			test(1);
