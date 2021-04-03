@@ -28,7 +28,7 @@ const void BasePictures::CreatePictures(const std::string& dirName)
 				<< entry.path().string().substr(dirName.size() + 1) << std::endl;
 			cv::imwrite(m_processedPictures + entry.path().string().substr(dirName.size()), img);
 
-			m_mediumColor.insert(std::make_pair(std::move(aux), std::move(entry.path().string().substr(dirName.size() + 1))));
+			m_mediumColor.insert({ std::move(aux), { std::move(img), entry.path().string().substr(dirName.size() + 1)}});
 		}
 	}
 	out.close();
@@ -78,7 +78,7 @@ void BasePictures::AddBasePicturesMosaic()
 			cv::Mat validation;
 			validation = cv::imread(m_processedPictures + item, cv::IMREAD_COLOR);
 			if (!validation.empty())
-				m_mediumColor.insert(std::make_pair(std::move(aux), std::move(item)));
+				m_mediumColor.insert({ std::move(aux),{validation, std::move(item)} });
 		}
 	}
 }

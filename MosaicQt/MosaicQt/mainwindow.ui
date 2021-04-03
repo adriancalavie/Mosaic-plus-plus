@@ -548,7 +548,7 @@ color:#19232D;
 background:#148dfa;</string>
     </property>
     <property name="text">
-     <string>Base pictures folder</string>
+     <string>Add base pictures folder</string>
     </property>
    </widget>
    <widget class="QPushButton" name="buttonPictureForMosaic">
@@ -882,52 +882,6 @@ border-color: rgb(181, 204, 214);</string>
     </property>
     <property name="text">
      <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBoxBasePictures">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>160</y>
-      <width>201</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Keep this off to append the photos from the above folder to the &lt;/span&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;database&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QCheckBox {
-border-style: outset;
-border-width: 1px;
-border-color: rgb(181, 204, 214);
-font: 10pt  &quot;Century Gothic&quot;;
-border-radius: 10px;
-background:none;
-}
-
-QCheckBox::indicator {
-	left:10px;
-    width:10px;
-    height: 10px;
-	background:none;
-	border-radius:5px;
-
-}
-
-QCheckBox::indicator:unchecked {
-    background: rgb(255, 80, 83);
-}
-
-QCheckBox::indicator:checked {
-     background: #148dfa;
-}</string>
-    </property>
-    <property name="text">
-     <string>Use only this photos</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBoxExtensions">
@@ -2067,7 +2021,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

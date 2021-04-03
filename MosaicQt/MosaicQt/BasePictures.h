@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -30,8 +29,10 @@ struct std::hash<cv::Scalar>
 
 class BasePictures
 {
+	
 public:
-	using map = std::unordered_map<cv::Scalar, std::string>;
+	using value = std::pair<cv::Mat, std::string>;
+	using map = std::unordered_map<cv::Scalar, value>;
 
 private:
 	map m_mediumColor;

@@ -38,6 +38,9 @@ private:
     std::unique_ptr<Ui::MainWindow> ui = std::make_unique<Ui::MainWindow>();
     std::unique_ptr<QWidget> help = std::make_unique<QWidget>();
     std::unique_ptr<QMessageBox> error = std::make_unique<QMessageBox>();
+
+private:
+    BasePictures basePictures;
     
 private slots:
     std::string SelectBasePicturesFolder();

@@ -53,14 +53,8 @@ bool MainWindow::StartMosaic()
 		return false;
 	}
 
-	std::string basePicturePathString = ui->textEditBasePictureFolder->toPlainText().toStdString();
-	BasePictures basePictures;
-
-	if (!ui->checkBoxBasePictures->isChecked())
-		basePictures.AddBasePicturesMosaic();
-
-	if (basePicturePathString.size() > 0)
-		basePictures.CreatePictures(basePicturePathString);
+	if (ui->textEditBasePictureFolder->toPlainText().toStdString().size() > 0)
+		basePictures.CreatePictures(ui->textEditBasePictureFolder->toPlainText().toStdString());
 
 	if (basePictures.GetNumberPictures() < 10)
 	{
@@ -183,6 +177,8 @@ MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 	//this->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
 	help->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
 	ui->waitLabel->setWordWrap(true);
+
+	basePictures.AddBasePicturesMosaic();
 }
 
 MainWindow::~MainWindow()

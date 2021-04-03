@@ -366,6 +366,7 @@ cv::Mat Mosaic::FindPictureWithColorMed(const bp::map& dataPictures, const cv::S
 {
 	std::string pictureName;
 	uint32_t closestDistance = INT_MAX;
+	cv::Mat picture;
 	for (auto itr : dataPictures)
 	{
 		uint32_t currDistance;
@@ -374,16 +375,15 @@ cv::Mat Mosaic::FindPictureWithColorMed(const bp::map& dataPictures, const cv::S
 		else
 			currDistance = EuclideanDistance(mediumColor, itr.first);
 
-		if (currDistance < closestDistance && itr.second != pictureDifferent)
+		if (currDistance < closestDistance && itr.second.second != pictureDifferent)
 		{
 			closestDistance = currDistance;
-			pictureName = itr.second;
+			pictureName = itr.second.second;
+			picture = itr.second.first;
 		}
-
 	}
-
 	pictureDifferent = pictureName;
-	return bp::ReadPhoto(pictureName);
+	return picture;
 }
 
 void Mosaic::ReplaceCellRectangle(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto, const Point& topL)
