@@ -68,6 +68,9 @@
     <ClCompile Include="QuadTreeImages.cpp">
       <Filter>Source Files\Mosaic Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Settings.cpp">
+      <Filter>Source Files\QT Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -93,5 +96,13 @@
     <QtMoc Include="mainwindow.h">
       <Filter>Header Files\QT Headers</Filter>
     </QtMoc>
+    <QtMoc Include="Settings.h">
+      <Filter>Header Files\QT Headers</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="settings.ui">
+      <Filter>Resource Files</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

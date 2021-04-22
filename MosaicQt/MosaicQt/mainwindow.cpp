@@ -16,7 +16,7 @@ std::string MainWindow::SelectFolderForResult()
 	QString aux = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "D:",
 		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	ui->textEditFolderResultForPicture->setText(aux);
-	
+
 	return aux.toStdString();
 }
 
@@ -36,7 +36,7 @@ bool MainWindow::StartMosaic()
 {
 	stopwatch timeMosaic;
 	timeMosaic.tick();
-	
+
 	auto errors = [&](std::string message) {
 		ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
 
@@ -77,19 +77,20 @@ bool MainWindow::StartMosaic()
 			return Type::SQUARE;
 		return Type::TRIANGLE;
 	};
-	auto method = [u = *ui]{
-		if (u.radioButtonMethodCropping->isChecked())
+
+	auto method = [s = *st->ui]{
+		if (s.radioButtonMethodCropping->isChecked())
 			return Method::CROPPING;
 		return Method::RESIZING;
 	};
-	auto algorithm = [u = *ui]{
-		if (u.radioButtonEuclidianAlgorithm->isChecked())
+	auto algorithm = [s = *st->ui]{
+		if (s.radioButtonEuclidianAlgorithm->isChecked())
 			return Algorithm::EUCLIDEAN;
 		return Algorithm::RIEMERSMA;
 	};
 
 	cv::Mat output = Mosaic::MakeMosaic(input, basePictures, method(), typeCell(), ui->spinBoxCellSize->value(),
-		algorithm(), ui->checkBoxBlendingPicture->isChecked());
+		algorithm(), st->ui->checkBoxBlendingPicture->isChecked());
 	if (output.empty())
 	{
 		errors(Data::Errors::ANOTHER_ERROR);
@@ -98,23 +99,23 @@ bool MainWindow::StartMosaic()
 
 	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
 
-	auto extension = [u = *ui]{
-		if (u.extensionJPG->isChecked())
+	auto extension = [s = *st->ui]{
+		if (s.extensionJPG->isChecked())
 			return ".jpg";
 		return ".png";
 	};
 
-	auto outputPath = [u = *ui, &extension]{
+	auto outputPath = [s = *st->ui, &extension, u = *ui]{
 		if (u.textEditFolderResultForPicture->toPlainText().toStdString().size() == 0)
 		{
-			return Data::Defaults::PATH_RESULT_IMAGE + u.textEditNameResultPicture->toPlainText().toStdString() + extension();
+			return Data::Defaults::PATH_RESULT_IMAGE + s.textEditNameResultPicture->toPlainText().toStdString() + extension();
 		}
-		return u.textEditFolderResultForPicture->toPlainText().toStdString() + "/" + u.textEditNameResultPicture->toPlainText().toStdString() + extension();
+		return u.textEditFolderResultForPicture->toPlainText().toStdString() + "/" + s.textEditNameResultPicture->toPlainText().toStdString() + extension();
 	};
 
-	if (!ui->checkBoxOriginalSize->isChecked())
+	if (!st->ui->checkBoxOriginalSize->isChecked())
 	{
-		output = Mosaic::pt::Resize(output, ui->spinBoxWidthResultPicture->value(), ui->spinBoxHeightResultPicture->value());
+		output = Mosaic::pt::Resize(output, st->ui->spinBoxWidthResultPicture->value(), st->ui->spinBoxHeightResultPicture->value());
 	}
 
 	cv::imwrite(outputPath(), output);
@@ -128,9 +129,14 @@ bool MainWindow::StartMosaic()
 	std::string convertor = std::to_string(timeMosaic.report_ms() / 1000.0);
 	convertor = std::move(convertor.substr(0, convertor.size() - 3));
 
-	ui->waitLabel->setText(std::move(QString::fromStdString("Time elapsed: "+ convertor +" seconds")));
+	ui->waitLabel->setText(std::move(QString::fromStdString("Time elapsed: " + convertor + " seconds")));
 
 	return true;
+}
+
+void MainWindow::ActionSettings()
+{
+	st->show();
 }
 
 
@@ -178,6 +184,7 @@ MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 	connect(ui->buttonMakeMosaic, &QPushButton::released, this, &MainWindow::StartMosaic);
 	connect(ui->actionExit, &QAction::triggered, this, &MainWindow::ActionExit);
 	connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::ActionHelp);
+	connect(ui->actionSettings, &QAction::triggered, this, &MainWindow::ActionSettings);
 	connect(ui->checkBoxQuadTree, &QPushButton::released, this, &MainWindow::SelectQuadTree);
 
 	//this->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
