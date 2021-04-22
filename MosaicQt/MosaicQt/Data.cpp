@@ -2,7 +2,7 @@
 
 //INFOS:
 
-const std::string Data::Info::VERSION = "0.0.1a";
+const std::string Data::Info::VERSION = "0.0.2a";
 
 const std::string Data::Info::GENERAL_HELP =
 
@@ -18,7 +18,7 @@ const std::string Data::Info::GENERAL_HELP =
 "	[..       [..   [..    [.. [..  [.. [...[..   [...                      \n\n"
 
 "For more information on a specific element, put your mouse over it.\n"
-"SELECT PICTURE 			Select a picture to be Mosaiced.\n"
+"SELECT PICTURE 				Select a picture to be Mosaiced.\n"
 "RESULT FOLDER				Select the folder in which the Mosaiced picture will be saved.\n"
 "BASE PICTURES FOLDER			Select the folder to your pictures' database. The pictures are added in our database.\n"
 "USE ONLY THIS PHOTO			Keep this off to append the photos from the above folder to the database.\n"
@@ -27,14 +27,14 @@ const std::string Data::Info::GENERAL_HELP =
 "RESOLUTION				Resolution for the resulting Mosaic++.\n"
 "ORIGINAL SIZE				Keep this on to retain the original width and height of the image(after Crop or Resize).\n"
 "EXTENSION				Extension for the resulting Mosaic++.\n"
-"METHOD				Method used for resolving uncommon resolutions for the original picture.\n"
+"METHOD					Method used for resolving uncommon resolutions for the original picture.\n"
 "ALGORITHM				Algorithm used to calculate the distance between mapped colors. \n"
 "CELL SHAPE				The shape of the cells used in the Mosaic++.\n"
 "NAME					Provides a name for the resulting Mosaic++.\n\n"
 "You can contact us here:\n"
 "Calavie Adrian		-->		adrian.calavie06@gmail.com\n"
 "Arhip Florin		-->		florin9925@gmail.com\n"
-"Dinu Alin		-->		dinui.alin@gmail.com\n";
+"Dinu Alin			-->		dinui.alin@gmail.com\n";
 
 
 

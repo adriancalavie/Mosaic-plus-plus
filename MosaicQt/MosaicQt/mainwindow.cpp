@@ -162,6 +162,11 @@ void MainWindow::ActionHelp()
 	help->show();
 }
 
+void MainWindow::SelectQuadTree()
+{
+	
+}
+
 MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 	QMainWindow(parent.get()),
 	ui(new Ui::MainWindow)
@@ -173,6 +178,7 @@ MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 	connect(ui->buttonMakeMosaic, &QPushButton::released, this, &MainWindow::StartMosaic);
 	connect(ui->actionExit, &QAction::triggered, this, &MainWindow::ActionExit);
 	connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::ActionHelp);
+	connect(ui->checkBoxQuadTree, &QPushButton::released, this, &MainWindow::SelectQuadTree);
 
 	//this->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
 	help->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");

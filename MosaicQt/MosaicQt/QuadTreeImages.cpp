@@ -70,16 +70,16 @@ void QuadTreeImages::recursiveSubDivide(QNode* node, double k, int minPixelSize,
 		return;
 	}
 
-	QNode* x1 = new QNode(node->x0, node->y0, h_1, w_1); //top left
+	QNode* x1 = new QNode(node->x0, node->y0, w_1, h_1); //top left
 	recursiveSubDivide(x1, k, minPixelSize, img);
 
-	QNode* x2 = new QNode(node->x0, node->y0 + w_1, h_1, w_2); //btm left
+	QNode* x2 = new QNode(node->x0, node->y0 + w_1, w_1, h_2); //btm left
 	recursiveSubDivide(x2, k, minPixelSize, img);
 
-	QNode* x3 = new QNode(node->x0 + h_1, node->y0, h_2, w_1); //top right
+	QNode* x3 = new QNode(node->x0 + h_1, node->y0, w_2, h_1); //top right
 	recursiveSubDivide(x3, k, minPixelSize, img);
 
-	QNode* x4 = new QNode(node->x0 + h_1, node->y0 + w_1, h_2, w_2); //btm right
+	QNode* x4 = new QNode(node->x0 + h_1, node->y0 + w_1, w_2, h_2); //btm right
 	recursiveSubDivide(x4, k, minPixelSize, img);
 
 	node->children = std::vector<QNode*>();
@@ -119,35 +119,7 @@ QuadTreeImages::QuadTreeImages(double stdThreshold, int minPixelSize, const cv::
 	this->minSize = minPixelSize;
 	this->minPixelSize = minPixelSize;
 	this->image = image;
-	this->root = new QNode(0, 0, image.rows, image.cols);
-}
-
-cv::Mat QuadTreeImages::renderImg(double thickness, cv::Scalar color)
-{
-	cv::Mat imgc;
-	this->image.copyTo(imgc);
-	auto children = findChildren(root);
-	for (auto child : children)
-	{
-		auto pixels = child->getPoints(this->image);
-
-		auto average = pt::AverageColorRectangle(pixels);
-
-		cv::Mat solidColorImage = pixels;
-		solidColorImage = average;
-		//cols, rows, cols, rows;
-		solidColorImage.copyTo(imgc(cv::Rect(child->x0, child->y0, solidColorImage.cols, solidColorImage.rows)));
-	}
-
-	if (thickness > 0.)
-	{
-		for (auto child : children)
-		{
-			cv::rectangle(imgc, { child->y0,child->x0 }, { child->width, child->height }, color, thickness);
-		}
-	}
-
-	return imgc;
+	this->root = new QNode(0, 0, image.cols, image.rows);
 }
 
 void QuadTreeImages::subdivide()

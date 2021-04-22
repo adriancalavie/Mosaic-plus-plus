@@ -49,4 +49,5 @@ private slots:
     bool StartMosaic();
     void ActionExit();
     void ActionHelp();
+    void SelectQuadTree();
 };

@@ -2014,6 +2014,61 @@ p, li { white-space: pre-wrap; }
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QCheckBox" name="checkBoxQuadTree">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>160</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Century Gothic</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QCheckBox {
+text-align: center;
+border-style: outset;
+border-width: 1px;
+border-color: rgb(181, 204, 214);
+font: 10pt  &quot;Century Gothic&quot;;
+border-radius: 10px;
+background:none;
+}
+
+QCheckBox::indicator {
+	left:10px;
+    width: 10px;
+    height: 10px;
+	background:none;
+	border-radius:5px;
+}
+
+QCheckBox::indicator:unchecked {
+    background: rgb(255, 80, 83);
+}
+
+QCheckBox::indicator:checked {
+     background: #148dfa;
+}</string>
+    </property>
+    <property name="text">
+     <string>Quad Tree</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
