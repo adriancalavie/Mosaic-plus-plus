@@ -65,6 +65,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files\Main</Filter>
     </ClCompile>
+    <ClCompile Include="QuadTreeImages.cpp">
+      <Filter>Source Files\Mosaic Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -80,6 +83,9 @@
       <Filter>Header Files\Mosaic Headers</Filter>
     </ClInclude>
     <ClInclude Include="StopWatch.h">
+      <Filter>Header Files\Mosaic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTreeImages.h">
       <Filter>Header Files\Mosaic Headers</Filter>
     </ClInclude>
   </ItemGroup>

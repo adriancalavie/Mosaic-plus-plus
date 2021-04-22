@@ -1,5 +1,3 @@
-
-
 #pragma once
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -24,7 +22,7 @@ public:
 		BILINEAR_INTERPOLATION
 	};
 
-private:
+public:
 	using Point = std::pair <uint16_t, uint16_t>;
 
 private:
