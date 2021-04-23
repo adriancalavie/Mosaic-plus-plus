@@ -448,7 +448,7 @@ std::vector<QuadTreeImages::QNode*> Mosaic::FindChildren(QuadTreeImages::QNode* 
 Mosaic::imgPair Mosaic::graphTree(const bp& database, const QuadTreeImages* qt, const int& thickness, const bool& hasDetails, const bool& blending)
 {
 	std::optional<cv::Mat> quadimage = qt->GetImage();
-	std::optional<cv::Mat> partialimage = qt->GetImage();
+	std::optional<cv::Mat> partialimage = cv::Mat(qt->GetImage().rows, qt->GetImage().cols, qt->GetImage().type());
 
 	auto c = FindChildren(qt->GetRoot());
 
