@@ -26,6 +26,8 @@
 #include "Mosaic.h"
 #include "StopWatch.h"
 #include "Settings.h"
+#include "QuadWindow.h"
+
 
 class MainWindow : public QMainWindow
 {
@@ -40,6 +42,7 @@ private:
     std::unique_ptr<QWidget> help = std::make_unique<QWidget>();
     std::unique_ptr<QMessageBox> error = std::make_unique<QMessageBox>();
     std::unique_ptr<Settings> st = std::make_unique<Settings>();
+    std::unique_ptr<QuadWindow> qw = std::make_unique<QuadWindow>();
 
 private:
     BasePictures basePictures;
@@ -52,9 +55,12 @@ private slots:
     void ActionSettings();
     void ActionExit();
     void ActionHelp();
-
     void CheckQuadMosaic();
-
+    void ShowDetailsQuad();
+private:
     void MakeMosaic();
     void MakeQuadMosaic();
+    void Errors(std::string message);
+
+
 };

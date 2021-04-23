@@ -26,4 +26,5 @@ public:
 private slots:
 	void ChangeValueTrehhold();
 	void ChangeValueMinimumSize();
+	void Save();
 };
