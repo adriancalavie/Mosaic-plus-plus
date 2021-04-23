@@ -62,67 +62,15 @@ bool MainWindow::StartMosaic()
 		return false;
 	}
 
-	cv::Mat input = cv::imread(pictureForMosaicPathString, cv::IMREAD_COLOR);
-
-	if (input.empty())
+	if (ui->checkBoxQuadTree->isChecked())
 	{
-		errors(Data::Errors::UNSUPPORTED_PICTURE);
-		return false;
+		MakeQuadMosaic();
+	}
+	else
+	{
+		MakeMosaic();
 	}
 
-	auto typeCell = [u = *ui]{
-		if (u.diamondRadioButton->isChecked())
-			return Type::DIAMOND;
-		if (u.squareRadioButton->isChecked())
-			return Type::SQUARE;
-		return Type::TRIANGLE;
-	};
-
-	auto method = [s = *st->ui]{
-		if (s.radioButtonMethodCropping->isChecked())
-			return Method::CROPPING;
-		return Method::RESIZING;
-	};
-	auto algorithm = [s = *st->ui]{
-		if (s.radioButtonEuclidianAlgorithm->isChecked())
-			return Algorithm::EUCLIDEAN;
-		return Algorithm::RIEMERSMA;
-	};
-
-	cv::Mat output = Mosaic::MakeMosaic(input, basePictures, method(), typeCell(), ui->spinBoxCellSize->value(),
-		algorithm(), st->ui->checkBoxBlendingPicture->isChecked());
-	if (output.empty())
-	{
-		errors(Data::Errors::ANOTHER_ERROR);
-		return false;
-	}
-
-	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
-
-	auto extension = [s = *st->ui]{
-		if (s.extensionJPG->isChecked())
-			return ".jpg";
-		return ".png";
-	};
-
-	auto outputPath = [s = *st->ui, &extension, u = *ui]{
-		if (u.textEditFolderResultForPicture->toPlainText().toStdString().size() == 0)
-		{
-			return Data::Defaults::PATH_RESULT_IMAGE + s.textEditNameResultPicture->toPlainText().toStdString() + extension();
-		}
-		return u.textEditFolderResultForPicture->toPlainText().toStdString() + "/" + s.textEditNameResultPicture->toPlainText().toStdString() + extension();
-	};
-
-	if (!st->ui->checkBoxOriginalSize->isChecked())
-	{
-		output = Mosaic::pt::Resize(output, st->ui->spinBoxWidthResultPicture->value(), st->ui->spinBoxHeightResultPicture->value());
-	}
-
-	cv::imwrite(outputPath(), output);
-
-	QPixmap mosaic(std::move(QString::fromStdString(outputPath())));
-	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),
-		ui->labelMosaicPicture->height(), Qt::IgnoreAspectRatio));
 
 	timeMosaic.tock();
 
@@ -170,7 +118,88 @@ void MainWindow::ActionHelp()
 
 void MainWindow::SelectQuadTree()
 {
+
+}
+
+void MainWindow::MakeMosaic()
+{
+	auto errors = [&](std::string message) {
+		ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
+
+		error->setWindowTitle("Error");
+		error->setWindowIcon(QIcon("Pictures\\error.png"));
+		error->setText(QString::fromStdString(message));
+		error->show();
+	};
+
+	std::string pictureForMosaicPathString = ui->textEditPictureForMosaic->toPlainText().toStdString();
+	cv::Mat input = cv::imread(pictureForMosaicPathString, cv::IMREAD_COLOR);
+
+	if (input.empty())
+	{
+		errors(Data::Errors::UNSUPPORTED_PICTURE);
+		return;
+	}
+
+	auto typeCell = [u = *ui]{
+		if (u.diamondRadioButton->isChecked())
+			return Type::DIAMOND;
+		if (u.squareRadioButton->isChecked())
+			return Type::SQUARE;
+		return Type::TRIANGLE;
+	};
+
+	auto method = [s = *st->GetUI()]{
+		if (s.radioButtonMethodCropping->isChecked())
+			return Method::CROPPING;
+		return Method::RESIZING;
+	};
+	auto algorithm = [s = *st->GetUI()]{
+		if (s.radioButtonEuclidianAlgorithm->isChecked())
+			return Algorithm::EUCLIDEAN;
+		return Algorithm::RIEMERSMA;
+	};
 	
+	cv::Mat output = Mosaic::MakeMosaic(input, basePictures, method(), typeCell(), ui->spinBoxCellSize->value(),
+		algorithm(), st->GetUI()->checkBoxBlendingPicture->isChecked());
+	if (output.empty())
+	{
+		errors(Data::Errors::ANOTHER_ERROR);
+		return;
+		
+	}
+
+	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
+
+	auto extension = [s = *st->GetUI()]{
+		if (s.extensionJPG->isChecked())
+			return ".jpg";
+		return ".png";
+	};
+
+	auto outputPath = [s = *st->GetUI(), &extension, u = *ui]{
+		if (u.textEditFolderResultForPicture->toPlainText().toStdString().size() == 0)
+		{
+			return Data::Defaults::PATH_RESULT_IMAGE + s.textEditNameResultPicture->toPlainText().toStdString() + extension();
+		}
+		return u.textEditFolderResultForPicture->toPlainText().toStdString() + "/" + s.textEditNameResultPicture->toPlainText().toStdString() + extension();
+	};
+
+	if (!st->GetUI()->checkBoxOriginalSize->isChecked())
+	{
+		output = Mosaic::pt::Resize(output, st->GetUI()->spinBoxWidthResultPicture->value(), st->GetUI()->spinBoxHeightResultPicture->value());
+	}
+
+	cv::imwrite(outputPath(), output);
+
+	QPixmap mosaic(std::move(QString::fromStdString(outputPath())));
+	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),
+		ui->labelMosaicPicture->height(), Qt::IgnoreAspectRatio));
+}
+
+void MainWindow::MakeQuadMosaic()
+{
+
 }
 
 MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :

@@ -53,4 +53,7 @@ private slots:
     void ActionExit();
     void ActionHelp();
     void SelectQuadTree();
+
+    void MakeMosaic();
+    void MakeQuadMosaic();
 };
