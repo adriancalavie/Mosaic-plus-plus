@@ -71,6 +71,9 @@
     <ClCompile Include="Settings.cpp">
       <Filter>Source Files\QT Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="QuadWindow.cpp">
+      <Filter>Source Files\QT Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -99,9 +102,15 @@
     <QtMoc Include="Settings.h">
       <Filter>Header Files\QT Headers</Filter>
     </QtMoc>
+    <QtMoc Include="QuadWindow.h">
+      <Filter>Header Files\QT Headers</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="settings.ui">
+      <Filter>Resource Files</Filter>
+    </QtUic>
+    <QtUic Include="quadwindow.ui">
       <Filter>Resource Files</Filter>
     </QtUic>
   </ItemGroup>
