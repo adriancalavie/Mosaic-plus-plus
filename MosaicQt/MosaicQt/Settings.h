@@ -3,6 +3,11 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMessageBox>
 #include "ui_settings.h"
+#include <QtWidgets/qslider.h>
+
+
+#include <QtWidgets>
+
 
 class Settings : public QMainWindow
 {
@@ -17,4 +22,8 @@ public:
 public:
 	Settings(std::shared_ptr<QWidget> parent = Q_NULLPTR);
 	~Settings();
+
+private slots:
+	void ChangeValueTrehhold();
+	void ChangeValueMinimumSize();
 };

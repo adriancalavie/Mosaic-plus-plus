@@ -116,10 +116,27 @@ void MainWindow::ActionHelp()
 	help->show();
 }
 
-void MainWindow::SelectQuadTree()
+void MainWindow::CheckQuadMosaic()
 {
+	if (ui->checkBoxQuadTree->isChecked())
+	{
+		ui->labelCellSize->setVisible(false);
+		ui->spinBoxCellSize->setVisible(false);
+		ui->diamondRadioButton->setVisible(false);
+		ui->triangleRadioButton->setVisible(false);
+		ui->squareRadioButton->setChecked(true);
+	}
+	else
+	{
+		ui->labelCellSize->setVisible(true);
+		ui->spinBoxCellSize->setVisible(true);
+		ui->diamondRadioButton->setVisible(true);
+		ui->triangleRadioButton->setVisible(true);
+		ui->squareRadioButton->setChecked(true);
+	}
 
 }
+
 
 void MainWindow::MakeMosaic()
 {
@@ -214,7 +231,8 @@ MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 	connect(ui->actionExit, &QAction::triggered, this, &MainWindow::ActionExit);
 	connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::ActionHelp);
 	connect(ui->actionSettings, &QAction::triggered, this, &MainWindow::ActionSettings);
-	connect(ui->checkBoxQuadTree, &QPushButton::released, this, &MainWindow::SelectQuadTree);
+	connect(ui->checkBoxQuadTree, &QPushButton::released, this, &MainWindow::CheckQuadMosaic);
+	
 
 	//this->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
 	help->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
