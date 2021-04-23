@@ -12,9 +12,6 @@ Settings::Settings(std::shared_ptr<QWidget> parent)
 	ui->setupUi(this);
 	connect(ui->sliderThreshold, &QSlider::valueChanged, this, &Settings::ChangeValueTrehhold);
 	connect(ui->sliderMinimumSize, &QSlider::valueChanged, this, &Settings::ChangeValueMinimumSize);
-	connect(ui->buttonSave, &QPushButton::released, this, &Settings::Save);
-	ui->sliderThreshold->setValue(ui->labelValueThreshold->text().toInt());
-	ui->sliderMinimumSize->setValue(ui->labelValueMinimumSize->text().toInt());
 }
 
 Settings::~Settings()
@@ -30,9 +27,4 @@ void Settings::ChangeValueTrehhold()
 void Settings::ChangeValueMinimumSize()
 {
 	ui->labelValueMinimumSize->setText(QString::fromStdString(std::to_string(ui->sliderMinimumSize->value())));
-}
-
-void Settings::Save()
-{
-	this->setVisible(false);
 }

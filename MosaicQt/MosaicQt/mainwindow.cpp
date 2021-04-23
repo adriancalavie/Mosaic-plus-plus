@@ -28,11 +28,7 @@ std::string MainWindow::SelectPictureForMosaic()
 	ui->textEditPictureForMosaic->setText(aux);
 	QPixmap pixmap(aux);
 	ui->labelOriginalPicture->setPixmap(pixmap.scaled(ui->labelOriginalPicture->width(),
-		ui->labelOriginalPicture->height(), Qt::KeepAspectRatio));
-
-	qw.get()->GetUI().get()->labelOriginalPicture->setPixmap(pixmap.scaled(qw.get()->GetUI().get()->labelOriginalPicture->width(),
-		qw.get()->GetUI().get()->labelOriginalPicture->height(), Qt::KeepAspectRatio));
-
+		ui->labelOriginalPicture->height(), Qt::IgnoreAspectRatio));
 	return aux.toStdString();
 }
 
@@ -41,10 +37,19 @@ bool MainWindow::StartMosaic()
 	stopwatch timeMosaic;
 	timeMosaic.tick();
 
+	auto errors = [&](std::string message) {
+		ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
+
+		error->setWindowTitle("Error");
+		error->setWindowIcon(QIcon("Pictures\\error.png"));
+		error->setText(QString::fromStdString(message));
+		error->show();
+	};
+
 	std::string pictureForMosaicPathString = ui->textEditPictureForMosaic->toPlainText().toStdString();
 	if (pictureForMosaicPathString.size() == 0)
 	{
-		Errors(Data::Errors::PICTURE_FOR_MOSAIC_EMPTY);
+		errors(Data::Errors::PICTURE_FOR_MOSAIC_EMPTY);
 		return false;
 	}
 
@@ -53,7 +58,7 @@ bool MainWindow::StartMosaic()
 
 	if (basePictures.GetNumberPictures() < 10)
 	{
-		Errors(Data::Errors::BASE_PICTURES_EMPTY);
+		errors(Data::Errors::BASE_PICTURES_EMPTY);
 		return false;
 	}
 
@@ -132,21 +137,24 @@ void MainWindow::CheckQuadMosaic()
 
 }
 
-void MainWindow::ShowDetailsQuad()
-{
-	qw->show();
-	ui->buttonShowDetailsQuad->setVisible(false);
-}
-
 
 void MainWindow::MakeMosaic()
 {
+	auto errors = [&](std::string message) {
+		ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
+
+		error->setWindowTitle("Error");
+		error->setWindowIcon(QIcon("Pictures\\error.png"));
+		error->setText(QString::fromStdString(message));
+		error->show();
+	};
+
 	std::string pictureForMosaicPathString = ui->textEditPictureForMosaic->toPlainText().toStdString();
 	cv::Mat input = cv::imread(pictureForMosaicPathString, cv::IMREAD_COLOR);
 
 	if (input.empty())
 	{
-		Errors(Data::Errors::UNSUPPORTED_PICTURE);
+		errors(Data::Errors::UNSUPPORTED_PICTURE);
 		return;
 	}
 
@@ -173,7 +181,7 @@ void MainWindow::MakeMosaic()
 		algorithm(), st.get()->GetUI().get()->checkBoxBlendingPicture->isChecked());
 	if (output.empty())
 	{
-		Errors(Data::Errors::ANOTHER_ERROR);
+		errors(Data::Errors::ANOTHER_ERROR);
 		return;
 
 	}
@@ -203,7 +211,7 @@ void MainWindow::MakeMosaic()
 
 	QPixmap mosaic(std::move(QString::fromStdString(outputPath())));
 	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),
-		ui->labelMosaicPicture->height(), Qt::KeepAspectRatio));
+		ui->labelMosaicPicture->height(), Qt::IgnoreAspectRatio));
 }
 
 void MainWindow::MakeQuadMosaic()
@@ -212,8 +220,8 @@ void MainWindow::MakeQuadMosaic()
 	std::string pictureForMosaicPathString = ui->textEditPictureForMosaic->toPlainText().toStdString();
 	cv::Mat input = cv::imread(pictureForMosaicPathString, cv::IMREAD_COLOR);
 
-	Mosaic::imgPair res = Mosaic::MakeQuadTree(basePictures, input, st.get()->GetUI().get()->checkBoxBlendingPicture->isChecked(), st.get()->GetUI().get()->sliderThreshold->value() / 500.0,
-		st.get()->GetUI().get()->sliderMinimumSize->value(), st.get()->GetUI().get()->checkBoxDetailsQuad->isChecked());
+	Mosaic::imgPair res = Mosaic::MakeQuadTree(basePictures, input, st.get()->GetUI().get()->checkBoxBlendingPicture->isChecked(), st.get()->GetUI().get()->sliderThreshold->value()/500.0 , 
+		st.get()->GetUI().get()->sliderMinimumSize->value(), true);
 
 	auto extension = [s = st.get()->GetUI()]{
 		if (s.get()->extensionJPG->isChecked())
@@ -229,43 +237,12 @@ void MainWindow::MakeQuadMosaic()
 		return u.textEditFolderResultForPicture->toPlainText().toStdString() + "/" + s.get()->textEditNameResultPicture->toPlainText().toStdString() + extension();
 	};
 
-	if (res.second.value().empty())
-	{
-		Errors(Data::Errors::ANOTHER_ERROR);
-		return;
-
-	}
-
-	cv::imwrite(outputPath(), res.first.value());
-	cv::imwrite(Data::Defaults::PATH_RESULT_IMAGE +"quad"+extension(), res.second.value());
+	cv::imwrite(outputPath(), res.second.value());
 
 	QPixmap mosaic(std::move(QString::fromStdString(outputPath())));
-
 	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),
-		ui->labelMosaicPicture->height(), Qt::KeepAspectRatio));
-
-	if (st.get()->GetUI().get()->checkBoxDetailsQuad->isChecked())
-	{
-		qw.get()->GetUI().get()->labelMosaicPicture->setPixmap(mosaic.scaled(qw.get()->GetUI().get()->labelMosaicPicture->width(),
-			qw.get()->GetUI().get()->labelMosaicPicture->height(), Qt::KeepAspectRatio));
-
-		QPixmap quadImage(std::move(QString::fromStdString(Data::Defaults::PATH_RESULT_IMAGE + "quad" + extension())));
-
-		qw.get()->GetUI().get()->labelQuadImage->setPixmap(quadImage.scaled(qw.get()->GetUI().get()->labelQuadImage->width(),
-			qw.get()->GetUI().get()->labelQuadImage->height(), Qt::KeepAspectRatio));
-		ui->buttonShowDetailsQuad->setVisible(true);
-	}
-
-}
-
-void MainWindow::Errors(std::string message)
-{
-	ui->buttonMakeMosaic->setStyleSheet("QPushButton{border-radius: 10px;font: 20pt \"Century Gothic\";color:#19232D; background:#148dfa;}");
-
-	error->setWindowTitle("Error");
-	error->setWindowIcon(QIcon("Pictures\\error.png"));
-	error->setText(QString::fromStdString(message));
-	error->show();
+		ui->labelMosaicPicture->height()));
+	
 }
 
 MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
@@ -281,13 +258,12 @@ MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :
 	connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::ActionHelp);
 	connect(ui->actionSettings, &QAction::triggered, this, &MainWindow::ActionSettings);
 	connect(ui->checkBoxQuadTree, &QPushButton::released, this, &MainWindow::CheckQuadMosaic);
-	connect(ui->buttonShowDetailsQuad, &QPushButton::released, this, &MainWindow::ShowDetailsQuad);
-
+	
 
 	//this->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
 	help->setStyleSheet("QWidget{ background-color: #19232D;border: 0px solid #32414B;padding: 0px;color: #F0F0F0;selection - background - color: #1464A0;selection - color: #F0F0F0;}");
 	ui->waitLabel->setWordWrap(true);
-	ui->buttonShowDetailsQuad->setVisible(false);
+
 	basePictures.AddBasePicturesMosaic();
 }
 
