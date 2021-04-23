@@ -734,6 +734,9 @@ border-color: rgb(181, 204, 214);</string>
     <property name="text">
      <string/>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QTextEdit" name="textEditPictureForMosaic">
     <property name="geometry">
@@ -848,6 +851,9 @@ border-color: rgb(181, 204, 214);</string>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBoxFormCell">
@@ -1162,6 +1168,33 @@ QCheckBox::indicator:checked {
     </property>
     <property name="textInteractionFlags">
      <set>Qt::NoTextInteraction</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonShowDetailsQuad">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>110</y>
+      <width>171</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="toolTip">
+     <string/>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{
+border-radius: 10px;;
+font: 14pt  &quot;Century Gothic&quot;;
+color:#19232D;
+background:#148dfa;
+}</string>
+    </property>
+    <property name="text">
+     <string>Show details</string>
     </property>
    </widget>
   </widget>
