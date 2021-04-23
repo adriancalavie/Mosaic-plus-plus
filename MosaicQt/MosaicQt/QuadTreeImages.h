@@ -5,9 +5,10 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <cmath>
+#include "Mosaic.h"
 
 
-class QuadTreeImages
+class QuadTreeimages
 {
 	using pt = PictureTools;
 
@@ -31,30 +32,45 @@ public:
 
 	public:
 
-		int getWidth();
-		int getHeigth();
+		int GetWidth();
+		int GetHeigth();
 
-		cv::Mat getPoints();
-		cv::Mat getPoints(const cv::Mat&);
+		cv::Mat GetPoints();
+		cv::Mat GetPoints(const cv::Mat&);
 	public:
-		double getError(const cv::Mat&);
+		double GetError(const cv::Mat&);
 	};
 
 private:
-	double threshold;
-	int minSize;
-	int minPixelSize;
-	cv::Mat image;
-	QNode* root;
+	double m_threshold;
+	int m_minSize;
+	int m_minPixelSize;
+	cv::Mat m_image;
+	QNode* m_root;
 
-	void recursiveSubDivide(QNode* node, double k, int minPixelSize, const cv::Mat& img);
-	std::vector<QNode*> findChildren(QNode*);
-public:
-	void graphTree();
+	void RecursiveSubDivide(QNode* node, double k, int m_minPixelSize, const cv::Mat& img);
 
 public:
-	QuadTreeImages(double stdThreshold, int minPixelSize, const cv::Mat& image);
-	void subdivide();
-	cv::Mat concat_images(const cv::Mat& img1, const cv::Mat& img2, int boarder = 5, const cv::Scalar& color = (255, 255, 255));
+	QuadTreeimages(double stdm_threshold, int m_minPixelSize, const cv::Mat& image);
+	void Subdivide();
+	cv::Mat Concat_images(const cv::Mat& img1, const cv::Mat& img2, int boarder = 5, const cv::Scalar& color = (255, 255, 255));
+
+public:
+	double GetThreshold() const;
+	void SetThreshold(const double& treshold);
+
+
+	int	GetMinSize() const;
+	void SetMinSize(const int& minSize);
+
+	int	GetMinPixelSize()const;
+	void SetMinPixelSize(const int& minPixelSize);
+
+
+	cv::Mat	GetImage() const;
+	void SetImage(const cv::Mat& image);
+
+	QNode* GetRoot() const;
+
 };
 

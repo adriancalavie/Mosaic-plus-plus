@@ -180,7 +180,11 @@ void MainWindow::MakeMosaic()
 	auto outputPath = [s = *st->GetUI(), &extension, u = *ui]{
 		if (u.textEditFolderResultForPicture->toPlainText().toStdString().size() == 0)
 		{
+<<<<<<< Updated upstream
 			return Data::Defaults::PATH_RESULT_IMAGE + s.textEditNameResultPicture->toPlainText().toStdString() + extension();
+=======
+			return Data::Defaults::PATH_RESULT_image + u.textEditNameResultPicture->toPlainText().toStdString() + extension();
+>>>>>>> Stashed changes
 		}
 		return u.textEditFolderResultForPicture->toPlainText().toStdString() + "/" + s.textEditNameResultPicture->toPlainText().toStdString() + extension();
 	};

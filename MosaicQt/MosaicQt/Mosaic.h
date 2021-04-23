@@ -8,9 +8,11 @@
 #include <random>
 #include <time.h> 
 #include <atomic>
+#include <optional>
 #include "BasePictures.h"
 #include "Data.h"
 #include "../Picture Tools/PictureTools.h"
+#include "QuadTreeImages.h"
 
 enum class Method {
 	CROPPING,
@@ -20,7 +22,7 @@ enum class Method {
 enum class Type {
 	SQUARE,
 	TRIANGLE,
-	DIAMOND
+	DIAMOND,
 };
 
 enum class Algorithm {
@@ -39,7 +41,7 @@ public:
 	using Point = std::pair <uint16_t, uint16_t>;
 	using pt = PictureTools;
 	using bp = BasePictures;
-
+	using imgPair = std::pair<std::optional<cv::Mat>, std::optional<cv::Mat>>;
 public:
 	friend uint32_t EuclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
 	friend uint32_t RiemersmaDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor);
@@ -50,6 +52,12 @@ public:
 		const uint8_t& partitionSize,
 		const Algorithm& algorithm ,
 		const bool& blending);
+	static imgPair MakeQuadTree(const bp::map& dataPictures,
+		const cv::Mat& image,
+		const bool& blending,
+		const double& treshold,
+		const int& minSize,
+		const bool& hasDetails);
 
 private:
 	static void ReplaceCellRectangle(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto, const Point& topL); // for square and rectangle
@@ -87,7 +95,12 @@ private:
 		const Algorithm& algorithm,
 		const bool& blending,
 		const uint8_t& partitionSize);
-private:
+
+	static std::vector<QuadTreeimages::QNode*> FindChildren(QuadTreeimages::QNode*);
+
+	static imgPair graphTree(const bp::map& database, const QuadTreeimages* qt, const int& thickness = -1, const bool& hasDetails = false);
+
+public:
 	static cv::Mat FindPictureWithColorMed(const bp::map& dataPictures,
 		const cv::Scalar& mediumColor,
 		std::string& pictureDifferent,

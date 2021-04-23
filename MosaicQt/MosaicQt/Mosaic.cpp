@@ -23,7 +23,7 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const bp& basePictures, const M
 {
 	assert(!image.empty());
 
-	cv::Mat copyOriginalImage = image;
+	cv::Mat copyOriginalimage = image;
 
 	if (image.cols % partitionSize != 0 || image.rows % partitionSize != 0)
 	{
@@ -32,10 +32,10 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const bp& basePictures, const M
 		switch (method)
 		{
 		case Method::CROPPING:
-			copyOriginalImage = std::move(pt::CropSquare(image, { 0,0 }, { v2,v1 }));
+			copyOriginalimage = std::move(pt::CropSquare(image, { 0,0 }, { v2,v1 }));
 			break;
 		case Method::RESIZING:
-			copyOriginalImage = std::move(pt::Resize(image, v1, v2, pt::Algorithm::BILINEAR_INTERPOLATION));
+			copyOriginalimage = std::move(pt::Resize(image, v1, v2, pt::Algorithm::BILINEAR_INTERPOLATION));
 			break;
 		default:
 			break;
@@ -45,14 +45,23 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const bp& basePictures, const M
 	switch (type)
 	{
 	case Type::SQUARE:
-		return MakeRectangle(basePictures.GetMediumColor(), copyOriginalImage, algorithm, blending, partitionSize);
+		return MakeRectangle(basePictures.GetMediumColor(), copyOriginalimage, algorithm, blending, partitionSize);
 	case Type::TRIANGLE:
-		return MakeTriangle(basePictures.GetMediumColor(), copyOriginalImage, algorithm, blending, partitionSize);
+		return MakeTriangle(basePictures.GetMediumColor(), copyOriginalimage, algorithm, blending, partitionSize);
 	case Type::DIAMOND:
-		return MakeDiamond(basePictures.GetMediumColor(), copyOriginalImage, algorithm, blending, partitionSize);
+		return MakeDiamond(basePictures.GetMediumColor(), copyOriginalimage, algorithm, blending, partitionSize);
 	default:
 		break;
 	}
+}
+
+Mosaic::imgPair Mosaic::MakeQuadTree(const bp::map& dataPictures, const cv::Mat& image, const bool& blending, const double& treshold, const int& minSize, const bool& hasDetails)
+{
+	QuadTreeimages* qt = new QuadTreeimages(treshold, minSize, image);
+
+	qt->Subdivide();
+
+	return graphTree(dataPictures, qt, 1, hasDetails);
 }
 
 cv::Mat Mosaic::MakeRectangle(const bp::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
@@ -359,6 +368,60 @@ void Mosaic::MakeMargins(cv::Mat& result, const bp::map& dataPictures, const cv:
 		ReplaceCellTriangle(result, std::move(cellBottom), { yDiamond, xDiamond }, 2, { y_top, y_top }, { partitionSize / 2 , partitionSize / 2 });
 
 	}
+}
+
+std::vector<QuadTreeimages::QNode*> Mosaic::FindChildren(QuadTreeimages::QNode* node)
+{
+	if (!node->children.size())
+	{
+		std::vector<QuadTreeimages::QNode*> result;
+		result.push_back(node);
+		return result;
+	}
+	else
+	{
+		auto children = std::vector<QuadTreeimages::QNode*>();
+		for (auto& child : node->children)
+		{
+			auto foundChildren = FindChildren(child);
+
+			children.reserve(children.size() + foundChildren.size());
+			children.insert(children.end(), foundChildren.begin(), foundChildren.end());
+		}
+		return children;
+	}
+}
+
+Mosaic::imgPair Mosaic::graphTree(const bp::map& database, const QuadTreeimages* qt, const int& thickness, const bool& hasDetails)
+{
+	std::optional<cv::Mat> quadimage = qt->GetImage();
+	std::optional<cv::Mat> partialimage = qt->GetImage();
+
+	auto c = FindChildren(qt->GetRoot());
+
+	std::cout << c.size();
+	for (auto& n : c)
+	{
+		//cv::Point pt1(this->root->x0, this->root->y0);
+
+		//cv::Point pt2(this->root->x0 + this->root->width, this->root->y0 + this->root->height);
+
+		cv::Rect part(n->y0, n->x0, n->width + n->y0, n->height + n->x0);
+
+		std::string uselessString = "";
+		cv::Mat img = Mosaic::FindPictureWithColorMed(database, n->mean, uselessString, Algorithm::RIEMERSMA);
+
+		img.copyTo(quadimage.value()(part));
+
+		if (hasDetails == true)
+		{
+			cv::rectangle(partialimage.value(), part, cv::Scalar(0, 0, 0), thickness);
+		}
+	}
+
+	Mosaic::imgPair result = { quadimage, (hasDetails) ? partialimage : std::nullopt };
+
+	return result;
 }
 
 

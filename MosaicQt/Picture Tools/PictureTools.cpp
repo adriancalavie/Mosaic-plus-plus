@@ -81,7 +81,7 @@ cv::Vec3b PictureTools::Interpolation(const cv::Vec3b& firstNeighbour, const cv:
 cv::Mat PictureTools::BilinearInterpolation(const cv::Mat& image, const uint16_t& width, const uint16_t& height)
 {
 
-	cv::Mat newImage(height, width, CV_8UC3);
+	cv::Mat newimage(height, width, CV_8UC3);
 
 	double heightRatio = height / static_cast<double>(image.rows);
 	double widthRatio = width / static_cast<double>(image.cols);
@@ -122,16 +122,16 @@ cv::Mat PictureTools::BilinearInterpolation(const cv::Mat& image, const uint16_t
 					w_t - neighbours[0].y
 				);
 
-				newImage.at<cv::Vec3b>(hIndex, wIndex) = std::move(valueH);
+				newimage.at<cv::Vec3b>(hIndex, wIndex) = std::move(valueH);
 			}
 			else
 			{
-				newImage.at<cv::Vec3b>(hIndex, wIndex) = image.at<cv::Vec3b>(neighbours[0].x, neighbours[0].y);
+				newimage.at<cv::Vec3b>(hIndex, wIndex) = image.at<cv::Vec3b>(neighbours[0].x, neighbours[0].y);
 			}
 		}
 	}
 
-	return newImage;
+	return newimage;
 }
 
 
