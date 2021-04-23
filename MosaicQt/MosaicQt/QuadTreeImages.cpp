@@ -59,10 +59,10 @@ void QuadTreeImages::RecursiveSubDivide(QNode* node, double k, int m_minPixelSiz
 	{
 		return;
 	}
-	int w_1 = (int)(std::floor(node->width / 2));
-	int w_2 = (int)(std::ceil(node->width / 2));
-	int h_1 = (int)(std::floor(node->height / 2));
-	int h_2 = (int)(std::ceil(node->height / 2));
+	int w_1 = (int)(std::floor(node->width / 2.0));
+	int w_2 = (int)(std::ceil(node->width / 2.0));
+	int h_1 = (int)(std::floor(node->height / 2.0));
+	int h_2 = (int)(std::ceil(node->height / 2.0));
 	//std::cout << w_1 << " " << w_2 << " " << h_1 << " " << h_2;
 
 	if (w_1 <= m_minPixelSize || h_1 <= m_minPixelSize)
@@ -73,10 +73,10 @@ void QuadTreeImages::RecursiveSubDivide(QNode* node, double k, int m_minPixelSiz
 	QNode* x1 = new QNode(node->x0, node->y0, w_1, h_1); //top left
 	RecursiveSubDivide(x1, k, m_minPixelSize, img);
 
-	QNode* x2 = new QNode(node->x0, node->y0 + w_1, w_1, h_2); //btm left
+	QNode* x2 = new QNode(node->x0 + h_1, node->y0, w_1, h_2); //btm left
 	RecursiveSubDivide(x2, k, m_minPixelSize, img);
 
-	QNode* x3 = new QNode(node->x0 + h_1, node->y0, w_2, h_1); //top right
+	QNode* x3 = new QNode(node->x0, node->y0 + w_1, w_2, h_1); //top right
 	RecursiveSubDivide(x3, k, m_minPixelSize, img);
 
 	QNode* x4 = new QNode(node->x0 + h_1, node->y0 + w_1, w_2, h_2); //btm right
@@ -103,29 +103,6 @@ QuadTreeImages::QuadTreeImages(double m_threshold, int m_minPixelSize, const cv:
 void QuadTreeImages::Subdivide()
 {
 	RecursiveSubDivide(m_root, m_threshold, m_minPixelSize, m_image);
-}
-
-cv::Mat QuadTreeImages::Concat_images(const cv::Mat& img1, const cv::Mat& img2, int boarder, const cv::Scalar& color)
-{
-	cv::Mat borderImg1 = img1;
-	cv::Mat borderImg2 = img2;
-
-	cv::copyMakeBorder(img1, borderImg1, boarder, boarder, boarder, boarder, cv::BORDER_CONSTANT, color);
-	cv::copyMakeBorder(img2, borderImg2, boarder, boarder, 0, boarder, cv::BORDER_CONSTANT, color);
-
-
-	// Get dimension of final image
-	int rows = cv::max(img1.rows, img2.rows);
-	int cols = img1.cols + img2.cols;
-
-	// Create a black image
-	cv::Mat3b res(rows, cols, cv::Vec3b(0, 0, 0));
-
-	// Copy images in correct position
-	img1.copyTo(res(cv::Rect(0, 0, img1.cols, img1.rows)));
-	img2.copyTo(res(cv::Rect(img1.cols, 0, img2.cols, img2.rows)));
-
-	return res;
 }
 
 double QuadTreeImages::GetThreshold() const

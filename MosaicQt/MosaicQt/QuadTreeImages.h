@@ -52,7 +52,6 @@ private:
 public:
 	QuadTreeImages(double stdm_threshold, int m_minPixelSize, const cv::Mat& image);
 	void Subdivide();
-	cv::Mat Concat_images(const cv::Mat& img1, const cv::Mat& img2, int boarder = 5, const cv::Scalar& color = (255, 255, 255));
 
 public:
 	double GetThreshold() const;

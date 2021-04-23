@@ -50,9 +50,9 @@ public:
 		const Method& method,
 		const Type& type,
 		const uint8_t& partitionSize,
-		const Algorithm& algorithm ,
+		const Algorithm& algorithm,
 		const bool& blending);
-	static imgPair MakeQuadTree(const bp::map& dataPictures,
+	static imgPair MakeQuadTree(const bp& dataPictures,
 		const cv::Mat& image,
 		const bool& blending,
 		const double& treshold,
@@ -98,13 +98,14 @@ private:
 
 	static std::vector<QuadTreeImages::QNode*> FindChildren(QuadTreeImages::QNode*);
 
-	static imgPair graphTree(const bp::map& database, const QuadTreeImages* qt, const int& thickness = -1, const bool& hasDetails = false);
+	static imgPair graphTree(const bp& database, const QuadTreeImages* qt, const int& thickness = -1, const bool& hasDetails = false);
 
 public:
 	static cv::Mat FindPictureWithColorMed(const bp::map& dataPictures,
 		const cv::Scalar& mediumColor,
 		std::string& pictureDifferent,
 		const Algorithm& algorithm);
+	static cv::Mat Concat4(const cv::Mat& img1, const cv::Mat& img2, const cv::Mat& img3, const cv::Mat& img4);
 };
 
 

@@ -152,6 +152,9 @@ void MainWindow::MakeMosaic()
 	std::string pictureForMosaicPathString = ui->textEditPictureForMosaic->toPlainText().toStdString();
 	cv::Mat input = cv::imread(pictureForMosaicPathString, cv::IMREAD_COLOR);
 
+
+	cv::resize(input, input, cv::Size(3000, 3000), 0, 0, 2);
+
 	if (input.empty())
 	{
 		errors(Data::Errors::UNSUPPORTED_PICTURE);
@@ -217,6 +220,33 @@ void MainWindow::MakeMosaic()
 void MainWindow::MakeQuadMosaic()
 {
 
+	std::string pictureForMosaicPathString = ui->textEditPictureForMosaic->toPlainText().toStdString();
+	cv::Mat input = cv::imread(pictureForMosaicPathString, cv::IMREAD_COLOR);
+
+	cv::resize(input, input, cv::Size(3000, 3000), 0, 0, 2);
+
+	Mosaic::imgPair res = Mosaic::MakeQuadTree(basePictures, input, false, 1, 10, false);
+
+	auto extension = [s = st.get()->GetUI()]{
+		if (s.get()->extensionJPG->isChecked())
+			return ".jpg";
+		return ".png";
+	};
+
+	auto outputPath = [s = st.get()->GetUI(), &extension, u = *ui]{
+		if (u.textEditFolderResultForPicture->toPlainText().toStdString().size() == 0)
+		{
+			return Data::Defaults::PATH_RESULT_IMAGE + s.get()->textEditNameResultPicture->toPlainText().toStdString() + extension();
+		}
+		return u.textEditFolderResultForPicture->toPlainText().toStdString() + "/" + s.get()->textEditNameResultPicture->toPlainText().toStdString() + extension();
+	};
+
+	cv::imwrite(outputPath(), res.first.value());
+
+	QPixmap mosaic(std::move(QString::fromStdString(outputPath())));
+	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),
+		ui->labelMosaicPicture->height()));
+	
 }
 
 MainWindow::MainWindow(std::unique_ptr<QWidget> parent) :

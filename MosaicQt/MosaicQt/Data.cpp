@@ -54,11 +54,18 @@ const std::string Data::Errors::ANOTHER_ERROR = "Unknown error! Please contact t
 //DEFAULTS
 #ifdef _DEBUG
 //const std::string Data::Defaults::PARENT_PATH = "..//..//Mosaic++\\";
-const std::string Data::Defaults::PATH_BASE_PICTURES = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Base pictures\\";
-const std::string Data::Defaults::PATH_PICTURES_FOR_MOSAIC = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Pictures for mosaics\\";
-const std::string Data::Defaults::PATH_DATA_BASE_FILE = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Database\\data_base.txt";
-const std::string Data::Defaults::PATH_TEST_IMAGE = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicTests\\test.jpg";
-const std::string Data::Defaults::PATH_RESULT_IMAGE = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Resulting pictures\\";
+//const std::string Data::Defaults::PATH_BASE_PICTURES = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Base pictures\\";
+//const std::string Data::Defaults::PATH_PICTURES_FOR_MOSAIC = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Pictures for mosaics\\";
+//const std::string Data::Defaults::PATH_DATA_BASE_FILE = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Database\\data_base.txt";
+//const std::string Data::Defaults::PATH_TEST_IMAGE = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicTests\\test.jpg";
+//const std::string Data::Defaults::PATH_RESULT_IMAGE = "D:\\Info Unitbv 2020-2021\\Semestrul I\\Modern C++\\Mozaic\\MosaicQt\\MosaicQt\\Resources\\Resulting pictures\\";
+
+
+const std::string Data::Defaults::PATH_BASE_PICTURES = "Resources\\Base pictures\\";
+const std::string Data::Defaults::PATH_PICTURES_FOR_MOSAIC = "Resources\\Pictures for mosaics\\";
+const std::string Data::Defaults::PATH_DATA_BASE_FILE = "Resources\\Database\\data_base.txt";
+const std::string Data::Defaults::PATH_TEST_IMAGE = "test.jpg";
+const std::string Data::Defaults::PATH_RESULT_IMAGE = "Resources\\Resulting pictures\\";
 
 #else
 //const std::string Data::Defaults::PARENT_PATH = "..//..//Mosaic++\\";

@@ -55,20 +55,64 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const bp& basePictures, const M
 	}
 }
 
-Mosaic::imgPair Mosaic::MakeQuadTree(const bp::map& dataPictures, const cv::Mat& image, const bool& blending, const double& treshold, const int& minSize, const bool& hasDetails)
+Mosaic::imgPair Mosaic::MakeQuadTree(const bp& dataPictures, const cv::Mat& image, const bool& blending, const double& treshold, const int& minSize, const bool& hasDetails)
 {
-	QuadTreeImages* qt = new QuadTreeImages(treshold, minSize, image);
+	auto makeMosaicPartition = [&](cv::Mat& imagePart) {
+		QuadTreeImages* qt = new QuadTreeImages(treshold, minSize, imagePart);
 
-	qt->Subdivide();
+		qt->Subdivide();
 
-	return graphTree(dataPictures, qt, 1, hasDetails);
+		imagePart = graphTree(dataPictures, qt, 1, hasDetails).first.value();
+	};
+
+	Point start1, start2, start3, start4;
+	Point end1, end2, end3, end4;
+
+	int row_partitions = image.rows;
+	int col_partitions = image.cols;
+
+	int rows = row_partitions / 2;
+	int cols = col_partitions / 2;
+
+	//width height
+
+	//0,0,599,299
+	//600,0,599,299
+	//0,300,599,299
+	//600,300,599,299
+	cv::Rect cropped1(0,0,cols - 1, rows - 1);
+	cv::Rect cropped2(cols, 0, cols - 1, rows - 1);
+	cv::Rect cropped3(0, rows, cols - 1, rows - 1);
+	cv::Rect cropped4(cols, rows, cols - 1, rows - 1);
+
+	auto image1 = image(cropped1);
+	auto image2 = image(cropped2);
+	auto image3 = image(cropped3);
+	auto image4 = image(cropped4);
+
+
+
+
+	std::thread t1{ makeMosaicPartition, std::ref(image1) };
+	std::thread t2{ makeMosaicPartition, std::ref(image2) };
+	std::thread t3{ makeMosaicPartition, std::ref(image3) };
+	std::thread t4{ makeMosaicPartition, std::ref(image4) };
+
+
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
+
+	return imgPair(Concat4(image1, image2, image3, image4), std::nullopt);
+
 }
 
 cv::Mat Mosaic::MakeRectangle(const bp::map& dataPictures, const cv::Mat& image, const Algorithm& algorithm, const bool& blending, const uint8_t& partitionSize)
 {
 	cv::Mat result(image.rows, image.cols, CV_8UC3);
 
-	auto test = [&](Point start, Point end) {
+	auto makeMosaicPartition = [&](Point start, Point end) {
 
 		for (int x = start.first; x < end.first - 1; x += partitionSize)
 		{
@@ -93,28 +137,28 @@ cv::Mat Mosaic::MakeRectangle(const bp::map& dataPictures, const cv::Mat& image,
 	Point start1, start2, start3, start4;
 	Point end1, end2, end3, end4;
 
-	int partitii_rand = image.rows / partitionSize;
-	int partitii_coloane = image.cols / partitionSize;
+	int row_partitions = image.rows / partitionSize;
+	int col_partitions = image.cols / partitionSize;
 
-	int randuri = partitii_rand / 2 * partitionSize;
-	int coloane = partitii_coloane / 2 * partitionSize;
+	int rows = row_partitions / 2 * partitionSize;
+	int cols = col_partitions / 2 * partitionSize;
 
 	start1 = { 0,0 };
-	end1 = { randuri, coloane };
+	end1 = { rows, cols };
 
-	start2 = { 0,coloane };
-	end2 = { randuri, image.cols };
+	start2 = { 0,cols };
+	end2 = { rows, image.cols };
 
-	start3 = { randuri,0 };
-	end3 = { image.rows, coloane };
+	start3 = { rows,0 };
+	end3 = { image.rows, cols };
 
-	start4 = { randuri,coloane };
+	start4 = { rows,cols };
 	end4 = { image.rows, image.cols };
 
-	std::thread t1{ test, std::ref(start1), std::ref(end1) };
-	std::thread t2{ test, std::ref(start2), std::ref(end2) };
-	std::thread t3{ test, std::ref(start3), std::ref(end3) };
-	std::thread t4{ test, std::ref(start4), std::ref(end4) };
+	std::thread t1{ makeMosaicPartition, std::ref(start1), std::ref(end1) };
+	std::thread t2{ makeMosaicPartition, std::ref(start2), std::ref(end2) };
+	std::thread t3{ makeMosaicPartition, std::ref(start3), std::ref(end3) };
+	std::thread t4{ makeMosaicPartition, std::ref(start4), std::ref(end4) };
 
 
 	t1.join();
@@ -244,9 +288,9 @@ cv::Mat Mosaic::MakeDiamond(const bp::map& dataPictures, const cv::Mat& image, c
 				Mosaic::ReplaceCellDiamond(result, std::move(cell), std::make_pair(x, y + (partitionSize) / 2));
 			}
 		}
-		for (int x = start.first+ (partitionSize + 1) / 2; x < end.first  -partitionSize - 1; x += partitionSize)
+		for (int x = start.first + (partitionSize + 1) / 2; x < end.first - partitionSize - 1; x += partitionSize)
 		{
-			for (int y = start.second+partitionSize/2; y < end.second - partitionSize - 1; y += partitionSize)
+			for (int y = start.second + partitionSize / 2; y < end.second - partitionSize - 1; y += partitionSize)
 			{
 				// compare partitionAverage with mapped images's average;
 				cv::Scalar medColor = pt::AverageColorRectangle(image, { x,y }, { partitionSize, partitionSize });
@@ -273,7 +317,7 @@ cv::Mat Mosaic::MakeDiamond(const bp::map& dataPictures, const cv::Mat& image, c
 	int coloane = partitii_coloane / 2 * partitionSize;
 
 	start1 = { 0,0 };
-	end1 = { randuri+partitionSize, coloane+partitionSize };
+	end1 = { randuri + partitionSize, coloane + partitionSize };
 
 	start2 = { 0,coloane };
 	end2 = { randuri, image.cols };
@@ -281,7 +325,7 @@ cv::Mat Mosaic::MakeDiamond(const bp::map& dataPictures, const cv::Mat& image, c
 	start3 = { randuri,0 };
 	end3 = { image.rows, coloane };
 
-	start4 = { randuri-partitionSize,coloane-partitionSize };
+	start4 = { randuri - partitionSize,coloane - partitionSize };
 	end4 = { image.rows, image.cols };
 
 	std::thread t1{ test, std::ref(start1), std::ref(end1) };
@@ -392,7 +436,7 @@ std::vector<QuadTreeImages::QNode*> Mosaic::FindChildren(QuadTreeImages::QNode* 
 	}
 }
 
-Mosaic::imgPair Mosaic::graphTree(const bp::map& database, const QuadTreeImages* qt, const int& thickness, const bool& hasDetails)
+Mosaic::imgPair Mosaic::graphTree(const bp& database, const QuadTreeImages* qt, const int& thickness, const bool& hasDetails)
 {
 	std::optional<cv::Mat> quadimage = qt->GetImage();
 	std::optional<cv::Mat> partialimage = qt->GetImage();
@@ -406,12 +450,15 @@ Mosaic::imgPair Mosaic::graphTree(const bp::map& database, const QuadTreeImages*
 
 		//cv::Point pt2(this->root->x0 + this->root->width, this->root->y0 + this->root->height);
 
-		cv::Rect part(n->y0, n->x0, n->width + n->y0, n->height + n->x0);
+		cv::Rect part(n->y0, n->x0, n->width, n->height);
 
 		std::string uselessString = "";
-		cv::Mat img = Mosaic::FindPictureWithColorMed(database, n->mean, uselessString, Algorithm::RIEMERSMA);
+		cv::Mat img = Mosaic::FindPictureWithColorMed(database.GetMediumColor(), n->mean, uselessString, Algorithm::RIEMERSMA);
 
-		img.copyTo(quadimage.value()(part));
+		//cv::rectangle(quadimage.value(), part, n->mean, 0);
+		cv::resize(img, img, cv::Size(n->width, n->height), 0, 0, 2);
+		img.copyTo((quadimage.value())(part));
+
 
 		if (hasDetails == true)
 		{
@@ -567,4 +614,33 @@ void Mosaic::ReplaceCellDiamond(cv::Mat& originalPicture, cv::Mat&& mosaicPhoto,
 	end.second = mosaicPhoto.cols;
 	ReplaceCellTriangle(originalPicture, std::move(mosaicPhoto), topD, 4, start, end);
 
+}
+
+
+cv::Mat Mosaic::Concat4(const cv::Mat& img1, const cv::Mat& img2, const cv::Mat& img3, const cv::Mat& img4)
+{
+
+	// Get dimension of final image
+	int rowsT = cv::max(img1.rows, img2.rows);
+	int colsT = img1.cols + img2.cols;
+	int rowsB = cv::max(img3.rows, img4.rows);
+	int colsB = img3.cols + img4.cols;
+
+	// Create a black image
+	cv::Mat3b resT(rowsT, colsT, cv::Vec3b(0, 0, 0));
+	cv::Mat3b resB(rowsB, colsB, cv::Vec3b(0, 0, 0));
+
+	// Copy images in correct position
+	img1.copyTo(resT(cv::Rect(0, 0, img1.cols, img1.rows)));
+	img2.copyTo(resT(cv::Rect(img1.cols, 0, img2.cols, img2.rows)));
+
+	img3.copyTo(resB(cv::Rect(0, 0, img3.cols, img3.rows)));
+	img4.copyTo(resB(cv::Rect(img3.cols, 0, img4.cols, img4.rows)));
+
+
+	cv::Mat3b resF(rowsB + rowsT, colsB, cv::Vec3b(0, 0, 0));
+	resT.copyTo(resF(cv::Rect(0, 0, resT.cols, resT.rows)));
+	resB.copyTo(resF(cv::Rect(0, resT.rows, resB.cols, resB.rows)));
+
+	return resF;
 }
