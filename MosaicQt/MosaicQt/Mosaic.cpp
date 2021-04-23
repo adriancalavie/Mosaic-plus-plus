@@ -63,6 +63,8 @@ Mosaic::imgPair Mosaic::MakeQuadTree(const bp& dataPictures, const cv::Mat& imag
 		qt->Subdivide();
 
 		imagePart = graphTree(dataPictures, qt, 1, hasDetails).first.value();
+
+		delete qt;
 	};
 
 	Point start1, start2, start3, start4;
@@ -122,6 +124,7 @@ cv::Mat Mosaic::MakeRectangle(const bp::map& dataPictures, const cv::Mat& image,
 				std::string pictureName;
 
 				cv::Mat cell = std::move(FindPictureWithColorMed(dataPictures, mediumColor, pictureName, algorithm));
+				cv::resize(cell, cell, cv::Size(partitionSize, partitionSize), 0, 0, 2);
 				cell = pt::Resize(cell, partitionSize, partitionSize, pt::Algorithm::BILINEAR_INTERPOLATION);
 
 				if (blending)

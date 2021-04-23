@@ -51,6 +51,8 @@ private:
 
 public:
 	QuadTreeImages(double stdm_threshold, int m_minPixelSize, const cv::Mat& image);
+	void recursiveDeletition(QNode* root);
+	~QuadTreeImages();
 	void Subdivide();
 
 public:

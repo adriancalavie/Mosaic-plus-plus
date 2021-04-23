@@ -100,6 +100,25 @@ QuadTreeImages::QuadTreeImages(double m_threshold, int m_minPixelSize, const cv:
 	this->m_root = new QNode(0, 0, image.cols, image.rows);
 }
 
+void QuadTreeImages::recursiveDeletition(QNode* root)
+{
+	if (root->children.empty())
+	{
+		delete root;
+		return;
+	}
+
+	for (auto child : root->children)
+	{
+		recursiveDeletition(child);
+	}
+}
+
+QuadTreeImages::~QuadTreeImages()
+{
+	recursiveDeletition(m_root);
+}
+
 void QuadTreeImages::Subdivide()
 {
 	RecursiveSubDivide(m_root, m_threshold, m_minPixelSize, m_image);
