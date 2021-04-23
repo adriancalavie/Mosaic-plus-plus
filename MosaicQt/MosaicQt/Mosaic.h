@@ -98,7 +98,7 @@ private:
 
 	static std::vector<QuadTreeImages::QNode*> FindChildren(QuadTreeImages::QNode*);
 
-	static imgPair graphTree(const bp& database, const QuadTreeImages* qt, const int& thickness = -1, const bool& hasDetails = false);
+	static imgPair graphTree(const bp& database, const QuadTreeImages* qt, const int& thickness = -1, const bool& hasDetails = false, const bool& blending = false);
 
 public:
 	static cv::Mat FindPictureWithColorMed(const bp::map& dataPictures,

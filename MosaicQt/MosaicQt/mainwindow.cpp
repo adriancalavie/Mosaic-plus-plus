@@ -152,9 +152,6 @@ void MainWindow::MakeMosaic()
 	std::string pictureForMosaicPathString = ui->textEditPictureForMosaic->toPlainText().toStdString();
 	cv::Mat input = cv::imread(pictureForMosaicPathString, cv::IMREAD_COLOR);
 
-
-	cv::resize(input, input, cv::Size(3000, 3000), 0, 0, 2);
-
 	if (input.empty())
 	{
 		errors(Data::Errors::UNSUPPORTED_PICTURE);
@@ -223,9 +220,8 @@ void MainWindow::MakeQuadMosaic()
 	std::string pictureForMosaicPathString = ui->textEditPictureForMosaic->toPlainText().toStdString();
 	cv::Mat input = cv::imread(pictureForMosaicPathString, cv::IMREAD_COLOR);
 
-	cv::resize(input, input, cv::Size(3000, 3000), 0, 0, 2);
-
-	Mosaic::imgPair res = Mosaic::MakeQuadTree(basePictures, input, false, 1, 10, false);
+	Mosaic::imgPair res = Mosaic::MakeQuadTree(basePictures, input, st.get()->GetUI().get()->checkBoxBlendingPicture->isChecked(), st.get()->GetUI().get()->sliderThreshold->value()/500.0 , 
+		st.get()->GetUI().get()->sliderMinimumSize->value(), true);
 
 	auto extension = [s = st.get()->GetUI()]{
 		if (s.get()->extensionJPG->isChecked())
@@ -241,7 +237,7 @@ void MainWindow::MakeQuadMosaic()
 		return u.textEditFolderResultForPicture->toPlainText().toStdString() + "/" + s.get()->textEditNameResultPicture->toPlainText().toStdString() + extension();
 	};
 
-	cv::imwrite(outputPath(), res.first.value());
+	cv::imwrite(outputPath(), res.second.value());
 
 	QPixmap mosaic(std::move(QString::fromStdString(outputPath())));
 	ui->labelMosaicPicture->setPixmap(mosaic.scaled(ui->labelMosaicPicture->width(),

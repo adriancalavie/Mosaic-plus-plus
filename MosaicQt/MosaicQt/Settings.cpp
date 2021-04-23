@@ -27,5 +27,4 @@ void Settings::ChangeValueTrehhold()
 void Settings::ChangeValueMinimumSize()
 {
 	ui->labelValueMinimumSize->setText(QString::fromStdString(std::to_string(ui->sliderMinimumSize->value())));
-
 }

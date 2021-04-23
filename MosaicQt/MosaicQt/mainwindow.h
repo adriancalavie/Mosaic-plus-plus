@@ -57,6 +57,4 @@ private slots:
 
     void MakeMosaic();
     void MakeQuadMosaic();
-
-
 };

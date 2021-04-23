@@ -2,8 +2,8 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMessageBox>
-#include "ui_settings.h"
 #include <QtWidgets/qslider.h>
+#include "ui_settings.h"
 
 
 #include <QtWidgets>

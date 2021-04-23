@@ -57,12 +57,15 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const bp& basePictures, const M
 
 Mosaic::imgPair Mosaic::MakeQuadTree(const bp& dataPictures, const cv::Mat& image, const bool& blending, const double& treshold, const int& minSize, const bool& hasDetails)
 {
-	auto makeMosaicPartition = [&](cv::Mat& imagePart) {
+	auto makeMosaicPartition = [&](cv::Mat& imagePart, cv::Mat& imageFootprint) {
 		QuadTreeImages* qt = new QuadTreeImages(treshold, minSize, imagePart);
 
 		qt->Subdivide();
 
-		imagePart = graphTree(dataPictures, qt, 1, hasDetails).first.value();
+		auto res = graphTree(dataPictures, qt, 1, hasDetails, blending);
+
+		imagePart = res.first.value();
+		imageFootprint = res.second.value();
 
 		delete qt;
 	};
@@ -92,13 +95,16 @@ Mosaic::imgPair Mosaic::MakeQuadTree(const bp& dataPictures, const cv::Mat& imag
 	auto image3 = image(cropped3);
 	auto image4 = image(cropped4);
 
+	auto image11 = image(cropped1);
+	auto image22 = image(cropped2);
+	auto image33 = image(cropped3);
+	auto image44 = image(cropped4);
 
 
-
-	std::thread t1{ makeMosaicPartition, std::ref(image1) };
-	std::thread t2{ makeMosaicPartition, std::ref(image2) };
-	std::thread t3{ makeMosaicPartition, std::ref(image3) };
-	std::thread t4{ makeMosaicPartition, std::ref(image4) };
+	std::thread t1{ makeMosaicPartition, std::ref(image1), std::ref(image11) };
+	std::thread t2{ makeMosaicPartition, std::ref(image2), std::ref(image22) };
+	std::thread t3{ makeMosaicPartition, std::ref(image3), std::ref(image33) };
+	std::thread t4{ makeMosaicPartition, std::ref(image4), std::ref(image44) };
 
 
 	t1.join();
@@ -106,7 +112,7 @@ Mosaic::imgPair Mosaic::MakeQuadTree(const bp& dataPictures, const cv::Mat& imag
 	t3.join();
 	t4.join();
 
-	return imgPair(Concat4(image1, image2, image3, image4), std::nullopt);
+	return imgPair(Concat4(image1, image2, image3, image4), Concat4(image11, image22, image33, image44));
 
 }
 
@@ -439,7 +445,7 @@ std::vector<QuadTreeImages::QNode*> Mosaic::FindChildren(QuadTreeImages::QNode* 
 	}
 }
 
-Mosaic::imgPair Mosaic::graphTree(const bp& database, const QuadTreeImages* qt, const int& thickness, const bool& hasDetails)
+Mosaic::imgPair Mosaic::graphTree(const bp& database, const QuadTreeImages* qt, const int& thickness, const bool& hasDetails, const bool& blending)
 {
 	std::optional<cv::Mat> quadimage = qt->GetImage();
 	std::optional<cv::Mat> partialimage = qt->GetImage();
@@ -460,13 +466,20 @@ Mosaic::imgPair Mosaic::graphTree(const bp& database, const QuadTreeImages* qt, 
 
 		//cv::rectangle(quadimage.value(), part, n->mean, 0);
 		cv::resize(img, img, cv::Size(n->width, n->height), 0, 0, 2);
+
+		if (hasDetails)
+		{
+			cv::rectangle(partialimage.value(), part, n->mean, -1);
+		}
+
+		if (blending)
+		{
+			pt::AlphaBlending(img, n->mean);
+		}
+
 		img.copyTo((quadimage.value())(part));
 
 
-		if (hasDetails == true)
-		{
-			cv::rectangle(partialimage.value(), part, cv::Scalar(0, 0, 0), thickness);
-		}
 	}
 
 	Mosaic::imgPair result = { quadimage, (hasDetails) ? partialimage : std::nullopt };
