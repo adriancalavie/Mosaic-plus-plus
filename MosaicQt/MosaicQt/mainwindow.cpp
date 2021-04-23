@@ -149,49 +149,45 @@ void MainWindow::MakeMosaic()
 		return Type::TRIANGLE;
 	};
 
-	auto method = [s = *st->GetUI()]{
-		if (s.radioButtonMethodCropping->isChecked())
+	auto method = [s = st.get()->GetUI()]{
+		if (s.get()->radioButtonMethodCropping->isChecked())
 			return Method::CROPPING;
 		return Method::RESIZING;
 	};
-	auto algorithm = [s = *st->GetUI()]{
-		if (s.radioButtonEuclidianAlgorithm->isChecked())
+	auto algorithm = [s = st.get()->GetUI()]{
+		if (s.get()->radioButtonEuclidianAlgorithm->isChecked())
 			return Algorithm::EUCLIDEAN;
 		return Algorithm::RIEMERSMA;
 	};
-	
+
 	cv::Mat output = Mosaic::MakeMosaic(input, basePictures, method(), typeCell(), ui->spinBoxCellSize->value(),
-		algorithm(), st->GetUI()->checkBoxBlendingPicture->isChecked());
+		algorithm(), st.get()->GetUI().get()->checkBoxBlendingPicture->isChecked());
 	if (output.empty())
 	{
 		errors(Data::Errors::ANOTHER_ERROR);
 		return;
-		
+
 	}
 
 	std::string folderForResultPathString = ui->textEditFolderResultForPicture->toPlainText().toStdString();
 
-	auto extension = [s = *st->GetUI()]{
-		if (s.extensionJPG->isChecked())
+	auto extension = [s = st.get()->GetUI()]{
+		if (s.get()->extensionJPG->isChecked())
 			return ".jpg";
 		return ".png";
 	};
 
-	auto outputPath = [s = *st->GetUI(), &extension, u = *ui]{
+	auto outputPath = [s = st.get()->GetUI(), &extension, u = *ui]{
 		if (u.textEditFolderResultForPicture->toPlainText().toStdString().size() == 0)
 		{
-<<<<<<< Updated upstream
-			return Data::Defaults::PATH_RESULT_IMAGE + s.textEditNameResultPicture->toPlainText().toStdString() + extension();
-=======
-			return Data::Defaults::PATH_RESULT_image + u.textEditNameResultPicture->toPlainText().toStdString() + extension();
->>>>>>> Stashed changes
+			return Data::Defaults::PATH_RESULT_IMAGE + s.get()->textEditNameResultPicture->toPlainText().toStdString() + extension();
 		}
-		return u.textEditFolderResultForPicture->toPlainText().toStdString() + "/" + s.textEditNameResultPicture->toPlainText().toStdString() + extension();
+		return u.textEditFolderResultForPicture->toPlainText().toStdString() + "/" + s.get()->textEditNameResultPicture->toPlainText().toStdString() + extension();
 	};
 
-	if (!st->GetUI()->checkBoxOriginalSize->isChecked())
+	if (!st.get()->GetUI().get()->checkBoxOriginalSize->isChecked())
 	{
-		output = Mosaic::pt::Resize(output, st->GetUI()->spinBoxWidthResultPicture->value(), st->GetUI()->spinBoxHeightResultPicture->value());
+		output = Mosaic::pt::Resize(output, st.get()->GetUI().get()->spinBoxWidthResultPicture->value(), st.get()->GetUI().get()->spinBoxHeightResultPicture->value());
 	}
 
 	cv::imwrite(outputPath(), output);
@@ -231,4 +227,3 @@ MainWindow::~MainWindow()
 {
 	//EMPTY
 }
-

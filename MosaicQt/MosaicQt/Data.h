@@ -30,8 +30,8 @@ public:
 		static const std::string PATH_BASE_PICTURES;
 		static const std::string PATH_PICTURES_FOR_MOSAIC;
 		static const std::string PATH_DATA_BASE_FILE;
-		static const std::string PATH_TEST_image;
-		static const std::string PATH_RESULT_image;
+		static const std::string PATH_TEST_IMAGE;
+		static const std::string PATH_RESULT_IMAGE;
 
 	};
 

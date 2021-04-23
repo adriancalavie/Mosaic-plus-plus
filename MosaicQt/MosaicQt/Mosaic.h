@@ -96,9 +96,9 @@ private:
 		const bool& blending,
 		const uint8_t& partitionSize);
 
-	static std::vector<QuadTreeimages::QNode*> FindChildren(QuadTreeimages::QNode*);
+	static std::vector<QuadTreeImages::QNode*> FindChildren(QuadTreeImages::QNode*);
 
-	static imgPair graphTree(const bp::map& database, const QuadTreeimages* qt, const int& thickness = -1, const bool& hasDetails = false);
+	static imgPair graphTree(const bp::map& database, const QuadTreeImages* qt, const int& thickness = -1, const bool& hasDetails = false);
 
 public:
 	static cv::Mat FindPictureWithColorMed(const bp::map& dataPictures,

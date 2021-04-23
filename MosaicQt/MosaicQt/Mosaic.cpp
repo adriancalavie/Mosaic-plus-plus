@@ -57,7 +57,7 @@ cv::Mat Mosaic::MakeMosaic(const cv::Mat& image, const bp& basePictures, const M
 
 Mosaic::imgPair Mosaic::MakeQuadTree(const bp::map& dataPictures, const cv::Mat& image, const bool& blending, const double& treshold, const int& minSize, const bool& hasDetails)
 {
-	QuadTreeimages* qt = new QuadTreeimages(treshold, minSize, image);
+	QuadTreeImages* qt = new QuadTreeImages(treshold, minSize, image);
 
 	qt->Subdivide();
 
@@ -370,17 +370,17 @@ void Mosaic::MakeMargins(cv::Mat& result, const bp::map& dataPictures, const cv:
 	}
 }
 
-std::vector<QuadTreeimages::QNode*> Mosaic::FindChildren(QuadTreeimages::QNode* node)
+std::vector<QuadTreeImages::QNode*> Mosaic::FindChildren(QuadTreeImages::QNode* node)
 {
 	if (!node->children.size())
 	{
-		std::vector<QuadTreeimages::QNode*> result;
+		std::vector<QuadTreeImages::QNode*> result;
 		result.push_back(node);
 		return result;
 	}
 	else
 	{
-		auto children = std::vector<QuadTreeimages::QNode*>();
+		auto children = std::vector<QuadTreeImages::QNode*>();
 		for (auto& child : node->children)
 		{
 			auto foundChildren = FindChildren(child);
@@ -392,7 +392,7 @@ std::vector<QuadTreeimages::QNode*> Mosaic::FindChildren(QuadTreeimages::QNode* 
 	}
 }
 
-Mosaic::imgPair Mosaic::graphTree(const bp::map& database, const QuadTreeimages* qt, const int& thickness, const bool& hasDetails)
+Mosaic::imgPair Mosaic::graphTree(const bp::map& database, const QuadTreeImages* qt, const int& thickness, const bool& hasDetails)
 {
 	std::optional<cv::Mat> quadimage = qt->GetImage();
 	std::optional<cv::Mat> partialimage = qt->GetImage();
@@ -430,7 +430,7 @@ cv::Mat Mosaic::FindPictureWithColorMed(const bp::map& dataPictures, const cv::S
 	std::string pictureName;
 	uint32_t closestDistance = INT_MAX;
 	cv::Mat picture;
-	for (auto itr : dataPictures)
+	for (auto& itr : dataPictures)
 	{
 		uint32_t currDistance;
 		if (algorithm == Algorithm::RIEMERSMA)
