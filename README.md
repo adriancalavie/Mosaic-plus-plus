@@ -1,5 +1,5 @@
 
-# **Mosaic++** <img src="MosaicQt/MosaicQt/Pictures/logo.png" width="30" align="right"/>
+# **Mosaic++** ![picture](MosaicQt/MosaicQt/Pictures/logo.png)
 
 ## **What's Mosaic++?**
 ---
