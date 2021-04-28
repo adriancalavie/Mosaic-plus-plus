@@ -482,7 +482,7 @@ Mosaic::imgPair Mosaic::graphTree(const bp& database, const QuadTreeImages* qt, 
 
 	}
 
-	Mosaic::imgPair result = { quadimage, partialimage };
+	Mosaic::imgPair result = { quadimage, (hasDetails) ? partialimage : std::nullopt };
 
 	return result;
 }

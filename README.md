@@ -1,194 +1,45 @@
+**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
 
-# **Mosaic++** <img src="MosaicQt/MosaicQt/Pictures/logo.png" width="30" align="right"/>
+When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
 
-## **What's Mosaic++?**
+*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+
 ---
-&nbsp;&nbsp;_**Mosaic++**_ is a tool that produces [photomosaics](https://en.wikipedia.org/wiki/Photographic_mosaic). It offers a range of options that have an effect on the final result. It can be used for entertainment purposes or be converted to an applicable tool in fields like image processing or mesh generation.
 
-### Motivation
+## Edit a file
 
-&nbsp;&nbsp;This project started as a college assignment for a Modern C++ course we took during the first term in our second year. We chose it because we are keen on challenging ourselves and the idea of learning image processing basics besides the required modern C++ elements was catching.
+You’ll start by editing this README file to learn how to edit a file in Bitbucket.
 
-## **Features**
+1. Click **Source** on the left side.
+2. Click the README.md link from the list of files.
+3. Click the **Edit** button.
+4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
+5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
+6. Go back to the **Source** page.
+
 ---
-### **Photomosaic types**
-Mosaics can be grouped by:
 
+## Create a file
 
-<!--TODO: ar fi dragut de adaugat imagini pe aici, ori sus un fel de colaj, ori in dreptul fiecarei optiuni, ori link la ceva poza de o incarcam noi unlisted pe imgur sau alt site de genul-->
-*   Shape
-    *   Square shaped cells
-        *   Square-mosaic
-        *   Quad-mosaic
-    *   Triangle shaped cells
-    *   Diamond shaped cells
-*   Blend
-    *   with
-    *   without
-*   Color distance method
-    *   Riemersma
-    *   Euclidean
+Next, you’ll add a new file to this repository.
 
-### **Other options**
-The user also has some configurable parameters:
-*   Select the picture to be mosaiced
-*   Cell size
-*   Add/Replace to the database of cell-pictures
-*   Final result options
-    *   Final result extension
-        *   *.jpg
-        *   *.png
-    *   Final result resolution
-        *   keep original
-        *   custom width and/or height
-    *   Final result name
-    *   Final result save location
-*   Quad-Mosaic options
-    *   Threshold
-    *   Minimum cell size
-    *   with/without details
+1. Click the **New file** button at the top of the **Source** page.
+2. Give the file a filename of **contributors.txt**.
+3. Enter your name in the empty file space.
+4. Click **Commit** and then **Commit** again in the dialog.
+5. Go back to the **Source** page.
 
-## **Flow**
+Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+
 ---
-![flow](MosaicQt/MosaicQt/Pictures/FLOW.png)
 
-## **How it works**
----
-### ```BasePictures.h```
+## Clone a repository
 
-   ```c++
-    class BasePictures
-    {
-        public:
-        /*
-            This class handles most of the directory work using <filesystem>.
-            It maps every image and its path with a key equal to its mean.
-            In this case, it is fairly efficient (in terms of time complexity) 
-            to have acces to any image that is needed.
-        */
-    };
-   ```
+Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
 
-### ```Mosaic.h```
+1. You’ll see the clone button under the **Source** heading. Click that button.
+2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
+3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
+4. Open the directory you just created to see your repository’s files.
 
-```c++
-class Mosaic
-{
-    public:
-    /*
-        This class handles all the mosaicing algorithms and logic. It recieves
-        an input image and the user's desired configurations and passes the
-        cv::Mat object through all the required methods in order to process the
-        final photomosaic.  
-    */
-};
-```
-
-### ```PictureTools.dll```
-
-```c++
-class PictureTools
-{
-    public:
-    /*
-        This class has multiple image processing methods. It is used to resize,
-        crop, blend and calculate the mean for a given photo.
-    */
-};
-```
-
-### ```QuadTreeImages.h```
-
-```c++
-class QuadTreeImages
-{
-    public:
-    /*
-        This class is used inside the Mosaic class in order to quad-divide a
-        photo. It represents a QuadTree data structure implemented by us for
-        the purpose of this project.
-    */
-};
-```
-
-### ```StopWatch.h```
-
-```c++
-class StopWatch
-{
-    public:
-    /*
-        This class's purpose is to count the time our mosaicing algorithms take
-        to finish in seconds. We used it to benchmark and test our code.
-    */
-};
-```
-
-### ```mainwindow.h``` | ```QuadWindow.h``` | ```Settings.h```
-
-```c++
-class MyWindow : public QMainWindow
-{
-    public:
-    /*
-        These classes are UI classes that connect the user to the back-end
-        processes. Our UI also acts like a config manager, letting the user
-        choose from a range of options(shape, final size, algorithm used, etc)
-        in order to make the tool more flexible. 
-    */
-};
-```
-
-## **Tech used:**
----
-### Libraries and Frameworks:
-*   Qt
-*   OpenCV
-
-### Modern elements used:
-*   Threading
-    *   Every Mosaic type runs on 4 *threads*, greatly increasing performance.
-*   Modern *structures*, *algorithms* and *synthax*
-    *   Everything from *maps* to *smart-pointers* ensures our code is both readable and memory-leak proof
-*   UnitTests
-    *   *Test-Driven-Development* helped us spot out bugs
-<!--Habar n am daca am ratat ceva, completati voi-->
-
-## Examples
-### Quad-Mosaic
-#### The threshold option have a great inpact in the final result, especially when things got a little bit bigger (or in our case, tremendously large :smile:). 
-<table>
-  <tr>
-    <td>Input Image (10,000 x 10,000)</td>
-     <td>Resulted Mosaic (threshold = 50)</td>
-     <td>Resulted Mosaic (threshold = 1000)</td>
-  </tr>
-  <tr>
-    <td><img src="MosaicQt/MosaicQt/Pictures/MoonInput.jpg" width=300 height=300></td>
-    <td><img src="MosaicQt/MosaicQt/Pictures/50MoonResult.jpg" width=300 height=300></td>
-    <td><img src="MosaicQt/MosaicQt/Pictures/1000MoonResult.jpg" width=300 height=300></td>
-  </tr>
- </table>
-
-### Square-Mosaic
- <table>
-  <tr>
-    <td>Input Image</td>
-     <td>Square shaped cells</td>
-     <td>Diamond shaped cells</td>
-     <td>Diamond shaped cells</td>
-  </tr>
-  <tr>
-    <td><img src="MosaicQt/MosaicQt/Pictures/Adam.jpg" width=400 height=200></td>
-    <td><img src="MosaicQt/MosaicQt/Pictures/AdamSquare.jpg" width=400 height=200></td>
-    <td><img src="MosaicQt/MosaicQt/Pictures/AdamTriangle.jpg" width=400 height=200></td>
-    <td><img src="MosaicQt/MosaicQt/Pictures/AdamDiamond.jpg" width=400 height=200></td>
-  </tr>
- </table>
-
-___
-## Authors:
-
-[Ionuț-Alin Dinu](https://github.com/Dinu-Alin) | 
-[Adrian Călăvie](https://github.com/adriancalavie) |
-[Florin Arhip](https://github.com/Florin9925)
+Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
