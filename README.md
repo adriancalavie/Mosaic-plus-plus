@@ -1,21 +1,20 @@
+<link rel="stylesheet" type="text/css" media="all" href="Style/style.css" />
 
-# **Mosaic++** ![picture](MosaicQt/MosaicQt/Pictures/logo.png)
+# **Mosaic++** <img class="logo" src="MosaicQt/MosaicQt/Pictures/logo.png"/>
 
 ## **What's Mosaic++?**
 ---
-&nbsp;&nbsp;_**Mosaic++**_ is a tool that produces [photomosaics](https://en.wikipedia.org/wiki/Photographic_mosaic). It offers a range of options that have an effect on the final result. It can be used for entertainment purposes or be converted to an applicable tool in fields like image processing or mesh generation.
+_**Mosaic++**_ is a tool that produces [photomosaics](https://en.wikipedia.org/wiki/Photographic_mosaic). It offers a range of options that have an effect on the final result. It can be used for entertainment purposes or be converted to an applicable tool in fields like image processing or mesh generation.
 
 ### Motivation
 
-&nbsp;&nbsp;This project started as a college assignment for a Modern C++ course we took during the first term in our second year. We chose it because we are keen on challenging ourselves and the idea of learning image processing basics besides the required modern C++ elements was catching.
+This project started as a college assignment for a Modern C++ course we took during the first term in our second year. We chose it because we are keen on challenging ourselves and the idea of learning image processing basics besides the required modern C++ elements was catching.
 
 ## **Features**
 ---
 ### **Photomosaic types**
 Mosaics can be grouped by:
 
-
-<!--TODO: ar fi dragut de adaugat imagini pe aici, ori sus un fel de colaj, ori in dreptul fiecarei optiuni, ori link la ceva poza de o incarcam noi unlisted pe imgur sau alt site de genul-->
 *   Shape
     *   Square shaped cells
         *   Square-mosaic
@@ -152,9 +151,9 @@ class MyWindow : public QMainWindow
     *   Everything from *maps* to *smart-pointers* ensures our code is both readable and memory-leak proof
 *   UnitTests
     *   *Test-Driven-Development* helped us spot out bugs
-<!--Habar n am daca am ratat ceva, completati voi-->
 
 ## Examples
+---
 ### Quad-Mosaic
 #### The threshold option have a great inpact in the final result, especially when things got a little bit bigger (or in our case, tremendously large :smile:). 
 <table>
@@ -164,9 +163,9 @@ class MyWindow : public QMainWindow
      <td>Resulted Mosaic (threshold = 1000)</td>
   </tr>
   <tr>
-    <td><img src="MosaicQt/MosaicQt/Pictures/MoonInput.jpg" width=300 height=300></td>
-    <td><img src="MosaicQt/MosaicQt/Pictures/50MoonResult.jpg" width=300 height=300></td>
-    <td><img src="MosaicQt/MosaicQt/Pictures/1000MoonResult.jpg" width=300 height=300></td>
+    <td><img class="quadImage" src="MosaicQt/MosaicQt/Pictures/MoonInput.jpg"></td>
+    <td><img class="quadImage" src="MosaicQt/MosaicQt/Pictures/50MoonResult.jpg"></td>
+    <td><img class="quadImage" src="MosaicQt/MosaicQt/Pictures/1000MoonResult.jpg"></td>
   </tr>
  </table>
 
@@ -179,10 +178,10 @@ class MyWindow : public QMainWindow
      <td>Diamond shaped cells</td>
   </tr>
   <tr>
-    <td><img src="MosaicQt/MosaicQt/Pictures/Adam.jpg" width=400 height=200></td>
-    <td><img src="MosaicQt/MosaicQt/Pictures/AdamSquare.jpg" width=400 height=200></td>
-    <td><img src="MosaicQt/MosaicQt/Pictures/AdamTriangle.jpg" width=400 height=200></td>
-    <td><img src="MosaicQt/MosaicQt/Pictures/AdamDiamond.jpg" width=400 height=200></td>
+    <td><img class="sectionSquare" src="MosaicQt/MosaicQt/Pictures/Adam.jpg"></td>
+    <td><img class="sectionSquare" src="MosaicQt/MosaicQt/Pictures/AdamSquare.jpg"></td>
+    <td><img class="sectionSquare" src="MosaicQt/MosaicQt/Pictures/AdamTriangle.jpg"></td>
+    <td><img class="sectionSquare" src="MosaicQt/MosaicQt/Pictures/AdamDiamond.jpg"></td>
   </tr>
  </table>
 
