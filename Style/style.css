@@ -1,0 +1,20 @@
+.logo {
+    height: 30px;
+    width: 30px;
+    float: right;
+}
+
+.quadImage
+{
+    width: 300px;
+    height: 300px;
+}
+
+.sectionSquare{
+    width: 400px;
+    height: 200px;
+}
+
+td{
+    text-align: center;
+}
