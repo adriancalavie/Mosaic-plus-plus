@@ -1357,7 +1357,7 @@ background:#148dfa;
 }</string>
     </property>
     <property name="text">
-     <string>Save</string>
+     <string>Close</string>
     </property>
    </widget>
   </widget>

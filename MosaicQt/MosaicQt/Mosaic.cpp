@@ -79,16 +79,12 @@ Mosaic::imgPair Mosaic::MakeQuadTree(const bp& dataPictures, const cv::Mat& imag
 	int rows = row_partitions / 2;
 	int cols = col_partitions / 2;
 
-	//width height
-
-	//0,0,599,299
-	//600,0,599,299
-	//0,300,599,299
-	//600,300,599,299
+	
 	cv::Rect cropped1(0,0,cols - 1, rows - 1);
 	cv::Rect cropped2(cols, 0, cols - 1, rows - 1);
 	cv::Rect cropped3(0, rows, cols - 1, rows - 1);
 	cv::Rect cropped4(cols, rows, cols - 1, rows - 1);
+
 
 	auto image1 = image(cropped1);
 	auto image2 = image(cropped2);

@@ -237,7 +237,8 @@ void MainWindow::MakeQuadMosaic()
 	}
 
 	cv::imwrite(outputPath(), res.first.value());
-	cv::imwrite(Data::Defaults::PATH_RESULT_IMAGE +"quad"+extension(), res.second.value());
+	if (st.get()->GetUI().get()->checkBoxDetailsQuad->isChecked())
+		cv::imwrite(Data::Defaults::PATH_RESULT_IMAGE + "quad" + extension(), res.second.value());
 
 	QPixmap mosaic(std::move(QString::fromStdString(outputPath())));
 
