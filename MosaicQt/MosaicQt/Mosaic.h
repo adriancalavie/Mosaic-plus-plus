@@ -1,16 +1,8 @@
 #pragma once
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-#include <cstdlib>
-#include <algorithm>
 #include <random>
-#include <time.h> 
-#include <atomic>
 #include <optional>
 #include "BasePictures.h"
-#include "Data.h"
 #include "../Picture Tools/PictureTools.h"
 #include "QuadTreeImages.h"
 

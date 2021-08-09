@@ -2,19 +2,18 @@
 
 uint32_t EuclideanDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor)
 {
-	int blueDistance, greenDistance, redDistance;
-	blueDistance = firstColor[0] - secondColor[0];
-	greenDistance = firstColor[1] - secondColor[1];
-	redDistance = firstColor[2] - secondColor[2];
+	const int blueDistance = firstColor[0] - secondColor[0];
+	const int greenDistance = firstColor[1] - secondColor[1];
+	const int redDistance = firstColor[2] - secondColor[2];
 	return (blueDistance * blueDistance + greenDistance * greenDistance + redDistance * redDistance);
 }
 
 uint32_t RiemersmaDistance(const cv::Scalar& firstColor, const cv::Scalar& secondColor)
 {
-	uint32_t rmean = ((long)firstColor[0] + (long)secondColor[0]) / 2;
-	uint32_t r = (long)firstColor[0] - (long)secondColor[0];
-	uint32_t g = (long)firstColor[1] - (long)secondColor[1];
-	uint32_t b = (long)firstColor[2] - (long)secondColor[2];
+	const uint32_t rmean = (static_cast<long>(firstColor[0]) + static_cast<long>(secondColor[0])) / 2;
+	const uint32_t r = static_cast<long>(firstColor[0]) - static_cast<long>(secondColor[0]);
+	const uint32_t g = static_cast<long>(firstColor[1]) - static_cast<long>(secondColor[1]);
+	const uint32_t b = static_cast<long>(firstColor[2]) - static_cast<long>(secondColor[2]);
 
 	return (((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8);
 }
@@ -139,26 +138,24 @@ cv::Mat Mosaic::MakeRectangle(const bp::map& dataPictures, const cv::Mat& image,
 			}
 		}
 	};
-	Point start1, start2, start3, start4;
-	Point end1, end2, end3, end4;
 
-	int row_partitions = image.rows / partitionSize;
-	int col_partitions = image.cols / partitionSize;
+	const int row_partitions = image.rows / partitionSize;
+	const int col_partitions = image.cols / partitionSize;
 
 	int rows = row_partitions / 2 * partitionSize;
 	int cols = col_partitions / 2 * partitionSize;
 
-	start1 = { 0,0 };
-	end1 = { rows, cols };
+	Point start1 = {0, 0};
+	Point end1 = {rows, cols};
 
-	start2 = { 0,cols };
-	end2 = { rows, image.cols };
+	Point start2 = {0, cols};
+	Point end2 = {rows, image.cols};
 
-	start3 = { rows,0 };
-	end3 = { image.rows, cols };
+	Point start3 = {rows, 0};
+	Point end3 = {image.rows, cols};
 
-	start4 = { rows,cols };
-	end4 = { image.rows, image.cols };
+	Point start4 = {rows, cols};
+	Point end4 = {image.rows, image.cols};
 
 	std::thread t1{ makeMosaicPartition, std::ref(start1), std::ref(end1) };
 	std::thread t2{ makeMosaicPartition, std::ref(start2), std::ref(end2) };
@@ -189,7 +186,7 @@ cv::Mat Mosaic::MakeTriangle(const bp::map& dataPictures, const cv::Mat& image, 
 				std::random_device rd;
 				std::mt19937 gen(rd());
 				std::uniform_int_distribution<> dis(0, 1);
-				uint8_t type = dis(gen);
+				const uint8_t type = dis(gen);
 
 				cv::Scalar medColor;
 
@@ -236,26 +233,23 @@ cv::Mat Mosaic::MakeTriangle(const bp::map& dataPictures, const cv::Mat& image, 
 	};
 
 
-	Point start1, start2, start3, start4;
-	Point end1, end2, end3, end4;
-
-	int partitii_rand = image.rows / partitionSize;
-	int partitii_coloane = image.cols / partitionSize;
+	const int partitii_rand = image.rows / partitionSize;
+	const int partitii_coloane = image.cols / partitionSize;
 
 	int randuri = partitii_rand / 2 * partitionSize;
 	int coloane = partitii_coloane / 2 * partitionSize;
 
-	start1 = { 0,0 };
-	end1 = { randuri, coloane };
+	Point start1 = {0, 0};
+	Point end1 = {randuri, coloane};
 
-	start2 = { 0,coloane };
-	end2 = { randuri, image.cols };
+	Point start2 = {0, coloane};
+	Point end2 = {randuri, image.cols};
 
-	start3 = { randuri,0 };
-	end3 = { image.rows, coloane };
+	Point start3 = {randuri, 0};
+	Point end3 = {image.rows, coloane};
 
-	start4 = { randuri,coloane };
-	end4 = { image.rows, image.cols };
+	Point start4 = {randuri, coloane};
+	Point end4 = {image.rows, image.cols};
 
 	std::thread t1{ test, std::ref(start1), std::ref(end1) };
 	std::thread t2{ test, std::ref(start2), std::ref(end2) };
@@ -312,26 +306,24 @@ cv::Mat Mosaic::MakeDiamond(const bp::map& dataPictures, const cv::Mat& image, c
 			}
 		}
 	};
-	Point start1, start2, start3, start4;
-	Point end1, end2, end3, end4;
 
-	int partitii_rand = image.rows / partitionSize;
-	int partitii_coloane = image.cols / partitionSize;
+	const int partitii_rand = image.rows / partitionSize;
+	const int partitii_coloane = image.cols / partitionSize;
 
 	int randuri = partitii_rand / 2 * partitionSize;
 	int coloane = partitii_coloane / 2 * partitionSize;
 
-	start1 = { 0,0 };
-	end1 = { randuri + partitionSize, coloane + partitionSize };
+	Point start1 = {0, 0};
+	Point end1 = {randuri + partitionSize, coloane + partitionSize};
 
-	start2 = { 0,coloane };
-	end2 = { randuri, image.cols };
+	Point start2 = {0, coloane};
+	Point end2 = {randuri, image.cols};
 
-	start3 = { randuri,0 };
-	end3 = { image.rows, coloane };
+	Point start3 = {randuri, 0};
+	Point end3 = {image.rows, coloane};
 
-	start4 = { randuri - partitionSize,coloane - partitionSize };
-	end4 = { image.rows, image.cols };
+	Point start4 = {randuri - partitionSize, coloane - partitionSize};
+	Point end4 = {image.rows, image.cols};
 
 	std::thread t1{ test, std::ref(start1), std::ref(end1) };
 	std::thread t2{ test, std::ref(start2), std::ref(end2) };
@@ -633,14 +625,14 @@ cv::Mat Mosaic::Concat4(const cv::Mat& img1, const cv::Mat& img2, const cv::Mat&
 {
 
 	// Get dimension of final image
-	int rowsT = cv::max(img1.rows, img2.rows);
-	int colsT = img1.cols + img2.cols;
-	int rowsB = cv::max(img3.rows, img4.rows);
-	int colsB = img3.cols + img4.cols;
+	const int rowsT = cv::max(img1.rows, img2.rows);
+	const int colsT = img1.cols + img2.cols;
+	const int rowsB = cv::max(img3.rows, img4.rows);
+	const int colsB = img3.cols + img4.cols;
 
 	// Create a black image
-	cv::Mat3b resT(rowsT, colsT, cv::Vec3b(0, 0, 0));
-	cv::Mat3b resB(rowsB, colsB, cv::Vec3b(0, 0, 0));
+	const cv::Mat3b resT(rowsT, colsT, cv::Vec3b(0, 0, 0));
+	const cv::Mat3b resB(rowsB, colsB, cv::Vec3b(0, 0, 0));
 
 	// Copy images in correct position
 	img1.copyTo(resT(cv::Rect(0, 0, img1.cols, img1.rows)));

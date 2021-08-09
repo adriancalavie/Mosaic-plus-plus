@@ -31,11 +31,11 @@ public:
 
 	public:
 
-		int GetWidth();
-		int GetHeigth();
+		int GetWidth() const;
+		int GetHeigth() const;
 
-		cv::Mat GetPoints();
-		cv::Mat GetPoints(const cv::Mat&);
+		cv::Mat GetPoints() const;
+		cv::Mat GetPoints(const cv::Mat&) const;
 	public:
 		double GetError(const cv::Mat&);
 	};
@@ -47,24 +47,24 @@ private:
 	cv::Mat m_image;
 	QNode* m_root;
 
-	void RecursiveSubDivide(QNode* node, double k, int m_minPixelSize, const cv::Mat& img);
+	void RecursiveSubDivide(QNode* node, double k, int m_minPixelSize, const cv::Mat& img) const;
 
 public:
 	QuadTreeImages(double stdm_threshold, int m_minPixelSize, const cv::Mat& image);
 	void recursiveDeletition(QNode* root);
 	~QuadTreeImages();
-	void Subdivide();
+	void Subdivide() const;
 
 public:
 	double GetThreshold() const;
-	void SetThreshold(const double& treshold);
+	void SetThreshold(const double treshold);
 
 
 	int	GetMinSize() const;
-	void SetMinSize(const int& minSize);
+	void SetMinSize(const int minSize);
 
 	int	GetMinPixelSize()const;
-	void SetMinPixelSize(const int& minPixelSize);
+	void SetMinPixelSize(const int minPixelSize);
 
 
 	cv::Mat	GetImage() const;

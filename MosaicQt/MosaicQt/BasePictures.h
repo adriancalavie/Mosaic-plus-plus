@@ -17,7 +17,7 @@
 template <>
 struct std::hash<cv::Scalar>
 {
-	size_t operator()(const cv::Scalar& k) const
+	size_t operator()(const cv::Scalar& k) const noexcept
 	{
 		size_t res = 17;
 		res = res * 31 + std::hash<double>()(k.val[0]);
@@ -29,7 +29,7 @@ struct std::hash<cv::Scalar>
 
 class BasePictures
 {
-	
+
 public:
 	using value = std::pair<cv::Mat, std::string>;
 	using map = std::unordered_map<cv::Scalar, value>;
@@ -43,13 +43,13 @@ public:
 	BasePictures();
 
 	[[nodiscard]] const map& GetMediumColor() const noexcept;
-	const void CreatePictures(const std::string & dirName = "");
+	void CreatePictures(const std::string& dirName = "");
 
 	static cv::Mat ReadPhoto(const std::string & = "\n", const std::string & = Data::Defaults::PATH_PICTURES_FOR_MOSAIC);
 
 	[[nodiscard]] const std::string& GetFileDestination() const;
 	void SetFileDestination(const std::string&);
-	[[nodiscard]] const uint16_t& GetNumberPictures() const;
+	[[nodiscard]] uint16_t GetNumberPictures() const;
 
 	void AddBasePicturesMosaic();
 };

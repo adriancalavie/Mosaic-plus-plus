@@ -24,7 +24,7 @@
 #include <string>
 
 #include "Mosaic.h"
-#include "StopWatch.h"
+#include "StopWatch.hpp"
 #include "Settings.h"
 #include "QuadWindow.h"
 
@@ -35,7 +35,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(std::unique_ptr<QWidget> parent = Q_NULLPTR);
-    ~MainWindow();
+    ~MainWindow() override = default;
 
 private:
     std::unique_ptr<Ui::MainWindow> ui = std::make_unique<Ui::MainWindow>();
@@ -48,19 +48,17 @@ private:
     BasePictures basePictures;
     
 private slots:
-    std::string SelectBasePicturesFolder();
-    std::string SelectPictureForMosaic();
-    std::string SelectFolderForResult();
+    void SelectBasePicturesFolder();
+    void SelectPictureForMosaic();
+    void SelectFolderForResult();
     bool StartMosaic();
-    void ActionSettings();
-    void ActionExit();
-    void ActionHelp();
-    void CheckQuadMosaic();
-    void ShowDetailsQuad();
+    void ActionHelp() const;
+    void CheckQuadMosaic() const;
+    void ShowDetailsQuad() const;
 private:
     void MakeMosaic();
     void MakeQuadMosaic();
-    void Errors(std::string message);
+    void Errors(const std::string& message) const;
 
 
 };

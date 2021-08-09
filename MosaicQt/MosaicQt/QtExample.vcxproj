@@ -46,13 +46,12 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>D:\Mosaic++\MosaicQt\Mosaic;C:\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Mosaic++\MosaicQt\x64\Debug;C:\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Mosaic++\MosaicQt\Mosaic;C:\OpenCV\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Mosaic++\MosaicQt\x64\Debug;C:\OpenCV\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <IncludePath>D:\Mosaic++\MosaicQt\Mosaic;C:\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Mosaic++\MosaicQt\x64\Debug;C:\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
-    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>D:\Mosaic++\MosaicQt\Mosaic;C:\OpenCV\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Mosaic++\MosaicQt\x64\Debug;C:\OpenCV\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -66,8 +65,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
       <AdditionalDependencies>opencv_world450.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OptimizeReferences>true</OptimizeReferences>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -78,15 +75,19 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>msvc2017_64</QtInstall>
+    <QtInstall>6.1.2_msvc2019_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>msvc2017_64</QtInstall>
+    <QtInstall>5.12.11_msvc2017_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -124,7 +125,6 @@
     <ClCompile Include="QuadTreeImages.cpp" />
     <ClCompile Include="QuadWindow.cpp" />
     <ClCompile Include="Settings.cpp" />
-    <ClCompile Include="StopWatch.cpp" />
     <QtRcc Include="mainwindow.qrc" />
     <QtUic Include="mainwindow.ui" />
     <QtMoc Include="mainwindow.h" />
@@ -145,7 +145,7 @@
     <ClInclude Include="QuadTreeImages.h" />
     <QtMoc Include="Settings.h" />
     <QtMoc Include="QuadWindow.h" />
-    <ClInclude Include="StopWatch.h" />
+    <ClInclude Include="StopWatch.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Picture Tools\Picture Tools.vcxproj">

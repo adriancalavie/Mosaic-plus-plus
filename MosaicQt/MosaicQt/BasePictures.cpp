@@ -12,23 +12,23 @@ BasePictures::BasePictures() :
 	return m_mediumColor;
 }
 
-const void BasePictures::CreatePictures(const std::string& dirName)
+void BasePictures::CreatePictures(const std::string& dirName)
 {
 	std::ofstream out;
 	out.open(m_dataBase, std::ios_base::app);
 	for (const auto& entry : std::filesystem::directory_iterator(dirName))
 	{
-		cv::Mat img = cv::imread(entry.path().string(), cv::IMREAD_COLOR);
-		if (!img.empty()) {
+		if (cv::Mat img = cv::imread(entry.path().string(), cv::IMREAD_COLOR); !img.empty()) {
 			img = PictureTools::Resize(img, 100, 100);
 			cv::Scalar aux = PictureTools::AverageColorRectangle(img, { 0, 0 }, { img.rows, img.cols });
 			out << aux[0] << " "
 				<< aux[1] << " "
 				<< aux[2] << " "
 				<< entry.path().string().substr(dirName.size() + 1) << std::endl;
+			
 			cv::imwrite(m_processedPictures + entry.path().string().substr(dirName.size()), img);
 
-			m_mediumColor.insert({ std::move(aux), { std::move(img), entry.path().string().substr(dirName.size() + 1)}});
+			m_mediumColor.insert({ aux, { std::move(img), entry.path().string().substr(dirName.size() + 1)} });
 		}
 	}
 	out.close();
@@ -39,10 +39,9 @@ cv::Mat BasePictures::ReadPhoto(const std::string& pictureName, const std::strin
 	cv::Mat img = std::move(cv::imread(fileName + pictureName, cv::IMREAD_COLOR));
 	assert(!img.empty());
 	return img;
-
 }
 
-[[nodiscard]] const uint16_t& BasePictures::GetNumberPictures() const
+[[nodiscard]] uint16_t BasePictures::GetNumberPictures() const
 {
 	return m_mediumColor.size();
 }
@@ -69,16 +68,16 @@ void BasePictures::AddBasePicturesMosaic()
 			cv::Scalar aux;
 
 			std::getline(ss, item, ' ');
-			aux[0] = std::move(std::stod(item));
+			aux[0] = std::stod(item);
 			std::getline(ss, item, ' ');
-			aux[1] = std::move(std::stod(item));
+			aux[1] = std::stod(item);
 			std::getline(ss, item, ' ');
-			aux[2] = std::move(std::stod(item));
+			aux[2] = std::stod(item);
 			std::getline(ss, item);
 			cv::Mat validation;
 			validation = cv::imread(m_processedPictures + item, cv::IMREAD_COLOR);
 			if (!validation.empty())
-				m_mediumColor.insert({ std::move(aux),{validation, std::move(item)} });
+				m_mediumColor.insert({ aux,{validation, std::move(item)} });
 		}
 	}
 }

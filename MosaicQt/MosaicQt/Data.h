@@ -8,14 +8,14 @@ class Data
 {
 public:
 
-	static class Info
+	class Info
 	{
 	public:
 		static const std::string VERSION;
 		static const std::string GENERAL_HELP;
 	};
 
-	static class Errors
+	class Errors
 	{
 	public:
 		static const std::string BASE_PICTURES_EMPTY;
@@ -24,7 +24,7 @@ public:
 		static const std::string ANOTHER_ERROR;
 	};
 
-	static class Defaults
+	class Defaults
 	{
 	public:
 		static const std::string PATH_BASE_PICTURES;

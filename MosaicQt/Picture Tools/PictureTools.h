@@ -1,10 +1,5 @@
 #pragma once
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
-#include <cstdlib>
-#include <cmath>
-#include <tuple>
 
 
 #ifdef PICTURETOOLS_EXPORTS
@@ -16,7 +11,7 @@
 class PICTURE_TOOLS_API PictureTools
 {
 public:
-	enum class Algorithm : uint8_t
+	enum class Algorithm : int_fast8_t
 	{
 		NEAREST_NEIGHBOUR,
 		BILINEAR_INTERPOLATION

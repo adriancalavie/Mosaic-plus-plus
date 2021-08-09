@@ -10,60 +10,55 @@ QuadTreeImages::QNode::QNode(int x0, int y0, int width, int heigth)
 	this->children = std::vector<QNode*>();
 }
 
-int QuadTreeImages::QNode::GetWidth()
+int QuadTreeImages::QNode::GetWidth() const
 {
 	return this->width;
 }
 
-int QuadTreeImages::QNode::GetHeigth()
+int QuadTreeImages::QNode::GetHeigth() const
 {
 	return this->height;
 }
 
-cv::Mat QuadTreeImages::QNode::GetPoints()
+cv::Mat QuadTreeImages::QNode::GetPoints() const
 {
 	return this->points;
 }
 
-cv::Mat QuadTreeImages::QNode::GetPoints(const cv::Mat& image)
+cv::Mat QuadTreeImages::QNode::GetPoints(const cv::Mat& image) const
 {
-	//std::cout << x0 << " " << y0 << " " << width << " " << height << std::endl;
-	cv::Rect cropped(y0, x0, width, height);
+	const cv::Rect cropped(y0, x0, width, height);
 
 	return image(cropped);
 }
 
 double QuadTreeImages::QNode::GetError(const cv::Mat& image)
 {
-	auto pixels = GetPoints(image);
+	const auto pixels = GetPoints(image);
 
 	cv::Mat3i temp = pixels;
 
-	cv::Scalar avg = cv::mean(temp);
+	const cv::Scalar avg = cv::mean(temp);
 	mean = avg;
 	temp = temp - avg;
 
 	cv::pow(temp, 2, temp);
 	cv::Scalar mse = cv::mean(temp);
 
-	double e = mse[0] * 0.2989 + mse[1] * 0.5870 + mse[2] * 0.1140;
+	const double e = mse[0] * 0.2989 + mse[1] * 0.5870 + mse[2] * 0.1140;
 	return (e * image.cols * image.rows) / 90000000;
 }
 
-void QuadTreeImages::RecursiveSubDivide(QNode* node, double k, int m_minPixelSize, const cv::Mat& img)
+void QuadTreeImages::RecursiveSubDivide(QNode* node, double k, int m_minPixelSize, const cv::Mat& img) const
 {
-	double size = node->GetError(img);
-
-	//std::cout << "size:" << size << std::endl;
-	if (size <= k)
+	if (node->GetError(img) <= k)
 	{
 		return;
 	}
-	int w_1 = (int)(std::floor(node->width / 2.0));
-	int w_2 = (int)(std::ceil(node->width / 2.0));
-	int h_1 = (int)(std::floor(node->height / 2.0));
-	int h_2 = (int)(std::ceil(node->height / 2.0));
-	//std::cout << w_1 << " " << w_2 << " " << h_1 << " " << h_2;
+	const int w_1 = static_cast<int>(std::floor(node->width / 2.0));
+	const int w_2 = static_cast<int>(std::ceil(node->width / 2.0));
+	const int h_1 = static_cast<int>(std::floor(node->height / 2.0));
+	const int h_2 = static_cast<int>(std::ceil(node->height / 2.0));
 
 	if (w_1 <= m_minPixelSize || h_1 <= m_minPixelSize)
 	{
@@ -119,7 +114,7 @@ QuadTreeImages::~QuadTreeImages()
 	recursiveDeletition(m_root);
 }
 
-void QuadTreeImages::Subdivide()
+void QuadTreeImages::Subdivide() const
 {
 	RecursiveSubDivide(m_root, m_threshold, m_minPixelSize, m_image);
 }
@@ -129,7 +124,7 @@ double QuadTreeImages::GetThreshold() const
 	return this->m_threshold;
 }
 
-void QuadTreeImages::SetThreshold(const double& threshold)
+void QuadTreeImages::SetThreshold(const double threshold)
 {
 	this->m_threshold = threshold;
 }
@@ -139,7 +134,7 @@ int QuadTreeImages::GetMinSize() const
 	return this->m_minSize;
 }
 
-void QuadTreeImages::SetMinSize(const int& minSize)
+void QuadTreeImages::SetMinSize(const int minSize)
 {
 	this->m_minSize = minSize;
 }
@@ -149,7 +144,7 @@ int QuadTreeImages::GetMinPixelSize() const
 	return this->m_minPixelSize;
 }
 
-void QuadTreeImages::SetMinPixelSize(const int& minPixelSize)
+void QuadTreeImages::SetMinPixelSize(const int minPixelSize)
 {
 	this->m_minPixelSize = minPixelSize;
 }

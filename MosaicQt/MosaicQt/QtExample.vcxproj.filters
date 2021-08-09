@@ -56,9 +56,6 @@
     <ClCompile Include="Mosaic.cpp">
       <Filter>Source Files\Mosaic Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StopWatch.cpp">
-      <Filter>Source Files\Mosaic Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mainwindow.cpp">
       <Filter>Source Files\QT Source Files</Filter>
     </ClCompile>
@@ -88,7 +85,7 @@
     <ClInclude Include="Mosaic.h">
       <Filter>Header Files\Mosaic Headers</Filter>
     </ClInclude>
-    <ClInclude Include="StopWatch.h">
+    <ClInclude Include="StopWatch.hpp">
       <Filter>Header Files\Mosaic Headers</Filter>
     </ClInclude>
     <ClInclude Include="QuadTreeImages.h">

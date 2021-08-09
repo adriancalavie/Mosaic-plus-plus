@@ -13,15 +13,20 @@ uint8_t PictureTools::ValueCheck(int number)
 
 cv::Mat PictureTools::CropSquare(const cv::Mat& image, const Point& topL, const Point& botR)
 {
-	uint16_t height = botR.first - topL.first;
-	uint16_t width = botR.second - topL.second;
+	const uint16_t height = botR.first - topL.first;
+	const uint16_t width = botR.second - topL.second;
 	cv::Mat result(height, width, CV_8UC3);
 	for (int index_rows = 0; index_rows < height; index_rows++)
 		for (int index_cols = 0; index_cols < width; index_cols++)
 		{
-			result.at<cv::Vec3b>(index_rows, index_cols)[0] = image.at<cv::Vec3b>(topL.first + index_rows, topL.second + index_cols)[0];
-			result.at<cv::Vec3b>(index_rows, index_cols)[1] = image.at<cv::Vec3b>(topL.first + index_rows, topL.second + index_cols)[1];
-			result.at<cv::Vec3b>(index_rows, index_cols)[2] = image.at<cv::Vec3b>(topL.first + index_rows, topL.second + index_cols)[2];
+			result.at<cv::Vec3b>(index_rows, index_cols)[0] =
+				image.at<cv::Vec3b>(topL.first + index_rows, topL.second + index_cols)[0];
+
+			result.at<cv::Vec3b>(index_rows, index_cols)[1] =
+				image.at<cv::Vec3b>(topL.first + index_rows, topL.second + index_cols)[1];
+
+			result.at<cv::Vec3b>(index_rows, index_cols)[2] =
+				image.at<cv::Vec3b>(topL.first + index_rows, topL.second + index_cols)[2];
 		}
 	return result;
 }
@@ -48,14 +53,13 @@ cv::Mat PictureTools::NearestNeighbour(const cv::Mat& image, const uint16_t& wid
 	assert(!image.empty());
 	cv::Mat newimage(height, width, CV_8UC3);
 
-	int x_ratio = (int)((image.cols << 16) / width) + 1;
-	int y_ratio = (int)((image.rows << 16) / height) + 1;
+	const int x_ratio = (image.cols << 16) / width + 1;
+	const int y_ratio = (image.rows << 16) / height + 1;
 
-	int nearX, nearY;
 	for (int rows = 0; rows < height; ++rows) {
 		for (int cols = 0; cols < width; ++cols) {
-			nearX = ((cols * x_ratio) >> 16);
-			nearY = ((rows * y_ratio) >> 16);
+			const int nearX = ((cols * x_ratio) >> 16);
+			const int nearY = ((rows * y_ratio) >> 16);
 
 			newimage.at<cv::Vec3b>(rows, cols) = cv::Vec3b(image.at<cv::Vec3b>(nearY, nearX));
 		}
@@ -83,19 +87,17 @@ cv::Mat PictureTools::BilinearInterpolation(const cv::Mat& image, const uint16_t
 
 	cv::Mat newimage(height, width, CV_8UC3);
 
-	double heightRatio = height / static_cast<double>(image.rows);
-	double widthRatio = width / static_cast<double>(image.cols);
+	const double heightRatio = height / static_cast<double>(image.rows);
+	const double widthRatio = width / static_cast<double>(image.cols);
 
 	for (int hIndex = 0; hIndex < height; ++hIndex)
 	{
 		for (int wIndex = 0; wIndex < width; ++wIndex)
 		{
 			std::array <cv::Point, 2> neighbours;
-			double h_t, w_t;
-			cv::Vec3b valueW1, valueW2, valueH;
 
-			h_t = hIndex / heightRatio;
-			w_t = wIndex / widthRatio;
+			const double h_t = hIndex / heightRatio;
+			const double w_t = wIndex / widthRatio;
 
 			neighbours[0].x = static_cast<int>(h_t);
 			neighbours[0].y = static_cast<int>(w_t);
@@ -104,6 +106,7 @@ cv::Mat PictureTools::BilinearInterpolation(const cv::Mat& image, const uint16_t
 
 			if (neighbours[1].x < image.rows && neighbours[1].y < image.cols)
 			{
+				cv::Vec3b valueW2, valueW1;
 				valueW1 = Interpolation(
 					image.at<cv::Vec3b>(neighbours[0].x, neighbours[0].y),
 					image.at<cv::Vec3b>(neighbours[0].x, neighbours[1].y),
@@ -116,13 +119,13 @@ cv::Mat PictureTools::BilinearInterpolation(const cv::Mat& image, const uint16_t
 					h_t - neighbours[0].x
 				);
 
-				valueH = Interpolation(
+				const cv::Vec3b valueH = Interpolation(
 					valueW1,
 					valueW2,
 					w_t - neighbours[0].y
 				);
 
-				newimage.at<cv::Vec3b>(hIndex, wIndex) = std::move(valueH);
+				newimage.at<cv::Vec3b>(hIndex, wIndex) = valueH;
 			}
 			else
 			{
@@ -138,18 +141,18 @@ cv::Mat PictureTools::BilinearInterpolation(const cv::Mat& image, const uint16_t
 cv::Scalar PictureTools::AverageColorRectangle(const cv::Mat& image, const Point& startLocation, const Point& size)
 {
 	assert(!image.empty());
-	double blue, green, red;
-	blue = green = red = 0;
-	int sizeOfPartition = (size.first) * (size.second);
-	int rowSize = size.first + startLocation.first;
-	int colSize = size.second + startLocation.second;
+	double green, red;
+	double blue = green = red = 0;
+	const int sizeOfPartition = (size.first) * (size.second);
+	const int rowSize = size.first + startLocation.first;
+	const int colSize = size.second + startLocation.second;
 	for (int rows = startLocation.first; rows < rowSize; ++rows)
 	{
 		for (int cols = startLocation.second; cols < colSize; ++cols)
 		{
-			blue += (int)image.at<cv::Vec3b>(rows, cols)[0] / (double)100;
-			green += (int)image.at<cv::Vec3b>(rows, cols)[1] / (double)100;
-			red += (int)image.at<cv::Vec3b>(rows, cols)[2] / (double)100;
+			blue += static_cast<int>(image.at<cv::Vec3b>(rows, cols)[0]) / static_cast<double>(100);
+			green += static_cast<int>(image.at<cv::Vec3b>(rows, cols)[1]) / static_cast<double>(100);
+			red += static_cast<int>(image.at<cv::Vec3b>(rows, cols)[2]) / static_cast<double>(100);
 
 		}
 	}
@@ -166,11 +169,9 @@ cv::Scalar PictureTools::AverageColorRectangle(const cv::Mat& image, const Point
 cv::Scalar PictureTools::AverageColorTriangle(const cv::Mat& image, const Point& startLocation, const Point& size, const uint8_t& type)
 {
 	assert(!image.empty());
-	double blue, green, red;
-	blue = green = red = 0;
-	int sizeOfPartition = (size.first) * (size.second) / 2;
-	int rowSize = size.first + startLocation.first;
-	int colSize = size.second + startLocation.second;
+	double green, red;
+	double blue = green = red = 0;
+	const int sizeOfPartition = (size.first) * (size.second) / 2;
 
 	switch (type)
 	{
@@ -179,9 +180,9 @@ cv::Scalar PictureTools::AverageColorTriangle(const cv::Mat& image, const Point&
 		{
 			for (int cols = 0; cols < size.second - rows; ++cols)
 			{
-				blue += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0] / (double)100;
-				green += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1] / (double)100;
-				red += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2] / (double)100;
+				blue += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0]) / static_cast<double>(100);
+				green += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1]) / static_cast<double>(100);
+				red += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2]) / static_cast<double>(100);
 			}
 		}
 
@@ -191,9 +192,9 @@ cv::Scalar PictureTools::AverageColorTriangle(const cv::Mat& image, const Point&
 		{
 			for (int cols = size.second - rows; cols < size.second; ++cols)
 			{
-				blue += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0] / (double)100;
-				green += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1] / (double)100;
-				red += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2] / (double)100;
+				blue += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0]) / static_cast<double>(100);
+				green += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1]) / static_cast<double>(100);
+				red += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2]) / static_cast<double>(100);
 			}
 		}
 
@@ -203,9 +204,9 @@ cv::Scalar PictureTools::AverageColorTriangle(const cv::Mat& image, const Point&
 		{
 			for (int cols = rows; cols < size.second; ++cols)
 			{
-				blue += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0] / (double)100;
-				green += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1] / (double)100;
-				red += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2] / (double)100;
+				blue += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0]) / static_cast<double>(100);
+				green += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1]) / static_cast<double>(100);
+				red += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2]) / static_cast<double>(100);
 			}
 		}
 
@@ -215,9 +216,9 @@ cv::Scalar PictureTools::AverageColorTriangle(const cv::Mat& image, const Point&
 		{
 			for (int cols = 0; cols < rows; ++cols)
 			{
-				blue += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0] / (double)100;
-				green += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1] / (double)100;
-				red += (int)image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2] / (double)100;
+				blue += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[0]) / static_cast<double>(100);
+				green += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[1]) / static_cast<double>(100);
+				red += static_cast<int>(image.at<cv::Vec3b>(startLocation.first + rows, startLocation.second + cols)[2]) / static_cast<double>(100);
 			}
 		}
 		break;
