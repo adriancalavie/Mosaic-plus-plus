@@ -49,7 +49,7 @@ The user also has some configurable parameters:
 
 ## **Flow**
 ---
-![flow](MosaicQt/MosaicQt/Pictures/FLOW.png)
+![flow](MosaicQt/MosaicQt/Pictures/flow.png)
 
 ## **How it works**
 ---
