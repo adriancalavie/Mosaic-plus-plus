@@ -190,4 +190,4 @@ ___
 
 [Ionuț-Alin Dinu](https://github.com/Dinu-Alin) | 
 [Adrian Călăvie](https://github.com/adriancalavie) |
-[Florin Arhip](https://github.com/Florin9925)
+[Florin Arhip](https://github.com/FlorinArhip)
