@@ -8,7 +8,7 @@ _**Mosaic++**_ is a tool that produces [photomosaics](https://en.wikipedia.org/w
 
 ### Motivation
 
-This project started as a college assignment for a Modern C++ course we took during the first term in our second year. We chose it because we are keen on challenging ourselves and the idea of learning image processing basics besides the required modern C++ elements was catching.
+This project started as a cool college idea. We chose it because we are keen on challenging ourselves and the idea of learning image processing basics.
 
 ## **Features**
 ---
